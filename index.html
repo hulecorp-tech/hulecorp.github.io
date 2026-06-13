@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Huy Le Creative â€” Portfolio</title>
+  <title>Huy Le Creative — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --orange: #FF6B2B;
@@ -31,7 +31,7 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Be Vietnam Pro','Inter',-apple-system,sans-serif; background: var(--bg); color: var(--text); transition: background .3s,color .3s; overflow-x: hidden; }
+    body { font-family: 'Inter','Noto Sans SC',-apple-system,sans-serif; background: var(--bg); color: var(--text); transition: background .3s,color .3s; overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
     .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
@@ -199,11 +199,11 @@
 
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-  <button class="mm-close" id="menuClose">âœ•</button>
-  <a href="#about" onclick="closeMM()"><span data-i18n="nav.about">Vá» tÃ´i</span></a>
-  <a href="#skills" onclick="closeMM()"><span data-i18n="nav.skills">Ká»¹ nÄƒng</span></a>
-  <a href="#projects" onclick="closeMM()"><span data-i18n="nav.projects">Dá»± Ã¡n</span></a>
-  <a href="#contact" onclick="closeMM()"><span data-i18n="nav.contact">LiÃªn há»‡</span></a>
+  <button class="mm-close" id="menuClose">✕</button>
+  <a href="#about" onclick="closeMM()"><span data-i18n="nav.about">Về tôi</span></a>
+  <a href="#skills" onclick="closeMM()"><span data-i18n="nav.skills">Kỹ năng</span></a>
+  <a href="#projects" onclick="closeMM()"><span data-i18n="nav.projects">Dự án</span></a>
+  <a href="#contact" onclick="closeMM()"><span data-i18n="nav.contact">Liên hệ</span></a>
 </div>
 
 <!-- NAVBAR -->
@@ -211,16 +211,16 @@
   <div class="container nav-inner">
     <a href="#" class="nav-logo grad-text">Huy Le Creative</a>
     <ul class="nav-links">
-      <li><a href="#about" data-i18n="nav.about">Vá» tÃ´i</a></li>
-      <li><a href="#skills" data-i18n="nav.skills">Ká»¹ nÄƒng</a></li>
-      <li><a href="#projects" data-i18n="nav.projects">Dá»± Ã¡n</a></li>
-      <li><a href="#contact" data-i18n="nav.contact">LiÃªn há»‡</a></li>
+      <li><a href="#about" data-i18n="nav.about">Về tôi</a></li>
+      <li><a href="#skills" data-i18n="nav.skills">Kỹ năng</a></li>
+      <li><a href="#projects" data-i18n="nav.projects">Dự án</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">Liên hệ</a></li>
     </ul>
     <div class="nav-controls">
       <button class="lang-btn active" data-lang="vi">VI</button>
       <button class="lang-btn" data-lang="en">EN</button>
-      <button class="lang-btn" data-lang="zh">ä¸­</button>
-      <button class="theme-btn" id="themeBtn">ðŸŒ™</button>
+      <button class="lang-btn" data-lang="zh">中</button>
+      <button class="theme-btn" id="themeBtn">🌙</button>
       <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
     </div>
   </div>
@@ -231,28 +231,28 @@
   <div class="container">
     <div class="hero-inner">
       <div class="fade-up">
-        <p class="hero-greeting" data-i18n="hero.greeting">Xin chÃ o, tÃ´i lÃ </p>
+        <p class="hero-greeting" data-i18n="hero.greeting">Xin chào, tôi là</p>
         <h1 class="hero-name grad-text">Huy Le Creative</h1>
         <div class="hero-role">
           <span class="dot"></span>
-          <span data-i18n="hero.role">Creative Designer táº¡i Midu MenaQ7</span>
+          <span data-i18n="hero.role">Creative Designer tại Midu MenaQ7</span>
         </div>
-        <p class="hero-tagline" data-i18n="hero.tagline">Thiáº¿t káº¿ sÃ¡ng táº¡o â€” ThÆ°Æ¡ng hiá»‡u biáº¿t ká»ƒ chuyá»‡n.</p>
+        <p class="hero-tagline" data-i18n="hero.tagline">Thiết kế sáng tạo — Thương hiệu biết kể chuyện.</p>
         <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary"><span>âœ¦</span><span data-i18n="hero.cta1">Xem dá»± Ã¡n</span></a>
-          <a href="#contact" class="btn btn-secondary"><span data-i18n="hero.cta2">LiÃªn há»‡ ngay</span><span>â†’</span></a>
+          <a href="#projects" class="btn btn-primary"><span>✦</span><span data-i18n="hero.cta1">Xem dự án</span></a>
+          <a href="#contact" class="btn btn-secondary"><span data-i18n="hero.cta2">Liên hệ ngay</span><span>→</span></a>
         </div>
       </div>
       <div class="hero-photo-wrap fade-up">
         <div class="hero-blob"></div>
-        <img src="raw/áº¢nh Huy LÃª.jpg" alt="Huy Le Creative" class="hero-photo">
+        <img src="avatar.jpg" alt="Huy Le Creative" class="hero-photo">
         <div class="hero-badge hb1">
-          <span class="badge-icon">ðŸŽ¨</span>
-          <div><div style="font-size:.68rem;color:var(--text2)" data-i18n="badge.projects">Dá»± Ã¡n</div><div>10+</div></div>
+          <span class="badge-icon">🎨</span>
+          <div><div style="font-size:.68rem;color:var(--text2)" data-i18n="badge.projects">Dự án</div><div>10+</div></div>
         </div>
         <div class="hero-badge hb2">
-          <span class="badge-icon">â­</span>
-          <div><div style="font-size:.68rem;color:var(--text2)" data-i18n="badge.skills">Ká»¹ nÄƒng</div><div>6 Skills</div></div>
+          <span class="badge-icon">⭐</span>
+          <div><div style="font-size:.68rem;color:var(--text2)" data-i18n="badge.skills">Kỹ năng</div><div>6 Skills</div></div>
         </div>
       </div>
     </div>
@@ -263,10 +263,10 @@
 <div class="stats-bar">
   <div class="container">
     <div class="stats-inner">
-      <div class="stat-item fade-up"><span class="stat-number grad-text">10+</span><span class="stat-label" data-i18n="stats.projects">Dá»± Ã¡n hoÃ n thÃ nh</span></div>
-      <div class="stat-item fade-up"><span class="stat-number grad-text">6</span><span class="stat-label" data-i18n="stats.skills">LÄ©nh vá»±c thiáº¿t káº¿</span></div>
-      <div class="stat-item fade-up"><span class="stat-number grad-text">3</span><span class="stat-label" data-i18n="stats.categories">Danh má»¥c sÃ¡ng táº¡o</span></div>
-      <div class="stat-item fade-up"><span class="stat-number grad-text">100%</span><span class="stat-label" data-i18n="stats.passion">Táº­n tÃ¢m & sÃ¡ng táº¡o</span></div>
+      <div class="stat-item fade-up"><span class="stat-number grad-text">10+</span><span class="stat-label" data-i18n="stats.projects">Dự án hoàn thành</span></div>
+      <div class="stat-item fade-up"><span class="stat-number grad-text">6</span><span class="stat-label" data-i18n="stats.skills">Lĩnh vực thiết kế</span></div>
+      <div class="stat-item fade-up"><span class="stat-number grad-text">3</span><span class="stat-label" data-i18n="stats.categories">Danh mục sáng tạo</span></div>
+      <div class="stat-item fade-up"><span class="stat-number grad-text">100%</span><span class="stat-label" data-i18n="stats.passion">Tận tâm & sáng tạo</span></div>
     </div>
   </div>
 </div>
@@ -276,21 +276,21 @@
   <div class="container">
     <div class="about-inner">
       <div class="about-img-wrap fade-up">
-        <img src="raw/áº¢nh Huy LÃª.jpg" alt="LÃª Ngá»c Huy" class="about-img">
+        <img src="avatar.jpg" alt="Lê Ngọc Huy" class="about-img">
         <div class="about-accent"></div>
       </div>
       <div class="fade-up">
-        <span class="section-tag grad-text" data-i18n="about.tag">Vá» tÃ´i</span>
-        <h2 class="section-title" data-i18n="about.title">Creative Designer vá»›i Ä‘am mÃª thÆ°Æ¡ng hiá»‡u</h2>
-        <p class="about-bio" data-i18n="about.bio">TÃ´i lÃ  LÃª Ngá»c Huy â€” nhÃ  thiáº¿t káº¿ Ä‘á»“ há»a sÃ¡ng táº¡o vá»›i niá»m Ä‘am mÃª xÃ¢y dá»±ng thÆ°Æ¡ng hiá»‡u vÃ  táº¡o ra nhá»¯ng áº¥n pháº©m trá»±c quan áº¥n tÆ°á»£ng. ChuyÃªn sÃ¢u vá» event branding, mascot design, vÃ  brand identity vá»›i phong cÃ¡ch tÆ°Æ¡i sÃ¡ng, nÄƒng Ä‘á»™ng, phÃ¹ há»£p thá»‹ trÆ°á»ng Viá»‡t Nam.</p>
+        <span class="section-tag grad-text" data-i18n="about.tag">Về tôi</span>
+        <h2 class="section-title" data-i18n="about.title">Creative Designer với đam mê thương hiệu</h2>
+        <p class="about-bio" data-i18n="about.bio">Tôi là Lê Ngọc Huy — nhà thiết kế đồ họa sáng tạo với niềm đam mê xây dựng thương hiệu và tạo ra những ấn phẩm trực quan ấn tượng. Chuyên sâu về event branding, mascot design, và brand identity với phong cách tươi sáng, năng động, phù hợp thị trường Việt Nam.</p>
         <div class="company-card">
           <div class="company-icon">M</div>
           <div>
             <div class="company-name">Midu MenaQ7</div>
-            <div class="company-role" data-i18n="about.current">Hiá»‡n Ä‘ang lÃ m viá»‡c táº¡i Ä‘Ã¢y</div>
+            <div class="company-role" data-i18n="about.current">Hiện đang làm việc tại đây</div>
           </div>
         </div>
-        <a href="#contact" class="btn btn-primary" data-i18n="about.cta">CÃ¹ng lÃ m viá»‡c nhÃ© â†’</a>
+        <a href="#contact" class="btn btn-primary" data-i18n="about.cta">Cùng làm việc nhé →</a>
       </div>
     </div>
   </div>
@@ -300,17 +300,17 @@
 <section class="section skills-bg" id="skills">
   <div class="container">
     <div class="skills-header fade-up">
-      <span class="section-tag grad-text" data-i18n="skills.tag">Ká»¹ nÄƒng</span>
-      <h2 class="section-title" data-i18n="skills.title">Nhá»¯ng gÃ¬ tÃ´i lÃ m Ä‘Æ°á»£c</h2>
-      <p class="section-desc" data-i18n="skills.desc">Tá»« sá»± kiá»‡n Ä‘áº¿n thÆ°Æ¡ng hiá»‡u â€” tÃ´i mang láº¡i thiáº¿t káº¿ Ä‘á»“ng nháº¥t, áº¥n tÆ°á»£ng vÃ  Ä‘Ãºng thá»i háº¡n.</p>
+      <span class="section-tag grad-text" data-i18n="skills.tag">Kỹ năng</span>
+      <h2 class="section-title" data-i18n="skills.title">Những gì tôi làm được</h2>
+      <p class="section-desc" data-i18n="skills.desc">Từ sự kiện đến thương hiệu — tôi mang lại thiết kế đồng nhất, ấn tượng và đúng thời hạn.</p>
     </div>
     <div class="skills-grid">
-      <div class="skill-card fade-up"><div class="skill-icon">ðŸŽª</div><div class="skill-name" data-i18n="sk1n">Event Branding</div><div class="skill-desc" data-i18n="sk1d">Thiáº¿t káº¿ bá»™ nháº­n diá»‡n sá»± kiá»‡n Ä‘á»“ng bá»™: backdrop, banner, Ã¡o Ä‘á»“ng phá»¥c, standee â€” nháº¥t quÃ¡n tá»« Ä‘áº§u Ä‘áº¿n cuá»‘i.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">ðŸ¦¸</div><div class="skill-name" data-i18n="sk2n">Mascot Design</div><div class="skill-desc" data-i18n="sk2d">Táº¡o nhÃ¢n váº­t linh váº­t Ä‘áº¡i diá»‡n thÆ°Æ¡ng hiá»‡u â€” cÃ¡ tÃ­nh, Ä‘Ã¡ng yÃªu, dá»… nháº­n diá»‡n vÃ  á»©ng dá»¥ng linh hoáº¡t.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">ðŸ–¼ï¸</div><div class="skill-name" data-i18n="sk3n">Banner & Panel</div><div class="skill-desc" data-i18n="sk3d">Thiáº¿t káº¿ banner sá»± kiá»‡n, panel thÃ´ng tin ngoÃ i trá»i vÃ  ná»™i tháº¥t â€” truyá»n Ä‘áº¡t thÃ´ng Ä‘iá»‡p rÃµ rÃ ng, thu hÃºt.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">ðŸ“¦</div><div class="skill-name" data-i18n="sk4n">Packaging Design</div><div class="skill-desc" data-i18n="sk4d">Thiáº¿t káº¿ bao bÃ¬ sáº£n pháº©m Ä‘áº¹p máº¯t, chuyÃªn nghiá»‡p â€” táº¡o áº¥n tÆ°á»£ng Ä‘áº§u tiÃªn máº¡nh máº½ trÃªn ká»‡ hÃ ng.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">âœ¦</div><div class="skill-name" data-i18n="sk5n">Brand Identity</div><div class="skill-desc" data-i18n="sk5d">XÃ¢y dá»±ng há»‡ thá»‘ng nháº­n diá»‡n thÆ°Æ¡ng hiá»‡u toÃ n diá»‡n: logo, mÃ u sáº¯c, font chá»¯, vÃ  guideline á»©ng dá»¥ng.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">ðŸ“¢</div><div class="skill-name" data-i18n="sk6n">Promotion Design</div><div class="skill-desc" data-i18n="sk6d">Thiáº¿t káº¿ áº¥n pháº©m khuyáº¿n mÃ£i, truyá»n thÃ´ng hÃ nh Ä‘á»™ng â€” kÃ­ch thÃ­ch tÆ°Æ¡ng tÃ¡c vÃ  chuyá»ƒn Ä‘á»•i ngÆ°á»i dÃ¹ng.</div></div>
+      <div class="skill-card fade-up"><div class="skill-icon">🎪</div><div class="skill-name" data-i18n="sk1n">Event Branding</div><div class="skill-desc" data-i18n="sk1d">Thiết kế bộ nhận diện sự kiện đồng bộ: backdrop, banner, áo đồng phục, standee — nhất quán từ đầu đến cuối.</div></div>
+      <div class="skill-card fade-up"><div class="skill-icon">🦸</div><div class="skill-name" data-i18n="sk2n">Mascot Design</div><div class="skill-desc" data-i18n="sk2d">Tạo nhân vật linh vật đại diện thương hiệu — cá tính, đáng yêu, dễ nhận diện và ứng dụng linh hoạt.</div></div>
+      <div class="skill-card fade-up"><div class="skill-icon">🖼️</div><div class="skill-name" data-i18n="sk3n">Banner & Panel</div><div class="skill-desc" data-i18n="sk3d">Thiết kế banner sự kiện, panel thông tin ngoài trời và nội thất — truyền đạt thông điệp rõ ràng, thu hút.</div></div>
+      <div class="skill-card fade-up"><div class="skill-icon">📦</div><div class="skill-name" data-i18n="sk4n">Packaging Design</div><div class="skill-desc" data-i18n="sk4d">Thiết kế bao bì sản phẩm đẹp mắt, chuyên nghiệp — tạo ấn tượng đầu tiên mạnh mẽ trên kệ hàng.</div></div>
+      <div class="skill-card fade-up"><div class="skill-icon">✦</div><div class="skill-name" data-i18n="sk5n">Brand Identity</div><div class="skill-desc" data-i18n="sk5d">Xây dựng hệ thống nhận diện thương hiệu toàn diện: logo, màu sắc, font chữ, và guideline ứng dụng.</div></div>
+      <div class="skill-card fade-up"><div class="skill-icon">📢</div><div class="skill-name" data-i18n="sk6n">Promotion Design</div><div class="skill-desc" data-i18n="sk6d">Thiết kế ấn phẩm khuyến mãi, truyền thông hành động — kích thích tương tác và chuyển đổi người dùng.</div></div>
     </div>
   </div>
 </section>
@@ -319,11 +319,11 @@
 <section class="section" id="projects">
   <div class="container">
     <div class="fade-up">
-      <span class="section-tag grad-text" data-i18n="proj.tag">Dá»± Ã¡n</span>
-      <h2 class="section-title" data-i18n="proj.title">Portfolio cá»§a tÃ´i</h2>
-      <p class="section-desc" data-i18n="proj.desc">CÃ¡c dá»± Ã¡n thiáº¿t káº¿ tá»« event branding Ä‘áº¿n brand identity â€” má»—i dá»± Ã¡n lÃ  má»™t cÃ¢u chuyá»‡n khÃ¡c nhau.</p>
+      <span class="section-tag grad-text" data-i18n="proj.tag">Dự án</span>
+      <h2 class="section-title" data-i18n="proj.title">Portfolio của tôi</h2>
+      <p class="section-desc" data-i18n="proj.desc">Các dự án thiết kế từ event branding đến brand identity — mỗi dự án là một câu chuyện khác nhau.</p>
       <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all" data-i18n="ft.all">Táº¥t cáº£</button>
+        <button class="filter-tab active" data-filter="all" data-i18n="ft.all">Tất cả</button>
         <button class="filter-tab" data-filter="event" data-i18n="ft.event">Event Branding</button>
         <button class="filter-tab" data-filter="mascot" data-i18n="ft.mascot">Mascot</button>
         <button class="filter-tab" data-filter="packaging" data-i18n="ft.pack">Packaging</button>
@@ -333,40 +333,40 @@
     </div>
     <div class="projects-grid" id="projGrid">
       <div class="project-card fade-up" data-category="event">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#FF9F68)"><span class="project-thumb-icon">ðŸŽª</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p1n">Event Brand Kit Vol.1</div><div class="project-desc" data-i18n="p1d">Bá»™ nháº­n diá»‡n sá»± kiá»‡n Ä‘á»“ng bá»™: backdrop sÃ¢n kháº¥u, banner dá»c/ngang, Ã¡o Ä‘á»“ng phá»¥c BTC.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#FF9F68)"><span class="project-thumb-icon">🎪</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p1n">Event Brand Kit Vol.1</div><div class="project-desc" data-i18n="p1d">Bộ nhận diện sự kiện đồng bộ: backdrop sân khấu, banner dọc/ngang, áo đồng phục BTC.</div></div>
       </div>
       <div class="project-card fade-up" data-category="event">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#1E6EFF,#64A8FF)"><span class="project-thumb-icon">ðŸŽ‰</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p2n">Event Brand Kit Vol.2</div><div class="project-desc" data-i18n="p2d">Nháº­n diá»‡n sá»± kiá»‡n cá»™ng Ä‘á»“ng â€” há»‡ thá»‘ng truyá»n thÃ´ng Ä‘áº§y Ä‘á»§ vá»›i bá»™ áº¥n pháº©m xÃºc tiáº¿n.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#1E6EFF,#64A8FF)"><span class="project-thumb-icon">🎉</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p2n">Event Brand Kit Vol.2</div><div class="project-desc" data-i18n="p2d">Nhận diện sự kiện cộng đồng — hệ thống truyền thông đầy đủ với bộ ấn phẩm xúc tiến.</div></div>
       </div>
       <div class="project-card fade-up" data-category="event">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#1E6EFF)"><span class="project-thumb-icon">âœ¨</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p3n">Event Brand Kit Vol.3</div><div class="project-desc" data-i18n="p3d">Brand kit sá»± kiá»‡n phong cÃ¡ch nÄƒng Ä‘á»™ng â€” backdrop, standee vÃ  áº¥n pháº©m Ä‘á»“ng bá»™.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#1E6EFF)"><span class="project-thumb-icon">✨</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p3n">Event Brand Kit Vol.3</div><div class="project-desc" data-i18n="p3d">Brand kit sự kiện phong cách năng động — backdrop, standee và ấn phẩm đồng bộ.</div></div>
       </div>
       <div class="project-card fade-up" data-category="mascot">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF4E9A,#FF6B2B)"><span class="project-thumb-icon">ðŸ¦¸</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.mascot">Mascot Design</div><div class="project-name" data-i18n="p4n">Mascot Design Vol.1</div><div class="project-desc" data-i18n="p4d">Thiáº¿t káº¿ nhÃ¢n váº­t linh váº­t thÆ°Æ¡ng hiá»‡u â€” nhiá»u biá»ƒu cáº£m vÃ  tÆ° tháº¿ á»©ng dá»¥ng Ä‘a dáº¡ng.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#FF4E9A,#FF6B2B)"><span class="project-thumb-icon">🦸</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.mascot">Mascot Design</div><div class="project-name" data-i18n="p4n">Mascot Design Vol.1</div><div class="project-desc" data-i18n="p4d">Thiết kế nhân vật linh vật thương hiệu — nhiều biểu cảm và tư thế ứng dụng đa dạng.</div></div>
       </div>
       <div class="project-card fade-up" data-category="mascot">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#9B59B6,#FF4E9A)"><span class="project-thumb-icon">ðŸ¾</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.mascot">Mascot Design</div><div class="project-name" data-i18n="p5n">Mascot Design Vol.2</div><div class="project-desc" data-i18n="p5d">Bá»™ linh váº­t thÆ°Æ¡ng hiá»‡u vá»›i nhiá»u biáº¿n thá»ƒ â€” phong phÃº cáº£m xÃºc, nháº¥t quÃ¡n nháº­n diá»‡n.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#9B59B6,#FF4E9A)"><span class="project-thumb-icon">🐾</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.mascot">Mascot Design</div><div class="project-name" data-i18n="p5n">Mascot Design Vol.2</div><div class="project-desc" data-i18n="p5d">Bộ linh vật thương hiệu với nhiều biến thể — phong phú cảm xúc, nhất quán nhận diện.</div></div>
       </div>
       <div class="project-card fade-up" data-category="brand">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#1E6EFF,#00C6FF)"><span class="project-thumb-icon">ðŸ–¼ï¸</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.brand">Brand Identity</div><div class="project-name" data-i18n="p6n">Banner & Panel System</div><div class="project-desc" data-i18n="p6d">Há»‡ thá»‘ng banner vÃ  panel thÃ´ng tin cho sá»± kiá»‡n â€” rÃµ rÃ ng, dá»… Ä‘á»c, chuyÃªn nghiá»‡p.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#1E6EFF,#00C6FF)"><span class="project-thumb-icon">🖼️</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.brand">Brand Identity</div><div class="project-name" data-i18n="p6n">Banner & Panel System</div><div class="project-desc" data-i18n="p6d">Hệ thống banner và panel thông tin cho sự kiện — rõ ràng, dễ đọc, chuyên nghiệp.</div></div>
       </div>
       <div class="project-card fade-up" data-category="brand">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#2ECC71,#1E6EFF)"><span class="project-thumb-icon">âœ¦</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.brand">Brand Identity</div><div class="project-name" data-i18n="p7n">AGIE Brand Identity</div><div class="project-desc" data-i18n="p7d">XÃ¢y dá»±ng há»‡ thá»‘ng nháº­n diá»‡n thÆ°Æ¡ng hiá»‡u AGIE â€” logo, mÃ u sáº¯c vÃ  á»©ng dá»¥ng Ä‘á»“ng bá»™.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#2ECC71,#1E6EFF)"><span class="project-thumb-icon">✦</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.brand">Brand Identity</div><div class="project-name" data-i18n="p7n">AGIE Brand Identity</div><div class="project-desc" data-i18n="p7d">Xây dựng hệ thống nhận diện thương hiệu AGIE — logo, màu sắc và ứng dụng đồng bộ.</div></div>
       </div>
       <div class="project-card fade-up" data-category="promo">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#FFD700)"><span class="project-thumb-icon">ðŸ“¢</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.promo">Promotion</div><div class="project-name" data-i18n="p8n">Promotion Campaign</div><div class="project-desc" data-i18n="p8d">áº¤n pháº©m truyá»n thÃ´ng khuyáº¿n mÃ£i hÃ nh Ä‘á»™ng â€” thiáº¿t káº¿ kÃ­ch thÃ­ch tÆ°Æ¡ng tÃ¡c vÃ  chuyá»ƒn Ä‘á»•i.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#FFD700)"><span class="project-thumb-icon">📢</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.promo">Promotion</div><div class="project-name" data-i18n="p8n">Promotion Campaign</div><div class="project-desc" data-i18n="p8d">Ấn phẩm truyền thông khuyến mãi hành động — thiết kế kích thích tương tác và chuyển đổi.</div></div>
       </div>
       <div class="project-card fade-up" data-category="packaging">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#0F0F0F,#1E6EFF)"><span class="project-thumb-icon">ðŸ“¦</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiáº¿t</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.pack">Packaging</div><div class="project-name" data-i18n="p9n">Ifinix Packaging</div><div class="project-desc" data-i18n="p9d">Thiáº¿t káº¿ bao bÃ¬ vÃ  nháº­n diá»‡n thÆ°Æ¡ng hiá»‡u Ifinix â€” hiá»‡n Ä‘áº¡i, tá»‘i giáº£n, áº¥n tÆ°á»£ng.</div></div>
+        <div class="project-thumb" style="background:linear-gradient(135deg,#0F0F0F,#1E6EFF)"><span class="project-thumb-icon">📦</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
+        <div class="project-body"><div class="project-cat" data-i18n="ft.pack">Packaging</div><div class="project-name" data-i18n="p9n">Ifinix Packaging</div><div class="project-desc" data-i18n="p9d">Thiết kế bao bì và nhận diện thương hiệu Ifinix — hiện đại, tối giản, ấn tượng.</div></div>
       </div>
     </div>
   </div>
@@ -376,13 +376,13 @@
 <section class="section clients-bg" id="clients">
   <div class="container">
     <div class="clients-center fade-up">
-      <span class="section-tag grad-text" data-i18n="cl.tag">KhÃ¡ch hÃ ng & Äá»‘i tÃ¡c</span>
-      <h2 class="section-title" data-i18n="cl.title">Äang cá»™ng tÃ¡c cÃ¹ng</h2>
-      <p class="section-desc" data-i18n="cl.desc">TÃ´i tá»± hÃ o Ä‘Æ°á»£c lÃ  má»™t pháº§n cá»§a Ä‘á»™i ngÅ© sÃ¡ng táº¡o táº¡i Midu MenaQ7.</p>
+      <span class="section-tag grad-text" data-i18n="cl.tag">Khách hàng & Đối tác</span>
+      <h2 class="section-title" data-i18n="cl.title">Đang cộng tác cùng</h2>
+      <p class="section-desc" data-i18n="cl.desc">Tôi tự hào được là một phần của đội ngũ sáng tạo tại Midu MenaQ7.</p>
       <div style="margin-top:48px">
         <div class="client-card">
           <div class="client-logo">M</div>
-          <div><div class="client-name">Midu MenaQ7</div><div class="client-sub" data-i18n="cl.role">Creative Designer â€” In-house</div></div>
+          <div><div class="client-name">Midu MenaQ7</div><div class="client-sub" data-i18n="cl.role">Creative Designer — In-house</div></div>
         </div>
       </div>
     </div>
@@ -394,23 +394,23 @@
   <div class="container">
     <div class="contact-inner">
       <div class="fade-up">
-        <span class="section-tag grad-text" data-i18n="ct.tag">LiÃªn há»‡</span>
-        <h2 class="section-title" data-i18n="ct.title">HÃ£y cÃ¹ng táº¡o ra Ä‘iá»u gÃ¬ Ä‘Ã³</h2>
+        <span class="section-tag grad-text" data-i18n="ct.tag">Liên hệ</span>
+        <h2 class="section-title" data-i18n="ct.title">Hãy cùng tạo ra điều gì đó</h2>
         <div class="contact-items">
-          <a href="mailto:huysnt@gmail.com" class="contact-item"><div class="contact-icon">ðŸ“§</div><div><div class="contact-label">Email</div><div class="contact-value">huysnt@gmail.com</div></div></a>
-          <a href="tel:0987467621" class="contact-item"><div class="contact-icon">ðŸ“±</div><div><div class="contact-label" data-i18n="ct.phone">Äiá»‡n thoáº¡i</div><div class="contact-value">0987 467 621</div></div></a>
-          <a href="https://facebook.com/huylet8" target="_blank" class="contact-item"><div class="contact-icon">ðŸ’¬</div><div><div class="contact-label">Facebook</div><div class="contact-value">facebook.com/huylet8</div></div></a>
-          <a href="https://behance.net/huyle3008" target="_blank" class="contact-item"><div class="contact-icon">ðŸŽ¨</div><div><div class="contact-label">Behance</div><div class="contact-value">behance.net/huyle3008</div></div></a>
+          <a href="mailto:huysnt@gmail.com" class="contact-item"><div class="contact-icon">📧</div><div><div class="contact-label">Email</div><div class="contact-value">huysnt@gmail.com</div></div></a>
+          <a href="tel:0987467621" class="contact-item"><div class="contact-icon">📱</div><div><div class="contact-label" data-i18n="ct.phone">Điện thoại</div><div class="contact-value">0987 467 621</div></div></a>
+          <a href="https://facebook.com/huylet8" target="_blank" class="contact-item"><div class="contact-icon">💬</div><div><div class="contact-label">Facebook</div><div class="contact-value">facebook.com/huylet8</div></div></a>
+          <a href="https://behance.net/huyle3008" target="_blank" class="contact-item"><div class="contact-icon">🎨</div><div><div class="contact-label">Behance</div><div class="contact-value">behance.net/huyle3008</div></div></a>
         </div>
       </div>
       <div class="contact-right fade-up">
         <div style="padding-top:56px">
-          <p class="contact-cta-text" data-i18n="ct.cta">Báº¡n cÃ³ dá»± Ã¡n cáº§n má»™t designer sÃ¡ng táº¡o? TÃ´i luÃ´n sáºµn sÃ ng láº¯ng nghe vÃ  biáº¿n Ã½ tÆ°á»Ÿng cá»§a báº¡n thÃ nh hiá»‡n thá»±c. HÃ£y liÃªn há»‡ ngay â€” tÃ´i thÆ°á»ng pháº£n há»“i trong vÃ²ng 24 giá».</p>
+          <p class="contact-cta-text" data-i18n="ct.cta">Bạn có dự án cần một designer sáng tạo? Tôi luôn sẵn sàng lắng nghe và biến ý tưởng của bạn thành hiện thực. Hãy liên hệ ngay — tôi thường phản hồi trong vòng 24 giờ.</p>
           <div class="social-row">
-            <a href="https://facebook.com/huylet8" target="_blank" class="social-btn" title="Facebook">ðŸ“˜</a>
-            <a href="https://behance.net/huyle3008" target="_blank" class="social-btn" title="Behance">ðŸ…±ï¸</a>
-            <a href="mailto:huysnt@gmail.com" class="social-btn" title="Email">ðŸ“§</a>
-            <a href="tel:0987467621" class="social-btn" title="Phone">ðŸ“ž</a>
+            <a href="https://facebook.com/huylet8" target="_blank" class="social-btn" title="Facebook">📘</a>
+            <a href="https://behance.net/huyle3008" target="_blank" class="social-btn" title="Behance">🅱️</a>
+            <a href="mailto:huysnt@gmail.com" class="social-btn" title="Email">📧</a>
+            <a href="tel:0987467621" class="social-btn" title="Phone">📞</a>
           </div>
         </div>
       </div>
@@ -421,122 +421,122 @@
 <!-- FOOTER -->
 <footer class="footer">
   <div class="container">
-    <p class="footer-text">Â© 2026 <span class="grad-text" style="-webkit-text-fill-color:unset;background:none;font-weight:700">Huy Le Creative</span> Â· Designed with â™¥ in Vietnam</p>
+    <p class="footer-text">© 2026 <span class="grad-text" style="-webkit-text-fill-color:unset;background:none;font-weight:700">Huy Le Creative</span> · Designed with ♥ in Vietnam</p>
   </div>
 </footer>
 
 <script>
 const T = {
   vi: {
-    "nav.about":"Vá» tÃ´i","nav.skills":"Ká»¹ nÄƒng","nav.projects":"Dá»± Ã¡n","nav.contact":"LiÃªn há»‡",
-    "hero.greeting":"Xin chÃ o, tÃ´i lÃ ","hero.role":"Creative Designer táº¡i Midu MenaQ7",
-    "hero.tagline":"Thiáº¿t káº¿ sÃ¡ng táº¡o â€” ThÆ°Æ¡ng hiá»‡u biáº¿t ká»ƒ chuyá»‡n.",
-    "hero.cta1":"Xem dá»± Ã¡n","hero.cta2":"LiÃªn há»‡ ngay",
-    "badge.projects":"Dá»± Ã¡n","badge.skills":"Ká»¹ nÄƒng",
-    "stats.projects":"Dá»± Ã¡n hoÃ n thÃ nh","stats.skills":"LÄ©nh vá»±c thiáº¿t káº¿",
-    "stats.categories":"Danh má»¥c sÃ¡ng táº¡o","stats.passion":"Táº­n tÃ¢m & sÃ¡ng táº¡o",
-    "about.tag":"Vá» tÃ´i","about.title":"Creative Designer vá»›i Ä‘am mÃª thÆ°Æ¡ng hiá»‡u",
-    "about.bio":"TÃ´i lÃ  LÃª Ngá»c Huy â€” nhÃ  thiáº¿t káº¿ Ä‘á»“ há»a sÃ¡ng táº¡o vá»›i niá»m Ä‘am mÃª xÃ¢y dá»±ng thÆ°Æ¡ng hiá»‡u vÃ  táº¡o ra nhá»¯ng áº¥n pháº©m trá»±c quan áº¥n tÆ°á»£ng. ChuyÃªn sÃ¢u vá» event branding, mascot design, vÃ  brand identity vá»›i phong cÃ¡ch tÆ°Æ¡i sÃ¡ng, nÄƒng Ä‘á»™ng, phÃ¹ há»£p thá»‹ trÆ°á»ng Viá»‡t Nam.",
-    "about.current":"Hiá»‡n Ä‘ang lÃ m viá»‡c táº¡i Ä‘Ã¢y","about.cta":"CÃ¹ng lÃ m viá»‡c nhÃ© â†’",
-    "skills.tag":"Ká»¹ nÄƒng","skills.title":"Nhá»¯ng gÃ¬ tÃ´i lÃ m Ä‘Æ°á»£c",
-    "skills.desc":"Tá»« sá»± kiá»‡n Ä‘áº¿n thÆ°Æ¡ng hiá»‡u â€” tÃ´i mang láº¡i thiáº¿t káº¿ Ä‘á»“ng nháº¥t, áº¥n tÆ°á»£ng vÃ  Ä‘Ãºng thá»i háº¡n.",
-    "sk1n":"Event Branding","sk1d":"Thiáº¿t káº¿ bá»™ nháº­n diá»‡n sá»± kiá»‡n Ä‘á»“ng bá»™: backdrop, banner, Ã¡o Ä‘á»“ng phá»¥c, standee â€” nháº¥t quÃ¡n tá»« Ä‘áº§u Ä‘áº¿n cuá»‘i.",
-    "sk2n":"Mascot Design","sk2d":"Táº¡o nhÃ¢n váº­t linh váº­t Ä‘áº¡i diá»‡n thÆ°Æ¡ng hiá»‡u â€” cÃ¡ tÃ­nh, Ä‘Ã¡ng yÃªu, dá»… nháº­n diá»‡n vÃ  á»©ng dá»¥ng linh hoáº¡t.",
-    "sk3n":"Banner & Panel","sk3d":"Thiáº¿t káº¿ banner sá»± kiá»‡n, panel thÃ´ng tin ngoÃ i trá»i vÃ  ná»™i tháº¥t â€” truyá»n Ä‘áº¡t thÃ´ng Ä‘iá»‡p rÃµ rÃ ng, thu hÃºt.",
-    "sk4n":"Packaging Design","sk4d":"Thiáº¿t káº¿ bao bÃ¬ sáº£n pháº©m Ä‘áº¹p máº¯t, chuyÃªn nghiá»‡p â€” táº¡o áº¥n tÆ°á»£ng Ä‘áº§u tiÃªn máº¡nh máº½ trÃªn ká»‡ hÃ ng.",
-    "sk5n":"Brand Identity","sk5d":"XÃ¢y dá»±ng há»‡ thá»‘ng nháº­n diá»‡n thÆ°Æ¡ng hiá»‡u toÃ n diá»‡n: logo, mÃ u sáº¯c, font chá»¯, vÃ  guideline á»©ng dá»¥ng.",
-    "sk6n":"Promotion Design","sk6d":"Thiáº¿t káº¿ áº¥n pháº©m khuyáº¿n mÃ£i, truyá»n thÃ´ng hÃ nh Ä‘á»™ng â€” kÃ­ch thÃ­ch tÆ°Æ¡ng tÃ¡c vÃ  chuyá»ƒn Ä‘á»•i ngÆ°á»i dÃ¹ng.",
-    "proj.tag":"Dá»± Ã¡n","proj.title":"Portfolio cá»§a tÃ´i",
-    "proj.desc":"CÃ¡c dá»± Ã¡n thiáº¿t káº¿ tá»« event branding Ä‘áº¿n brand identity â€” má»—i dá»± Ã¡n lÃ  má»™t cÃ¢u chuyá»‡n khÃ¡c nhau.",
-    "ft.all":"Táº¥t cáº£","ft.event":"Event Branding","ft.mascot":"Mascot","ft.pack":"Packaging","ft.brand":"Brand Identity","ft.promo":"Promotion",
-    "pv":"Xem chi tiáº¿t",
-    "p1n":"Event Brand Kit Vol.1","p1d":"Bá»™ nháº­n diá»‡n sá»± kiá»‡n Ä‘á»“ng bá»™: backdrop sÃ¢n kháº¥u, banner dá»c/ngang, Ã¡o Ä‘á»“ng phá»¥c BTC.",
-    "p2n":"Event Brand Kit Vol.2","p2d":"Nháº­n diá»‡n sá»± kiá»‡n cá»™ng Ä‘á»“ng â€” há»‡ thá»‘ng truyá»n thÃ´ng Ä‘áº§y Ä‘á»§ vá»›i bá»™ áº¥n pháº©m xÃºc tiáº¿n.",
-    "p3n":"Event Brand Kit Vol.3","p3d":"Brand kit sá»± kiá»‡n phong cÃ¡ch nÄƒng Ä‘á»™ng â€” backdrop, standee vÃ  áº¥n pháº©m Ä‘á»“ng bá»™.",
-    "p4n":"Mascot Design Vol.1","p4d":"Thiáº¿t káº¿ nhÃ¢n váº­t linh váº­t thÆ°Æ¡ng hiá»‡u â€” nhiá»u biá»ƒu cáº£m vÃ  tÆ° tháº¿ á»©ng dá»¥ng Ä‘a dáº¡ng.",
-    "p5n":"Mascot Design Vol.2","p5d":"Bá»™ linh váº­t thÆ°Æ¡ng hiá»‡u vá»›i nhiá»u biáº¿n thá»ƒ â€” phong phÃº cáº£m xÃºc, nháº¥t quÃ¡n nháº­n diá»‡n.",
-    "p6n":"Banner & Panel System","p6d":"Há»‡ thá»‘ng banner vÃ  panel thÃ´ng tin cho sá»± kiá»‡n â€” rÃµ rÃ ng, dá»… Ä‘á»c, chuyÃªn nghiá»‡p.",
-    "p7n":"AGIE Brand Identity","p7d":"XÃ¢y dá»±ng há»‡ thá»‘ng nháº­n diá»‡n thÆ°Æ¡ng hiá»‡u AGIE â€” logo, mÃ u sáº¯c vÃ  á»©ng dá»¥ng Ä‘á»“ng bá»™.",
-    "p8n":"Promotion Campaign","p8d":"áº¤n pháº©m truyá»n thÃ´ng khuyáº¿n mÃ£i hÃ nh Ä‘á»™ng â€” thiáº¿t káº¿ kÃ­ch thÃ­ch tÆ°Æ¡ng tÃ¡c vÃ  chuyá»ƒn Ä‘á»•i.",
-    "p9n":"Ifinix Packaging","p9d":"Thiáº¿t káº¿ bao bÃ¬ vÃ  nháº­n diá»‡n thÆ°Æ¡ng hiá»‡u Ifinix â€” hiá»‡n Ä‘áº¡i, tá»‘i giáº£n, áº¥n tÆ°á»£ng.",
-    "cl.tag":"KhÃ¡ch hÃ ng & Äá»‘i tÃ¡c","cl.title":"Äang cá»™ng tÃ¡c cÃ¹ng",
-    "cl.desc":"TÃ´i tá»± hÃ o Ä‘Æ°á»£c lÃ  má»™t pháº§n cá»§a Ä‘á»™i ngÅ© sÃ¡ng táº¡o táº¡i Midu MenaQ7.","cl.role":"Creative Designer â€” In-house",
-    "ct.tag":"LiÃªn há»‡","ct.title":"HÃ£y cÃ¹ng táº¡o ra Ä‘iá»u gÃ¬ Ä‘Ã³","ct.phone":"Äiá»‡n thoáº¡i",
-    "ct.cta":"Báº¡n cÃ³ dá»± Ã¡n cáº§n má»™t designer sÃ¡ng táº¡o? TÃ´i luÃ´n sáºµn sÃ ng láº¯ng nghe vÃ  biáº¿n Ã½ tÆ°á»Ÿng cá»§a báº¡n thÃ nh hiá»‡n thá»±c. HÃ£y liÃªn há»‡ ngay â€” tÃ´i thÆ°á»ng pháº£n há»“i trong vÃ²ng 24 giá»."
+    "nav.about":"Về tôi","nav.skills":"Kỹ năng","nav.projects":"Dự án","nav.contact":"Liên hệ",
+    "hero.greeting":"Xin chào, tôi là","hero.role":"Creative Designer tại Midu MenaQ7",
+    "hero.tagline":"Thiết kế sáng tạo — Thương hiệu biết kể chuyện.",
+    "hero.cta1":"Xem dự án","hero.cta2":"Liên hệ ngay",
+    "badge.projects":"Dự án","badge.skills":"Kỹ năng",
+    "stats.projects":"Dự án hoàn thành","stats.skills":"Lĩnh vực thiết kế",
+    "stats.categories":"Danh mục sáng tạo","stats.passion":"Tận tâm & sáng tạo",
+    "about.tag":"Về tôi","about.title":"Creative Designer với đam mê thương hiệu",
+    "about.bio":"Tôi là Lê Ngọc Huy — nhà thiết kế đồ họa sáng tạo với niềm đam mê xây dựng thương hiệu và tạo ra những ấn phẩm trực quan ấn tượng. Chuyên sâu về event branding, mascot design, và brand identity với phong cách tươi sáng, năng động, phù hợp thị trường Việt Nam.",
+    "about.current":"Hiện đang làm việc tại đây","about.cta":"Cùng làm việc nhé →",
+    "skills.tag":"Kỹ năng","skills.title":"Những gì tôi làm được",
+    "skills.desc":"Từ sự kiện đến thương hiệu — tôi mang lại thiết kế đồng nhất, ấn tượng và đúng thời hạn.",
+    "sk1n":"Event Branding","sk1d":"Thiết kế bộ nhận diện sự kiện đồng bộ: backdrop, banner, áo đồng phục, standee — nhất quán từ đầu đến cuối.",
+    "sk2n":"Mascot Design","sk2d":"Tạo nhân vật linh vật đại diện thương hiệu — cá tính, đáng yêu, dễ nhận diện và ứng dụng linh hoạt.",
+    "sk3n":"Banner & Panel","sk3d":"Thiết kế banner sự kiện, panel thông tin ngoài trời và nội thất — truyền đạt thông điệp rõ ràng, thu hút.",
+    "sk4n":"Packaging Design","sk4d":"Thiết kế bao bì sản phẩm đẹp mắt, chuyên nghiệp — tạo ấn tượng đầu tiên mạnh mẽ trên kệ hàng.",
+    "sk5n":"Brand Identity","sk5d":"Xây dựng hệ thống nhận diện thương hiệu toàn diện: logo, màu sắc, font chữ, và guideline ứng dụng.",
+    "sk6n":"Promotion Design","sk6d":"Thiết kế ấn phẩm khuyến mãi, truyền thông hành động — kích thích tương tác và chuyển đổi người dùng.",
+    "proj.tag":"Dự án","proj.title":"Portfolio của tôi",
+    "proj.desc":"Các dự án thiết kế từ event branding đến brand identity — mỗi dự án là một câu chuyện khác nhau.",
+    "ft.all":"Tất cả","ft.event":"Event Branding","ft.mascot":"Mascot","ft.pack":"Packaging","ft.brand":"Brand Identity","ft.promo":"Promotion",
+    "pv":"Xem chi tiết",
+    "p1n":"Event Brand Kit Vol.1","p1d":"Bộ nhận diện sự kiện đồng bộ: backdrop sân khấu, banner dọc/ngang, áo đồng phục BTC.",
+    "p2n":"Event Brand Kit Vol.2","p2d":"Nhận diện sự kiện cộng đồng — hệ thống truyền thông đầy đủ với bộ ấn phẩm xúc tiến.",
+    "p3n":"Event Brand Kit Vol.3","p3d":"Brand kit sự kiện phong cách năng động — backdrop, standee và ấn phẩm đồng bộ.",
+    "p4n":"Mascot Design Vol.1","p4d":"Thiết kế nhân vật linh vật thương hiệu — nhiều biểu cảm và tư thế ứng dụng đa dạng.",
+    "p5n":"Mascot Design Vol.2","p5d":"Bộ linh vật thương hiệu với nhiều biến thể — phong phú cảm xúc, nhất quán nhận diện.",
+    "p6n":"Banner & Panel System","p6d":"Hệ thống banner và panel thông tin cho sự kiện — rõ ràng, dễ đọc, chuyên nghiệp.",
+    "p7n":"AGIE Brand Identity","p7d":"Xây dựng hệ thống nhận diện thương hiệu AGIE — logo, màu sắc và ứng dụng đồng bộ.",
+    "p8n":"Promotion Campaign","p8d":"Ấn phẩm truyền thông khuyến mãi hành động — thiết kế kích thích tương tác và chuyển đổi.",
+    "p9n":"Ifinix Packaging","p9d":"Thiết kế bao bì và nhận diện thương hiệu Ifinix — hiện đại, tối giản, ấn tượng.",
+    "cl.tag":"Khách hàng & Đối tác","cl.title":"Đang cộng tác cùng",
+    "cl.desc":"Tôi tự hào được là một phần của đội ngũ sáng tạo tại Midu MenaQ7.","cl.role":"Creative Designer — In-house",
+    "ct.tag":"Liên hệ","ct.title":"Hãy cùng tạo ra điều gì đó","ct.phone":"Điện thoại",
+    "ct.cta":"Bạn có dự án cần một designer sáng tạo? Tôi luôn sẵn sàng lắng nghe và biến ý tưởng của bạn thành hiện thực. Hãy liên hệ ngay — tôi thường phản hồi trong vòng 24 giờ."
   },
   en: {
     "nav.about":"About","nav.skills":"Skills","nav.projects":"Projects","nav.contact":"Contact",
     "hero.greeting":"Hello, I'm","hero.role":"Creative Designer at Midu MenaQ7",
-    "hero.tagline":"Creative Design â€” Brands That Tell Stories.",
+    "hero.tagline":"Creative Design — Brands That Tell Stories.",
     "hero.cta1":"View Projects","hero.cta2":"Contact Me",
     "badge.projects":"Projects","badge.skills":"Skills",
     "stats.projects":"Completed Projects","stats.skills":"Design Disciplines",
     "stats.categories":"Creative Categories","stats.passion":"Passion & Dedication",
     "about.tag":"About Me","about.title":"Creative Designer with a Passion for Brands",
-    "about.bio":"I'm Le Ngoc Huy â€” a creative graphic designer passionate about brand building and creating visually striking works. Specializing in event branding, mascot design, and brand identity with a vibrant, dynamic style tailored to the Vietnamese market.",
-    "about.current":"Currently working here","about.cta":"Let's work together â†’",
+    "about.bio":"I'm Le Ngoc Huy — a creative graphic designer passionate about brand building and creating visually striking works. Specializing in event branding, mascot design, and brand identity with a vibrant, dynamic style tailored to the Vietnamese market.",
+    "about.current":"Currently working here","about.cta":"Let's work together →",
     "skills.tag":"Skills","skills.title":"What I Do",
-    "skills.desc":"From events to brands â€” I deliver consistent, impressive designs on time.",
-    "sk1n":"Event Branding","sk1d":"Synchronized event identity kits: backdrops, banners, uniforms, standees â€” consistent from start to finish.",
-    "sk2n":"Mascot Design","sk2d":"Creating brand mascot characters â€” distinct, lovable, recognizable, and flexibly applicable.",
-    "sk3n":"Banner & Panel","sk3d":"Event banners and information panels for indoor and outdoor â€” clear messaging, visually engaging.",
-    "sk4n":"Packaging Design","sk4d":"Beautiful, professional product packaging â€” creating a strong first impression on the shelf.",
+    "skills.desc":"From events to brands — I deliver consistent, impressive designs on time.",
+    "sk1n":"Event Branding","sk1d":"Synchronized event identity kits: backdrops, banners, uniforms, standees — consistent from start to finish.",
+    "sk2n":"Mascot Design","sk2d":"Creating brand mascot characters — distinct, lovable, recognizable, and flexibly applicable.",
+    "sk3n":"Banner & Panel","sk3d":"Event banners and information panels for indoor and outdoor — clear messaging, visually engaging.",
+    "sk4n":"Packaging Design","sk4d":"Beautiful, professional product packaging — creating a strong first impression on the shelf.",
     "sk5n":"Brand Identity","sk5d":"Building comprehensive brand identity systems: logo, colors, typography, and application guidelines.",
-    "sk6n":"Promotion Design","sk6d":"Promotional and action marketing materials â€” designs that drive engagement and conversion.",
+    "sk6n":"Promotion Design","sk6d":"Promotional and action marketing materials — designs that drive engagement and conversion.",
     "proj.tag":"Projects","proj.title":"My Portfolio",
-    "proj.desc":"Design projects ranging from event branding to brand identity â€” each project tells a different story.",
+    "proj.desc":"Design projects ranging from event branding to brand identity — each project tells a different story.",
     "ft.all":"All","ft.event":"Event Branding","ft.mascot":"Mascot","ft.pack":"Packaging","ft.brand":"Brand Identity","ft.promo":"Promotion",
     "pv":"View Details",
     "p1n":"Event Brand Kit Vol.1","p1d":"Synchronized event identity: stage backdrop, vertical/horizontal banners, organizer uniforms.",
-    "p2n":"Event Brand Kit Vol.2","p2d":"Community event branding â€” complete communication system with full promotional materials.",
-    "p3n":"Event Brand Kit Vol.3","p3d":"Dynamic event brand kit â€” backdrop, standees, and synchronized print materials.",
-    "p4n":"Mascot Design Vol.1","p4d":"Brand mascot character design â€” multiple expressions and poses for diverse applications.",
-    "p5n":"Mascot Design Vol.2","p5d":"Brand mascot set with multiple variants â€” rich emotions, consistent identity.",
-    "p6n":"Banner & Panel System","p6d":"Event banner and information panel system â€” clear, readable, professional design.",
-    "p7n":"AGIE Brand Identity","p7d":"Building the AGIE brand identity system â€” logo, colors, and synchronized applications.",
-    "p8n":"Promotion Campaign","p8d":"Action marketing promotional materials â€” designs that stimulate interaction and conversion.",
-    "p9n":"Ifinix Packaging","p9d":"Ifinix brand packaging and identity design â€” modern, minimal, and impactful.",
+    "p2n":"Event Brand Kit Vol.2","p2d":"Community event branding — complete communication system with full promotional materials.",
+    "p3n":"Event Brand Kit Vol.3","p3d":"Dynamic event brand kit — backdrop, standees, and synchronized print materials.",
+    "p4n":"Mascot Design Vol.1","p4d":"Brand mascot character design — multiple expressions and poses for diverse applications.",
+    "p5n":"Mascot Design Vol.2","p5d":"Brand mascot set with multiple variants — rich emotions, consistent identity.",
+    "p6n":"Banner & Panel System","p6d":"Event banner and information panel system — clear, readable, professional design.",
+    "p7n":"AGIE Brand Identity","p7d":"Building the AGIE brand identity system — logo, colors, and synchronized applications.",
+    "p8n":"Promotion Campaign","p8d":"Action marketing promotional materials — designs that stimulate interaction and conversion.",
+    "p9n":"Ifinix Packaging","p9d":"Ifinix brand packaging and identity design — modern, minimal, and impactful.",
     "cl.tag":"Clients & Partners","cl.title":"Currently Collaborating With",
-    "cl.desc":"I am proud to be part of the creative team at Midu MenaQ7.","cl.role":"Creative Designer â€” In-house",
+    "cl.desc":"I am proud to be part of the creative team at Midu MenaQ7.","cl.role":"Creative Designer — In-house",
     "ct.tag":"Contact","ct.title":"Let's Create Something Together","ct.phone":"Phone",
-    "ct.cta":"Do you have a project that needs a creative designer? I'm always ready to listen and turn your ideas into reality. Get in touch â€” I usually respond within 24 hours."
+    "ct.cta":"Do you have a project that needs a creative designer? I'm always ready to listen and turn your ideas into reality. Get in touch — I usually respond within 24 hours."
   },
   zh: {
-    "nav.about":"å…³äºŽæˆ‘","nav.skills":"æŠ€èƒ½","nav.projects":"ä½œå“","nav.contact":"è”ç³»",
-    "hero.greeting":"ä½ å¥½ï¼Œæˆ‘æ˜¯","hero.role":"åˆ›æ„è®¾è®¡å¸ˆ Â· Midu MenaQ7",
-    "hero.tagline":"åˆ›æ„è®¾è®¡ â€” ä¼šè®²æ•…äº‹çš„å“ç‰Œã€‚",
-    "hero.cta1":"æŸ¥çœ‹ä½œå“","hero.cta2":"ç«‹å³è”ç³»",
-    "badge.projects":"é¡¹ç›®","badge.skills":"æŠ€èƒ½",
-    "stats.projects":"å®Œæˆé¡¹ç›®","stats.skills":"è®¾è®¡é¢†åŸŸ",
-    "stats.categories":"åˆ›æ„ç±»åˆ«","stats.passion":"çƒ­æƒ…ä¸Žä¸“æ³¨",
-    "about.tag":"å…³äºŽæˆ‘","about.title":"åˆ›æ„è®¾è®¡å¸ˆ Â· çƒ­çˆ±å“ç‰Œå»ºè®¾",
-    "about.bio":"æˆ‘æ˜¯é»ŽçŽ‰è¾‰ï¼ˆLÃª Ngá»c Huyï¼‰â€”â€”å……æ»¡çƒ­æƒ…çš„åˆ›æ„å¹³é¢è®¾è®¡å¸ˆï¼Œä¸“æ³¨äºŽå“ç‰Œå»ºè®¾å’Œè§†è§‰å†²å‡»åŠ›å¼ºçš„è®¾è®¡ä½œå“ã€‚ä¸“é•¿äºŽæ´»åŠ¨å“ç‰Œç­–åˆ’ã€å‰ç¥¥ç‰©è®¾è®¡å’Œå“ç‰Œè§†è§‰è¯†åˆ«ï¼Œé£Žæ ¼æ˜Žäº®æ´»æ³¼ï¼Œä¸»è¦é¢å‘è¶Šå—å¸‚åœºã€‚",
-    "about.current":"ç›®å‰å°±èŒäºŽæ­¤","about.cta":"ä¸€èµ·åˆä½œå§ â†’",
-    "skills.tag":"æŠ€èƒ½","skills.title":"æˆ‘èƒ½åšä»€ä¹ˆ",
-    "skills.desc":"ä»Žæ´»åŠ¨åˆ°å“ç‰Œâ€”â€”æˆ‘æä¾›ä¸€è‡´ã€å‡ºè‰²ä¸”å‡†æ—¶çš„è®¾è®¡ã€‚",
-    "sk1n":"æ´»åŠ¨å“ç‰Œç­–åˆ’","sk1d":"åŒæ­¥æ´»åŠ¨è§†è§‰è¯†åˆ«å¥—è£…ï¼šèˆžå°èƒŒæ™¯ã€æ¨ªå¹…ã€å·¥ä½œæœã€æ˜“æ‹‰å®â€”â€”å§‹ç»ˆä¿æŒä¸€è‡´ã€‚",
-    "sk2n":"å‰ç¥¥ç‰©è®¾è®¡","sk2d":"åˆ›ä½œå“ç‰Œå‰ç¥¥ç‰©å½¢è±¡â€”â€”ä¸ªæ€§é²œæ˜Žã€å¯çˆ±è®¨å–œã€æ˜“äºŽè¯†åˆ«ã€çµæ´»åº”ç”¨ã€‚",
-    "sk3n":"æ¨ªå¹…ä¸Žå±•æ¿","sk3d":"å®¤å†…å¤–æ´»åŠ¨æ¨ªå¹…å’Œä¿¡æ¯å±•æ¿â€”â€”ä¿¡æ¯ä¼ è¾¾æ¸…æ™°ï¼Œè§†è§‰å¸å¼•åŠ›å¼ºã€‚",
-    "sk4n":"åŒ…è£…è®¾è®¡","sk4d":"ç¾Žè§‚ä¸“ä¸šçš„äº§å“åŒ…è£…è®¾è®¡â€”â€”åœ¨è´§æž¶ä¸Šç•™ä¸‹å¼ºçƒˆçš„ç¬¬ä¸€å°è±¡ã€‚",
-    "sk5n":"å“ç‰Œè§†è§‰è¯†åˆ«","sk5d":"æž„å»ºå®Œæ•´çš„å“ç‰Œè§†è§‰è¯†åˆ«ç³»ç»Ÿï¼šæ ‡å¿—ã€è‰²å½©ã€å­—ä½“åŠåº”ç”¨è§„èŒƒã€‚",
-    "sk6n":"æŽ¨å¹¿è®¾è®¡","sk6d":"ä¿ƒé”€åŠè¡ŒåŠ¨è¥é”€ææ–™â€”â€”æ¿€åŠ±äº’åŠ¨ä¸Žè½¬åŒ–çš„è®¾è®¡ã€‚",
-    "proj.tag":"ä½œå“","proj.title":"æˆ‘çš„ä½œå“é›†",
-    "proj.desc":"ä»Žæ´»åŠ¨å“ç‰Œç­–åˆ’åˆ°å“ç‰Œè§†è§‰è¯†åˆ«â€”â€”æ¯ä¸ªé¡¹ç›®éƒ½æœ‰å…¶ç‹¬ç‰¹çš„æ•…äº‹ã€‚",
-    "ft.all":"å…¨éƒ¨","ft.event":"æ´»åŠ¨å“ç‰Œ","ft.mascot":"å‰ç¥¥ç‰©","ft.pack":"åŒ…è£…","ft.brand":"å“ç‰Œè¯†åˆ«","ft.promo":"æŽ¨å¹¿",
-    "pv":"æŸ¥çœ‹è¯¦æƒ…",
-    "p1n":"æ´»åŠ¨å“ç‰Œå¥—è£… Vol.1","p1d":"åŒæ­¥æ´»åŠ¨è§†è§‰ï¼šèˆžå°èƒŒæ™¯ã€ç«–/æ¨ªæ¨ªå¹…ã€ç»„å§”ä¼šå·¥ä½œæœã€‚",
-    "p2n":"æ´»åŠ¨å“ç‰Œå¥—è£… Vol.2","p2d":"ç¤¾åŒºæ´»åŠ¨å“ç‰Œâ€”â€”å®Œæ•´ä¼ æ’­ä½“ç³»ï¼Œå«å…¨å¥—æŽ¨å¹¿ææ–™ã€‚",
-    "p3n":"æ´»åŠ¨å“ç‰Œå¥—è£… Vol.3","p3d":"åŠ¨æ„Ÿæ´»åŠ¨å“ç‰Œå¥—è£…â€”â€”èƒŒæ™¯æ¿ã€æ˜“æ‹‰å®åŠåŒæ­¥å°åˆ·ææ–™ã€‚",
-    "p4n":"å‰ç¥¥ç‰©è®¾è®¡ Vol.1","p4d":"å“ç‰Œå‰ç¥¥ç‰©è§’è‰²è®¾è®¡â€”â€”å¤šç§è¡¨æƒ…ä¸Žå§¿åŠ¿ï¼Œåº”ç”¨å¤šæ ·ã€‚",
-    "p5n":"å‰ç¥¥ç‰©è®¾è®¡ Vol.2","p5d":"å¤šæ¬¾å˜ä½“å“ç‰Œå‰ç¥¥ç‰©å¥—è£…â€”â€”æƒ…æ„Ÿä¸°å¯Œï¼Œè¯†åˆ«ç»Ÿä¸€ã€‚",
-    "p6n":"æ¨ªå¹…ä¸Žå±•æ¿ç³»ç»Ÿ","p6d":"æ´»åŠ¨æ¨ªå¹…ä¸Žä¿¡æ¯å±•æ¿ç³»ç»Ÿâ€”â€”æ¸…æ™°ã€æ˜“è¯»ã€ä¸“ä¸šè®¾è®¡ã€‚",
-    "p7n":"AGIE å“ç‰Œè¯†åˆ«","p7d":"æž„å»º AGIE å“ç‰Œè§†è§‰è¯†åˆ«ç³»ç»Ÿâ€”â€”æ ‡å¿—ã€è‰²å½©åŠåŒæ­¥åº”ç”¨ã€‚",
-    "p8n":"æŽ¨å¹¿æ´»åŠ¨","p8d":"è¡ŒåŠ¨è¥é”€æŽ¨å¹¿ææ–™â€”â€”æ¿€åŠ±äº’åŠ¨ä¸Žè½¬åŒ–çš„è®¾è®¡ã€‚",
-    "p9n":"Ifinix åŒ…è£…è®¾è®¡","p9d":"Ifinix å“ç‰ŒåŒ…è£…ä¸Žè§†è§‰è¯†åˆ«è®¾è®¡â€”â€”çŽ°ä»£ã€ç®€çº¦ã€å°è±¡æ·±åˆ»ã€‚",
-    "cl.tag":"å®¢æˆ·ä¸Žåˆä½œä¼™ä¼´","cl.title":"å½“å‰åˆä½œæ–¹",
-    "cl.desc":"æˆ‘å¾ˆè£å¹¸æˆä¸º Midu MenaQ7 åˆ›æ„å›¢é˜Ÿçš„ä¸€å‘˜ã€‚","cl.role":"åˆ›æ„è®¾è®¡å¸ˆ â€” å†…éƒ¨",
-    "ct.tag":"è”ç³»æˆ‘","ct.title":"è®©æˆ‘ä»¬ä¸€èµ·åˆ›é€ ç²¾å½©","ct.phone":"ç”µè¯",
-    "ct.cta":"æ‚¨æœ‰éœ€è¦åˆ›æ„è®¾è®¡å¸ˆçš„é¡¹ç›®å—ï¼Ÿæˆ‘éšæ—¶å‡†å¤‡å€¾å¬å¹¶å°†æ‚¨çš„æƒ³æ³•å˜ä¸ºçŽ°å®žã€‚ç«‹å³è”ç³»æˆ‘â€”â€”æˆ‘é€šå¸¸åœ¨24å°æ—¶å†…å›žå¤ã€‚"
+    "nav.about":"关于我","nav.skills":"技能","nav.projects":"作品","nav.contact":"联系",
+    "hero.greeting":"你好，我是","hero.role":"创意设计师 · Midu MenaQ7",
+    "hero.tagline":"创意设计 — 会讲故事的品牌。",
+    "hero.cta1":"查看作品","hero.cta2":"立即联系",
+    "badge.projects":"项目","badge.skills":"技能",
+    "stats.projects":"完成项目","stats.skills":"设计领域",
+    "stats.categories":"创意类别","stats.passion":"热情与专注",
+    "about.tag":"关于我","about.title":"创意设计师 · 热爱品牌建设",
+    "about.bio":"我是黎玉辉（Lê Ngọc Huy）——充满热情的创意平面设计师，专注于品牌建设和视觉冲击力强的设计作品。专长于活动品牌策划、吉祥物设计和品牌视觉识别，风格明亮活泼，主要面向越南市场。",
+    "about.current":"目前就职于此","about.cta":"一起合作吧 →",
+    "skills.tag":"技能","skills.title":"我能做什么",
+    "skills.desc":"从活动到品牌——我提供一致、出色且准时的设计。",
+    "sk1n":"活动品牌策划","sk1d":"同步活动视觉识别套装：舞台背景、横幅、工作服、易拉宝——始终保持一致。",
+    "sk2n":"吉祥物设计","sk2d":"创作品牌吉祥物形象——个性鲜明、可爱讨喜、易于识别、灵活应用。",
+    "sk3n":"横幅与展板","sk3d":"室内外活动横幅和信息展板——信息传达清晰，视觉吸引力强。",
+    "sk4n":"包装设计","sk4d":"美观专业的产品包装设计——在货架上留下强烈的第一印象。",
+    "sk5n":"品牌视觉识别","sk5d":"构建完整的品牌视觉识别系统：标志、色彩、字体及应用规范。",
+    "sk6n":"推广设计","sk6d":"促销及行动营销材料——激励互动与转化的设计。",
+    "proj.tag":"作品","proj.title":"我的作品集",
+    "proj.desc":"从活动品牌策划到品牌视觉识别——每个项目都有其独特的故事。",
+    "ft.all":"全部","ft.event":"活动品牌","ft.mascot":"吉祥物","ft.pack":"包装","ft.brand":"品牌识别","ft.promo":"推广",
+    "pv":"查看详情",
+    "p1n":"活动品牌套装 Vol.1","p1d":"同步活动视觉：舞台背景、竖/横横幅、组委会工作服。",
+    "p2n":"活动品牌套装 Vol.2","p2d":"社区活动品牌——完整传播体系，含全套推广材料。",
+    "p3n":"活动品牌套装 Vol.3","p3d":"动感活动品牌套装——背景板、易拉宝及同步印刷材料。",
+    "p4n":"吉祥物设计 Vol.1","p4d":"品牌吉祥物角色设计——多种表情与姿势，应用多样。",
+    "p5n":"吉祥物设计 Vol.2","p5d":"多款变体品牌吉祥物套装——情感丰富，识别统一。",
+    "p6n":"横幅与展板系统","p6d":"活动横幅与信息展板系统——清晰、易读、专业设计。",
+    "p7n":"AGIE 品牌识别","p7d":"构建 AGIE 品牌视觉识别系统——标志、色彩及同步应用。",
+    "p8n":"推广活动","p8d":"行动营销推广材料——激励互动与转化的设计。",
+    "p9n":"Ifinix 包装设计","p9d":"Ifinix 品牌包装与视觉识别设计——现代、简约、印象深刻。",
+    "cl.tag":"客户与合作伙伴","cl.title":"当前合作方",
+    "cl.desc":"我很荣幸成为 Midu MenaQ7 创意团队的一员。","cl.role":"创意设计师 — 内部",
+    "ct.tag":"联系我","ct.title":"让我们一起创造精彩","ct.phone":"电话",
+    "ct.cta":"您有需要创意设计师的项目吗？我随时准备倾听并将您的想法变为现实。立即联系我——我通常在24小时内回复。"
   }
 };
 
@@ -553,7 +553,7 @@ document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click',(
 // DARK MODE
 let dark=false;
 const themeBtn=document.getElementById('themeBtn');
-themeBtn.addEventListener('click',()=>{ dark=!dark; document.documentElement.setAttribute('data-theme',dark?'dark':'light'); themeBtn.textContent=dark?'â˜€ï¸':'ðŸŒ™'; });
+themeBtn.addEventListener('click',()=>{ dark=!dark; document.documentElement.setAttribute('data-theme',dark?'dark':'light'); themeBtn.textContent=dark?'☀️':'🌙'; });
 
 // MOBILE MENU
 const mm=document.getElementById('mobileMenu');
@@ -581,23 +581,12 @@ window.addEventListener('scroll',()=>{ scrollBtn.classList.toggle('show', window
 scrollBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 </script>
 
-<button id="scrollTop" aria-label="Scroll to top" style="
-  position:fixed;bottom:32px;right:32px;z-index:999;
-  width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--orange),var(--blue));
-  color:#fff;font-size:1.2rem;
-  box-shadow:0 4px 20px rgba(255,107,43,.4);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transform:translateY(16px) scale(0.85);
-  transition:opacity .3s,transform .3s;
-  pointer-events:none;
-">↑</button>
-
 <style>
-#scrollTop.show { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-#scrollTop:hover { transform:translateY(-4px) scale(1.08) !important; box-shadow:0 8px 28px rgba(255,107,43,.55); }
+#scrollTop { position:fixed;bottom:32px;right:32px;z-index:999;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--orange),var(--blue));color:#fff;font-size:1.2rem;box-shadow:0 4px 20px rgba(255,107,43,.4);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(16px) scale(0.85);transition:opacity .3s,transform .3s;pointer-events:none; }
+#scrollTop.show { opacity:1;transform:translateY(0) scale(1);pointer-events:auto; }
+#scrollTop:hover { transform:translateY(-4px) scale(1.08) !important;box-shadow:0 8px 28px rgba(255,107,43,.55); }
 </style>
+<button id="scrollTop" aria-label="Scroll to top">↑</button>
 
 </body>
 </html>
-
