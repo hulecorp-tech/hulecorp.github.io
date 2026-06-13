@@ -574,7 +574,30 @@ document.querySelectorAll('.filter-tab').forEach(tab=>{
 // SCROLL ANIMATIONS
 const obs=new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }),{threshold:0.1});
 document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+// SCROLL TO TOP
+const scrollBtn=document.getElementById('scrollTop');
+window.addEventListener('scroll',()=>{ scrollBtn.classList.toggle('show', window.scrollY>400); });
+scrollBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
 </script>
+
+<button id="scrollTop" aria-label="Scroll to top" style="
+  position:fixed;bottom:32px;right:32px;z-index:999;
+  width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--orange),var(--blue));
+  color:#fff;font-size:1.2rem;
+  box-shadow:0 4px 20px rgba(255,107,43,.4);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transform:translateY(16px) scale(0.85);
+  transition:opacity .3s,transform .3s;
+  pointer-events:none;
+">↑</button>
+
+<style>
+#scrollTop.show { opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
+#scrollTop:hover { transform:translateY(-4px) scale(1.08) !important; box-shadow:0 8px 28px rgba(255,107,43,.55); }
+</style>
+
 </body>
 </html>
 
