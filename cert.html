@@ -125,14 +125,14 @@ const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 let _t;function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast'+(err?' err':'');clearTimeout(_t);setTimeout(()=>t.classList.add('show'),10);_t=setTimeout(()=>t.classList.remove('show'),3500)}
 
 /* ---------- position config (tunable, persisted) ---------- */
-const POS_KEY='cert_pos_v2';
+const POS_KEY='cert_pos_v3';
 const DEFAULT_POS={
-  photoX:0.500, photoY:0.468, photoR:0.122,
-  nameY:0.632, nameSize:0.058,
-  lineY:0.690, lineW:0.46,
-  contentY:0.722, contentSize:0.028, contentGap:0.034,
-  chapterY:0.760, chapterSize:0.026,
-  dateY:0.792, dateSize:0.022
+  photoX:0.491, photoY:0.427, photoR:0.115,
+  nameY:0.646, nameSize:0.056,
+  lineY:0.668, lineW:0.46,
+  contentY:0.700, contentSize:0.026, contentGap:0.031,
+  chapterY:0.754, chapterSize:0.023,
+  dateY:0.774, dateSize:0.020
 };
 let POS=loadPos();
 function loadPos(){try{return Object.assign({},DEFAULT_POS,JSON.parse(localStorage.getItem(POS_KEY)||'{}'))}catch{return{...DEFAULT_POS}}}
@@ -144,15 +144,14 @@ let tplImg=null;
 function loadTemplate(){
   return new Promise(res=>{
     const saved=localStorage.getItem(TPL_KEY);
-    const tryUrl='cert-template.png?v=1';
     const img=new Image();img.crossOrigin='anonymous';
     img.onload=()=>{tplImg=img;res(true)};
     img.onerror=()=>{
       if(saved){const i2=new Image();i2.onload=()=>{tplImg=i2;res(true)};i2.onerror=()=>res(false);i2.src=saved;}
       else res(false);
     };
-    // prefer uploaded (most up-to-date) if exists, else committed asset
-    img.src=saved||tryUrl;
+    // prefer committed shared template; fall back to a locally uploaded one
+    img.src='cert-template.png?v=2';
   });
 }
 
