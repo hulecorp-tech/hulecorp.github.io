@@ -209,10 +209,14 @@ function drawCert(ctx,W,H,data){
   if(data.name)gradText(ctx,data.name,W*POS.photoX,H*POS.nameY,W*POS.nameSize,'"MTD Brand Pro"','400');
   // divider
   if(data.name){ctx.strokeStyle='#c9b9a4';ctx.lineWidth=Math.max(1,W*0.0012);ctx.beginPath();ctx.moveTo(W*(POS.photoX-POS.lineW/2),H*POS.lineY);ctx.lineTo(W*(POS.photoX+POS.lineW/2),H*POS.lineY);ctx.stroke();}
-  // content — RubikMKT Bold (wrap)
+  // content — RubikMKT Bold (respect manual line breaks, then auto-wrap each)
   if(data.content){
-    const lines=wrap(ctx,data.content,W*0.80,W*POS.contentSize,'RubikMKT','700');
-    lines.forEach((ln,i)=>gradText(ctx,ln,W*POS.photoX,H*POS.contentY+i*H*POS.contentGap,W*POS.contentSize,'RubikMKT','700'));
+    let lines=[];
+    String(data.content).split(/\r?\n/).forEach(seg=>{
+      if(seg.trim()==='')lines.push('');
+      else lines=lines.concat(wrap(ctx,seg,W*0.80,W*POS.contentSize,'RubikMKT','700'));
+    });
+    lines.forEach((ln,i)=>{if(ln)gradText(ctx,ln,W*POS.photoX,H*POS.contentY+i*H*POS.contentGap,W*POS.contentSize,'RubikMKT','700')});
   }
   // chapter — "Chapter N:" Regular + name Bold
   if(data.chapter){
@@ -331,7 +335,7 @@ function renderTool(prof){
           <input type="file" id="fileIn" accept="image/*" hidden>
         </div>
         <div class="field"><label>Tên (in trên chứng nhận)</label><input id="fName" value="${esc(state.name)}"></div>
-        <div class="field"><label>Nội dung vinh danh</label><textarea id="fContent">${esc(state.content)}</textarea></div>
+        <div class="field"><label>Nội dung vinh danh <span style="font-weight:400;color:var(--ink2)">(Enter để xuống dòng)</span></label><textarea id="fContent">${esc(state.content)}</textarea></div>
         <div class="field"><label>Chapter</label><input id="fChapter" value="${esc(state.chapter)}"></div>
         <div class="field"><label>Ngày tháng năm</label><input id="fDate" value="${esc(state.date)}"></div>
 
