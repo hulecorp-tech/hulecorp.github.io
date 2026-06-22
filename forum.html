@@ -3,223 +3,191 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Forum — Huy Le Creative</title>
+<title>Forum — Huy Le</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--c:#F4EBDC;--c2:#EAD9C4;--nv:#070F2B;--nv2:#0B2A78;--or:#FF7A1A;--or2:#FF9D4D;--cy:#41E2FF;--wh:#fff;--tx:#17130C;--tx2:#6B6050;--bd:#E2D8CC;--rad:18px;--sh:0 6px 28px rgba(0,0,0,.1)}
+:root{--bg:#F4EBDC;--bg2:#EAD9C4;--nv:#070F2B;--nv2:#0B2A78;--or:#FF7A1A;--or2:#FF9D4D;--wh:#fff;--tx:#17130C;--tx2:#6B6050;--bd:#E2D8CC;--rad:16px;--sh:0 4px 20px rgba(0,0,0,.1)}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Inter',-apple-system,sans-serif;background:var(--c);color:var(--tx);min-height:100vh;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
 a{color:inherit;text-decoration:none;cursor:pointer}
-.disp{font-family:'Poppins',sans-serif}
+button{cursor:pointer;font-family:inherit}
+.pp{font-family:'Poppins',sans-serif;font-weight:700}
 .wrap{max-width:860px;margin:0 auto;padding:0 20px}
 
-/* NAV */
-.nav{position:sticky;top:0;z-index:100;background:rgba(244,235,220,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);padding:0}
-.nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
-.nav-logo{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.1rem;display:flex;align-items:center;gap:8px}
-.nav-logo span{background:var(--nv);color:var(--c);width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.nav-links{display:flex;gap:4px}
-.nav-links a{padding:7px 14px;border-radius:20px;font-size:.82rem;font-weight:600;color:var(--tx2);transition:.2s}
-.nav-links a:hover,.nav-links a.on{background:var(--nv);color:var(--wh)}
-.nav-user{display:flex;align-items:center;gap:10px}
-.avatar-sm{width:34px;height:34px;border-radius:50%;background:var(--nv2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;cursor:pointer;flex-shrink:0}
-.btn{padding:9px 20px;border-radius:24px;font-weight:700;font-size:.82rem;cursor:pointer;border:0;font-family:'Inter',sans-serif;transition:.2s}
-.btn-o{background:var(--or);color:#fff;box-shadow:0 6px 18px rgba(255,122,26,.35)}
-.btn-o:hover{background:var(--or2);transform:translateY(-1px)}
-.btn-g{background:transparent;border:2px solid var(--bd);color:var(--tx)}
-.btn-g:hover{background:var(--c2)}
-.btn-sm{padding:6px 14px;font-size:.78rem}
-.btn-danger{background:#EF4444;color:#fff}
-.btn-danger:hover{background:#DC2626}
+.nav{position:sticky;top:0;z-index:100;background:rgba(244,235,220,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:58px;gap:12px}
+.logo{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.logo-i{width:30px;height:30px;background:var(--nv);color:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.nav-links{display:flex;gap:2px}
+.nav-links a{padding:6px 14px;border-radius:20px;font-size:.82rem;font-weight:600;color:var(--tx2);transition:.15s}
+.nav-links a:hover,.nav-links a.on{background:var(--nv);color:#fff}
+.nav-r{display:flex;align-items:center;gap:8px}
+.av{width:32px;height:32px;border-radius:50%;background:var(--nv2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;cursor:pointer;flex-shrink:0}
 
-/* MAIN */
-.view{padding:32px 0 80px}
-.loading{text-align:center;padding:80px 20px;color:var(--tx2);font-size:1.1rem}
+.btn{padding:8px 18px;border-radius:24px;font-weight:700;font-size:.82rem;border:none;transition:.15s;font-family:inherit;cursor:pointer}
+.btn-o{background:var(--or);color:#fff}.btn-o:hover{background:var(--or2)}
+.btn-g{background:var(--bg2);color:var(--tx)}.btn-g:hover{background:var(--bd)}
+.btn-nv{background:var(--nv);color:#fff}
+.btn-red{background:#ef4444;color:#fff}
+.btn-sm{padding:5px 12px;font-size:.78rem}
+.btn:disabled{opacity:.5;pointer-events:none}
 
-/* TOAST */
-.toast{position:fixed;bottom:28px;right:28px;background:var(--nv);color:#fff;padding:14px 22px;border-radius:14px;font-weight:600;font-size:.9rem;transform:translateY(80px);opacity:0;transition:.35s;z-index:999;max-width:320px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.err{background:#EF4444}
+.view{min-height:calc(100vh - 58px);padding:32px 0 60px}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--nv);color:#fff;padding:12px 20px;border-radius:12px;font-size:.85rem;font-weight:600;z-index:999;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;max-width:300px}
+.toast.show{opacity:1;transform:translateY(0)}.toast.err{background:#ef4444}
 
-/* SETUP SCREEN */
-.setup-box{max-width:520px;margin:60px auto;background:var(--wh);border-radius:var(--rad);padding:40px;box-shadow:var(--sh)}
-.setup-box h2{font-family:'Poppins',sans-serif;font-size:1.6rem;margin-bottom:8px}
-.setup-box p{color:var(--tx2);margin-bottom:24px;line-height:1.6;font-size:.95rem}
-.setup-box pre{background:var(--c2);border-radius:10px;padding:14px;font-size:.78rem;margin-bottom:20px;overflow-x:auto;color:var(--nv2);line-height:1.6}
-details{margin-bottom:20px}
-summary{cursor:pointer;font-weight:600;font-size:.9rem;color:var(--nv2);padding:8px 0}
+.spin{text-align:center;padding:60px 20px;color:var(--tx2);font-size:.9rem}
+.spin::before{content:'⟳';display:block;font-size:2rem;margin-bottom:12px;animation:rot 1s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:48px 20px;color:var(--tx2);font-size:.9rem;line-height:1.7}
 
-/* FORMS */
-.form-box{max-width:440px;margin:40px auto;background:var(--wh);border-radius:var(--rad);padding:36px;box-shadow:var(--sh)}
-.form-box h2{font-family:'Poppins',sans-serif;font-size:1.5rem;margin-bottom:22px}
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.field label{font-weight:600;font-size:.85rem;color:var(--tx2)}
-.field input,.field textarea,.field select{border:1.5px solid var(--bd);border-radius:10px;padding:10px 14px;font-size:.93rem;font-family:'Inter',sans-serif;background:var(--c);color:var(--tx);transition:.2s}
-.field input:focus,.field textarea:focus,.field select:focus{outline:0;border-color:var(--or);background:var(--wh)}
-.field textarea{resize:vertical;min-height:100px}
-.form-switch{text-align:center;margin-top:16px;color:var(--tx2);font-size:.88rem}
-.form-switch a{color:var(--or);font-weight:700}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.ph h1{font-family:'Poppins',sans-serif;font-size:1.6rem}
+.card{background:var(--wh);border-radius:var(--rad);border:1px solid var(--bd);padding:20px;box-shadow:var(--sh)}
 
-/* PAGE HEAD */
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
-.ph h1{font-family:'Poppins',sans-serif;font-size:1.8rem;font-weight:800}
-.bc{font-size:.85rem;color:var(--tx2);margin-bottom:16px}
-.bc a{color:var(--or);font-weight:600}
-.bc a:hover{text-decoration:underline}
+.cat-list{display:flex;flex-direction:column;gap:10px}
+.cat-card{display:flex;align-items:center;gap:16px;background:var(--wh);border:1px solid var(--bd);border-radius:var(--rad);padding:18px 20px;box-shadow:var(--sh);transition:.15s}
+.cat-card:hover{border-color:var(--or);transform:translateY(-1px)}
+.cat-icon{font-size:1.8rem;flex-shrink:0;width:44px;text-align:center}
+.cat-info{flex:1;min-width:0}
+.cat-name{font-weight:700;font-size:1rem;margin-bottom:3px}
+.cat-desc{color:var(--tx2);font-size:.84rem}
+.cat-count{color:var(--tx2);font-size:.82rem;white-space:nowrap}
 
-/* CATEGORIES */
-.cat-list{display:flex;flex-direction:column;gap:12px}
-.cat-card{display:flex;align-items:center;gap:18px;background:var(--wh);border-radius:var(--rad);padding:20px 24px;box-shadow:var(--sh);transition:.25s}
-.cat-card:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(0,0,0,.13)}
-.cat-icon{font-size:2.2rem;width:52px;text-align:center;flex-shrink:0}
-.cat-info{flex:1}
-.cat-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.08rem}
-.cat-desc{color:var(--tx2);font-size:.88rem;margin-top:3px}
-.cat-count{font-weight:700;color:var(--tx2);font-size:.88rem;flex-shrink:0}
-
-/* POST LIST */
-.post-list{display:flex;flex-direction:column;gap:10px}
-.post-row{display:flex;align-items:center;gap:14px;background:var(--wh);border-radius:14px;padding:16px 20px;box-shadow:0 3px 14px rgba(0,0,0,.07);transition:.2s;border-left:4px solid transparent}
-.post-row:hover{transform:translateX(3px);border-left-color:var(--or)}
-.post-row.pinned{border-left-color:var(--nv2)}
+.post-list{display:flex;flex-direction:column;gap:8px}
+.post-row{display:flex;align-items:center;gap:16px;background:var(--wh);border:1px solid var(--bd);border-radius:12px;padding:14px 18px;transition:.15s}
+.post-row:hover{border-color:var(--or)}
+.post-row.pinned{background:rgba(255,122,26,.05);border-color:rgba(255,122,26,.3)}
 .post-info{flex:1;min-width:0}
-.post-title{font-weight:700;font-size:.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.post-meta{font-size:.8rem;color:var(--tx2);margin-top:3px}
-.post-replies{text-align:right;font-size:.82rem;color:var(--tx2);font-weight:600;flex-shrink:0}
-.post-replies span{display:block;font-weight:400}
-.empty{text-align:center;padding:50px 20px;color:var(--tx2);background:var(--wh);border-radius:var(--rad)}
-.pin,.lock{font-size:.9rem}
+.post-title{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.post-meta{color:var(--tx2);font-size:.78rem}
+.post-replies{text-align:center;min-width:50px;color:var(--tx2);font-size:.82rem;font-weight:600}
+.post-replies span{display:block;font-size:.72rem;font-weight:400}
 
-/* POST DETAIL */
-.post-full{background:var(--wh);border-radius:var(--rad);padding:32px;box-shadow:var(--sh);margin-bottom:24px}
-.post-full h1{font-family:'Poppins',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:10px}
-.post-byline{font-size:.85rem;color:var(--tx2);margin-bottom:22px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.post-body{font-size:.97rem;line-height:1.75;white-space:pre-wrap;word-break:break-word}
-.locked-msg,.login-msg{text-align:center;padding:20px;color:var(--tx2);font-size:.9rem;background:var(--c2);border-radius:10px;margin-top:16px}
+.post-full{background:var(--wh);border-radius:var(--rad);border:1px solid var(--bd);padding:28px;margin-bottom:24px;box-shadow:var(--sh)}
+.post-full h1{font-family:'Poppins',sans-serif;font-size:1.4rem;margin-bottom:14px}
+.post-byline{display:flex;align-items:center;gap:8px;color:var(--tx2);font-size:.82rem;margin-bottom:20px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid var(--bd)}
+.post-body{line-height:1.75;white-space:pre-wrap;word-break:break-word}
 
-/* COMMENTS */
-.comments-sec h3{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.15rem;margin-bottom:16px}
-.comment-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
-.comment{display:flex;gap:12px;background:var(--wh);border-radius:14px;padding:16px;box-shadow:0 3px 12px rgba(0,0,0,.06)}
-.c-avatar{width:38px;height:38px;border-radius:50%;background:var(--nv2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;flex-shrink:0}
-.c-body{flex:1;min-width:0}
-.c-meta{font-size:.8rem;color:var(--tx2);margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.c-meta b{color:var(--tx)}
-.c-text{font-size:.93rem;line-height:1.65;white-space:pre-wrap;word-break:break-word}
-.del-btn{font-size:.75rem;color:#EF4444;border:0;background:0;cursor:pointer;margin-top:6px;font-family:'Inter',sans-serif}
-.del-btn:hover{text-decoration:underline}
-.role-badge-sm{font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:5px;text-transform:uppercase}
-.role-badge-sm.admin{background:var(--or);color:#fff}
-.role-badge-sm.moderator{background:var(--nv2);color:#fff}
+.cmts-sec h3{font-size:1rem;margin-bottom:14px;font-weight:700}
+.comment{display:flex;gap:12px;margin-bottom:16px}
+.c-av{width:32px;height:32px;border-radius:50%;background:var(--nv2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;flex-shrink:0}
+.c-body{flex:1;background:var(--wh);border:1px solid var(--bd);border-radius:12px;padding:12px 16px}
+.c-meta{color:var(--tx2);font-size:.78rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.c-text{font-size:.88rem;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.del-btn{font-size:.72rem;color:#ef4444;background:none;border:none;padding:4px 0;margin-top:4px;cursor:pointer;font-family:inherit}
+.locked-msg,.login-cta{text-align:center;padding:20px;color:var(--tx2);font-size:.88rem;background:var(--bg2);border-radius:12px;margin-top:16px}
 
-/* ADMIN */
-.admin-tabs{display:flex;gap:8px;margin-bottom:24px;border-bottom:2px solid var(--bd);padding-bottom:0}
-.tab{padding:10px 20px;font-weight:700;font-size:.88rem;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:.2s;color:var(--tx2)}
-.tab.on{color:var(--or);border-bottom-color:var(--or)}
-.table-wrap{overflow-x:auto;background:var(--wh);border-radius:var(--rad);box-shadow:var(--sh)}
-table{width:100%;border-collapse:collapse;font-size:.88rem}
-th{background:var(--c2);padding:12px 16px;text-align:left;font-weight:700;color:var(--tx2)}
-th:first-child{border-radius:var(--rad) 0 0 0}
-th:last-child{border-radius:0 var(--rad) 0 0}
-td{padding:11px 16px;border-top:1px solid var(--bd);vertical-align:middle}
-tr:hover td{background:rgba(0,0,0,.02)}
-.role-sel{border:1.5px solid var(--bd);border-radius:8px;padding:5px 10px;font-size:.82rem;background:var(--c);font-family:'Inter',sans-serif;cursor:pointer}
-.perm-list{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
-.perm-chip{display:flex;align-items:center;gap:6px;background:var(--nv);color:#fff;padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:600}
-.perm-chip button{background:0;border:0;color:rgba(255,255,255,.7);cursor:pointer;font-size:1rem;line-height:1;padding:0}
-.perm-chip button:hover{color:#fff}
-.perm-add{display:flex;gap:8px;flex-wrap:wrap}
+.bc{font-size:.82rem;color:var(--tx2);margin-bottom:16px}
+.bc a{color:var(--or);font-weight:600}
 
-/* PROFILE PAGE */
-.profile-card{background:var(--wh);border-radius:var(--rad);padding:28px;box-shadow:var(--sh);margin-bottom:24px;display:flex;align-items:center;gap:20px}
-.profile-avatar{width:60px;height:60px;border-radius:50%;background:var(--nv2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.4rem;flex-shrink:0}
-.profile-info h2{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.3rem}
-.profile-info .meta{color:var(--tx2);font-size:.88rem;margin-top:4px;display:flex;gap:12px}
-.role-pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;text-transform:uppercase}
-.role-pill.admin{background:var(--or);color:#fff}
-.role-pill.moderator{background:var(--nv2);color:#fff}
-.role-pill.member{background:var(--c2);color:var(--tx2)}
+.form-box{max-width:440px;margin:0 auto}
+.form-box h2{font-family:'Poppins',sans-serif;margin-bottom:24px}
+.wide-form{max-width:600px;margin:0 auto}
+.wide-form h2{font-family:'Poppins',sans-serif;margin-bottom:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;padding:10px 14px;border:1.5px solid var(--bd);border-radius:10px;font-family:inherit;font-size:.9rem;background:var(--wh);color:var(--tx);outline:none;transition:.15s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--or)}
+.field textarea{resize:vertical;min-height:120px}
+.form-footer{margin-top:12px;color:var(--tx2);font-size:.82rem;text-align:center}
+.form-footer a{color:var(--or);font-weight:600}
+
+.bdg{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:.68rem;font-weight:700;text-transform:uppercase}
+.bdg-a{background:var(--or);color:#fff}.bdg-m{background:var(--nv2);color:#fff}.bdg-u{background:var(--bg2);color:var(--tx2)}
+
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--bg2);border-radius:12px;padding:4px}
+.tab{flex:1;padding:8px;border-radius:9px;font-size:.82rem;font-weight:600;text-align:center;cursor:pointer;color:var(--tx2);transition:.15s;border:none;background:none;font-family:inherit}
+.tab.on{background:var(--wh);color:var(--nv);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.84rem}
+th{text-align:left;padding:10px 12px;color:var(--tx2);font-weight:600;border-bottom:2px solid var(--bd);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--bd);vertical-align:middle}
+select.rsel{padding:4px 8px;border-radius:8px;border:1.5px solid var(--bd);font-family:inherit;font-size:.8rem;background:var(--wh)}
+
+.setup-box{max-width:560px;margin:0 auto;background:var(--wh);border-radius:var(--rad);border:1px solid var(--bd);padding:32px;box-shadow:var(--sh)}
+.setup-box h2{font-family:'Poppins',sans-serif;margin-bottom:12px}
+.sql-pre{background:var(--nv);color:#e2e8f0;padding:16px;border-radius:10px;font-size:.7rem;font-family:monospace;overflow:auto;max-height:260px;white-space:pre;margin:10px 0;line-height:1.6}
+details summary{cursor:pointer;font-size:.82rem;font-weight:600;color:var(--or);padding:8px 0;user-select:none}
+
+.perm-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--bd);gap:12px;font-size:.85rem}
+.perm-add{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.perm-add input,.perm-add select{flex:1;padding:8px 12px;border:1.5px solid var(--bd);border-radius:8px;font-family:inherit;font-size:.82rem;background:var(--wh);min-width:100px}
+
+.profile-hdr{display:flex;align-items:center;gap:20px;margin-bottom:28px;flex-wrap:wrap}
+.av-lg{width:64px;height:64px;border-radius:50%;background:var(--nv2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem}
+
+.err-box{background:var(--wh);border-radius:var(--rad);border:2px solid #ef4444;padding:32px;text-align:center;max-width:480px;margin:0 auto}
 
 @media(max-width:600px){
   .nav-links{display:none}
-  .ph h1{font-size:1.4rem}
-  .cat-card{padding:15px}
-  .post-full{padding:20px}
-  .form-box,.setup-box{margin:20px auto;padding:24px}
-  .perm-add{flex-direction:column}
+  .ph h1{font-size:1.2rem}
+  .post-full{padding:18px}
+  .setup-box{margin:16px auto;padding:24px}
 }
 </style>
 </head>
 <body>
-<nav class="nav" id="navEl"><div class="wrap nav-in" id="navIn"></div></nav>
-<div id="toast" class="toast"></div>
-<main class="view"><div class="wrap" id="view"><div class="loading">Đang tải...</div></div></main>
-
+<nav class="nav"><div class="wrap nav-in" id="navIn"></div></nav>
+<div class="toast" id="toast"></div>
+<main class="view"><div class="wrap" id="view"><div class="spin"></div></div></main>
 <script>
-/* ====== CONFIG ====== */
-const CFG_KEY = 'hf_sb_cfg';
-let sb = null, me = null, prof = null;
+/* CONFIG */
+const CFGK='hf2_cfg';
+let sb=null,me=null,prof=null;
+const getCfg=()=>{try{return JSON.parse(localStorage.getItem(CFGK)||'null')}catch{return null}};
+const saveCfg=(u,k)=>localStorage.setItem(CFGK,JSON.stringify({url:u,key:k}));
+window.clearCfg=()=>{localStorage.removeItem(CFGK);location.reload()};
 
-function getCfg(){try{return JSON.parse(localStorage.getItem(CFG_KEY)||'null')}catch{return null}}
-function saveCfg(u,k){localStorage.setItem(CFG_KEY,JSON.stringify({url:u,key:k}))}
-function clearCfg(){localStorage.removeItem(CFG_KEY);location.reload()}
+/* UTILS */
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function ago(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return s+'s trước';if(s<3600)return Math.floor(s/60)+'ph trước';if(s<86400)return Math.floor(s/3600)+'h trước';return Math.floor(s/86400)+'ngày trước'}
+function view(h){document.getElementById('view').innerHTML=h}
+let _t;
+function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' err':'');clearTimeout(_t);setTimeout(()=>t.classList.add('show'),10);_t=setTimeout(()=>t.classList.remove('show'),3500)}
+window.goto=r=>{location.hash=r};
+function bdg(r){if(r==='admin')return`<span class="bdg bdg-a">Admin</span>`;if(r==='moderator')return`<span class="bdg bdg-m">Mod</span>`;return`<span class="bdg bdg-u">Thành viên</span>`}
+function errBox(msg){return`<div class="err-box"><div style="font-size:2.5rem;margin-bottom:12px">⚠️</div><div style="font-weight:700;font-size:1.05rem;margin-bottom:8px">Không tải được dữ liệu</div><div style="color:var(--tx2);font-size:.85rem;word-break:break-all;margin-bottom:20px;line-height:1.6">${esc(msg)}</div><button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình Supabase</button></div>`}
 
-function initSb(url,key){
-  sb = window.supabase.createClient(url,key);
+/* INIT SUPABASE */
+function initSb(url,key){sb=window.supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true}})}
+
+/* AUTH */
+async function loadUser(){
+  const {data:{user}}=await sb.auth.getUser();
+  me=user||null;
+  if(me){const{data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data||null;}
+  else prof=null;
 }
 
-/* ====== UTILS ====== */
-const esc = s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-function ago(d){
-  const s=Math.floor((Date.now()-new Date(d))/1000);
-  if(s<60)return s+'s trước';if(s<3600)return Math.floor(s/60)+'ph trước';
-  if(s<86400)return Math.floor(s/3600)+'h trước';return Math.floor(s/86400)+'ngày trước';
-}
-function view(html){document.getElementById('view').innerHTML=html}
-let _tid;
-function toast(msg,err=false){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.className='toast'+(err?' err':'');
-  clearTimeout(_tid);
-  setTimeout(()=>t.classList.add('show'),10);
-  _tid=setTimeout(()=>t.classList.remove('show'),3500);
-}
-function rolePill(r){return`<span class="role-pill ${r}">${r==='admin'?'Admin':r==='moderator'?'Mod':'Thành viên'}</span>`}
-function roleBadgeSm(r){return r==='admin'?`<span class="role-badge-sm admin">ADMIN</span>`:r==='moderator'?`<span class="role-badge-sm moderator">MOD</span>`:``}
-
-/* ====== NAV ====== */
+/* NAV */
 function renderNav(){
   const h=location.hash.slice(1)||'home';
-  const on=r=>h===r?'on':'';
+  const on=r=>h===r||h.startsWith(r+'-')?'on':'';
   document.getElementById('navIn').innerHTML=`
-    <a href="#home" class="nav-logo"><span>H</span> Forum</a>
+    <a href="#home" class="logo"><div class="logo-i">H</div> Forum</a>
     <div class="nav-links">
       <a href="#home" class="${on('home')}">Diễn đàn</a>
       ${prof?.role==='admin'?`<a href="#admin" class="${on('admin')}">Quản trị</a>`:''}
       ${me?`<a href="#profile" class="${on('profile')}">Hồ sơ</a>`:''}
     </div>
-    <div class="nav-user">
-      ${me
-        ? `<div class="avatar-sm" onclick="goto('profile')">${(prof?.username||me.email||'?')[0].toUpperCase()}</div>
-           <button class="btn btn-g btn-sm" onclick="doLogout()">Đăng xuất</button>`
-        : `<button class="btn btn-o btn-sm" onclick="goto('login')">Đăng nhập</button>`
-      }
+    <div class="nav-r">
+      ${me?`<div class="av" onclick="goto('profile')" title="${esc(prof?.username||'')}">${(prof?.username||me.email||'?')[0].toUpperCase()}</div><button class="btn btn-g btn-sm" onclick="doLogout()">Đăng xuất</button>`:`<button class="btn btn-o btn-sm" onclick="goto('login')">Đăng nhập</button>`}
       <button class="btn btn-g btn-sm" onclick="clearCfg()" title="Đổi cấu hình">⚙️</button>
     </div>`;
 }
 
-/* ====== ROUTER ====== */
-function goto(r){location.hash=r}
+/* ROUTER */
 async function router(){
   const h=location.hash.slice(1)||'home';
   renderNav();
   if(h==='home') await renderHome();
   else if(h==='login') renderLogin();
   else if(h==='register') renderRegister();
-  else if(h.startsWith('cat-')) await renderCategory(h.slice(4));
+  else if(h.startsWith('cat-')) await renderCat(h.slice(4));
   else if(h.startsWith('post-')) await renderPost(h.slice(5));
   else if(h==='new-post') await renderNewPost(null);
   else if(h.startsWith('new-post-')) await renderNewPost(h.slice(9));
@@ -229,531 +197,413 @@ async function router(){
 }
 window.addEventListener('hashchange',router);
 
-/* ====== AUTH ====== */
-async function loadUser(){
-  const {data:{user}}=await sb.auth.getUser();
-  me=user||null;
-  if(me){
-    const {data}=await sb.from('profiles').select('*').eq('id',me.id).single();
-    prof=data;
-  } else prof=null;
-}
-
+/* LOGIN */
 function renderLogin(){
-  view(`<div class="form-box">
-    <h2 class="disp">Đăng nhập</h2>
-    <form id="loginForm">
-      <div class="field"><label>Email</label><input name="email" type="email" required placeholder="you@email.com"></div>
-      <div class="field"><label>Mật khẩu</label><input name="pw" type="password" required minlength="6" placeholder="••••••••"></div>
+  view(`<div class="form-box"><h2>Đăng nhập</h2>
+    <form id="lf">
+      <div class="field"><label>Email</label><input name="email" type="email" required placeholder="you@email.com" autocomplete="email"></div>
+      <div class="field"><label>Mật khẩu</label><input name="pw" type="password" required placeholder="••••••••" autocomplete="current-password"></div>
       <button class="btn btn-o" style="width:100%" type="submit">Đăng nhập</button>
     </form>
-    <div class="form-switch">Chưa có tài khoản? <a href="#register">Đăng ký ngay</a></div>
+    <div class="form-footer">Chưa có tài khoản? <a href="#register">Đăng ký ngay</a></div>
   </div>`);
-  document.getElementById('loginForm').onsubmit=async e=>{
-    e.preventDefault();
-    const f=e.target;const btn=f.querySelector('button');btn.disabled=true;btn.textContent='Đang đăng nhập...';
+  document.getElementById('lf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;btn.textContent='Đang đăng nhập...';
     try{
-      const {error}=await sb.auth.signInWithPassword({email:f.email.value.trim(),password:f.pw.value});
+      const{error}=await sb.auth.signInWithPassword({email:e.target.email.value.trim(),password:e.target.pw.value});
       if(error)throw error;
       await loadUser();renderNav();toast('Đăng nhập thành công!');goto('home');
-    }catch(err){toast(err.message||'Đăng nhập thất bại',true);btn.disabled=false;btn.textContent='Đăng nhập'}
+    }catch(err){toast(err.message||'Lỗi đăng nhập',true);btn.disabled=false;btn.textContent='Đăng nhập'}
   };
 }
 
+/* REGISTER */
 function renderRegister(){
-  view(`<div class="form-box">
-    <h2 class="disp">Đăng ký</h2>
-    <form id="regForm">
+  view(`<div class="form-box"><h2>Đăng ký</h2>
+    <form id="rf">
       <div class="field"><label>Tên hiển thị</label><input name="uname" required minlength="3" maxlength="30" placeholder="Tên của bạn"></div>
-      <div class="field"><label>Email</label><input name="email" type="email" required placeholder="you@email.com"></div>
-      <div class="field"><label>Mật khẩu</label><input name="pw" type="password" required minlength="6" placeholder="Ít nhất 6 ký tự"></div>
+      <div class="field"><label>Email</label><input name="email" type="email" required placeholder="you@email.com" autocomplete="email"></div>
+      <div class="field"><label>Mật khẩu</label><input name="pw" type="password" required minlength="6" placeholder="Ít nhất 6 ký tự" autocomplete="new-password"></div>
       <button class="btn btn-o" style="width:100%" type="submit">Đăng ký</button>
     </form>
-    <div class="form-switch">Đã có tài khoản? <a href="#login">Đăng nhập</a></div>
+    <div class="form-footer">Đã có tài khoản? <a href="#login">Đăng nhập</a></div>
   </div>`);
-  document.getElementById('regForm').onsubmit=async e=>{
-    e.preventDefault();
-    const f=e.target;const btn=f.querySelector('button');btn.disabled=true;btn.textContent='Đang đăng ký...';
-    const uname=f.uname.value.trim();
+  document.getElementById('rf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;btn.textContent='Đang đăng ký...';
+    const uname=e.target.uname.value.trim(),email=e.target.email.value.trim(),pw=e.target.pw.value;
     try{
-      const {data,error}=await sb.auth.signUp({email:f.email.value.trim(),password:f.pw.value});
+      const{data,error}=await sb.auth.signUp({email,password:pw});
       if(error)throw error;
       if(data.user){
-        await sb.from('profiles').upsert({id:data.user.id,username:uname});
-        await loadUser();renderNav();toast('Đăng ký thành công! Chào mừng '+uname);goto('home');
-      } else {
-        toast('Kiểm tra email để xác nhận tài khoản.');goto('login');
-      }
-    }catch(err){toast(err.message||'Đăng ký thất bại',true);btn.disabled=false;btn.textContent='Đăng ký'}
+        const{error:pe}=await sb.from('profiles').insert({id:data.user.id,username:uname});
+        if(pe&&pe.code!=='23505')throw pe;
+        await loadUser();renderNav();toast('Chào mừng '+uname+'!');goto('home');
+      }else{toast('Kiểm tra email để xác nhận, rồi đăng nhập.');goto('login');}
+    }catch(err){toast(err.message||'Lỗi đăng ký',true);btn.disabled=false;btn.textContent='Đăng ký'}
   };
 }
 
-async function doLogout(){
-  await sb.auth.signOut();me=null;prof=null;renderNav();toast('Đã đăng xuất.');goto('home');
-}
+window.doLogout=async()=>{await sb.auth.signOut();me=null;prof=null;renderNav();toast('Đã đăng xuất.');goto('home')};
 
-/* ====== VIEWS ====== */
+/* HOME */
 async function renderHome(){
-  view('<div class="loading">Đang tải...</div>');
+  view('<div class="spin"></div>');
   try{
-    const queries=Promise.all([
+    const[r1,r2]=await Promise.all([
       sb.from('categories').select('*').order('id'),
-      sb.from('posts').select('id,category_id').order('created_at',{ascending:false})
+      sb.from('posts').select('id,category_id')
     ]);
-    const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('Kết nối quá lâu. Kiểm tra lại URL và Key Supabase.')),10000));
-    const [{data:cats,error:e1},{data:posts,error:e2}]=await Promise.race([queries,timeout]);
-    if(e1)throw e1;
-    if(e2)throw e2;
-    const cnt={};(posts||[]).forEach(p=>{cnt[p.category_id]=(cnt[p.category_id]||0)+1});
-    view(`
-    <div class="ph">
-      <h1 class="disp">💬 Diễn đàn</h1>
-      ${me?`<a href="#new-post" class="btn btn-o">+ Bài mới</a>`:`<button class="btn btn-o" onclick="goto('login')">Đăng nhập để đăng bài</button>`}
-    </div>
-    <div class="cat-list">
-      ${(cats||[]).length===0?`<div class="empty">Chưa có danh mục nào. <button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình</button></div>`:(cats||[]).map(c=>`
-        <a href="#cat-${c.id}" class="cat-card">
-          <div class="cat-icon">${esc(c.icon)}</div>
-          <div class="cat-info">
-            <div class="cat-name">${esc(c.name)}</div>
-            <div class="cat-desc">${esc(c.description||'')}</div>
-          </div>
-          <div class="cat-count">${cnt[c.id]||0} bài</div>
-        </a>`).join('')}
-    </div>`);
-  }catch(err){
-    view(`<div class="empty" style="padding:40px;text-align:center">
-      <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
-      <div style="font-weight:700;margin-bottom:8px">Không tải được dữ liệu</div>
-      <div style="color:var(--tx2);font-size:.88rem;margin-bottom:20px;word-break:break-all">${esc(err.message||'Lỗi không xác định')}</div>
-      <button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình Supabase</button>
-    </div>`);
-  }
+    if(r1.error)throw r1.error;
+    const cats=r1.data||[],cnt={};
+    (r2.data||[]).forEach(p=>{cnt[p.category_id]=(cnt[p.category_id]||0)+1});
+    view(`<div class="ph"><h1 class="pp">💬 Diễn đàn</h1>${me?`<a href="#new-post" class="btn btn-o">+ Bài mới</a>`:`<button class="btn btn-o" onclick="goto('login')">Đăng nhập để đăng bài</button>`}</div>
+      ${cats.length?`<div class="cat-list">${cats.map(c=>`<a href="#cat-${c.id}" class="cat-card"><div class="cat-icon">${esc(c.icon||'💬')}</div><div class="cat-info"><div class="cat-name">${esc(c.name)}</div><div class="cat-desc">${esc(c.description||'')}</div></div><div class="cat-count">${cnt[c.id]||0} bài</div></a>`).join('')}</div>`:`<div class="empty">Chưa có danh mục nào.<br><small>${prof?.role==='admin'?`<a href="#admin" style="color:var(--or)">Vào Quản trị</a> để tạo danh mục.`:'Liên hệ Admin để tạo danh mục.'}</small></div>`}`);
+  }catch(err){view(errBox(err.message||String(err)));}
 }
 
-async function renderCategory(id){
-  view('<div class="loading">Đang tải...</div>');
-  const [{data:cat},{data:posts}]=await Promise.all([
-    sb.from('categories').select('*').eq('id',id).single(),
-    sb.from('posts').select('id,title,is_pinned,is_locked,reply_count,created_at,profiles!author_id(username,role)')
-      .eq('category_id',id).order('is_pinned',{ascending:false}).order('created_at',{ascending:false}).limit(50)
-  ]);
-  view(`
-    <div class="bc"><a href="#home">Forum</a> / ${esc(cat?.name)}</div>
-    <div class="ph">
-      <h1 class="disp">${esc(cat?.icon)} ${esc(cat?.name)}</h1>
-      ${me?`<a href="#new-post-${id}" class="btn btn-o btn-sm">+ Bài mới</a>`:''}
-    </div>
-    <div class="post-list">
-      ${(posts||[]).length?posts.map(p=>`
-        <a href="#post-${p.id}" class="post-row ${p.is_pinned?'pinned':''}">
-          <div class="post-info">
-            <div class="post-title">${p.is_pinned?'📌 ':''}${p.is_locked?'🔒 ':''}${esc(p.title)}</div>
-            <div class="post-meta">bởi <b>${esc(p.profiles?.username)}</b> · ${ago(p.created_at)}</div>
-          </div>
-          <div class="post-replies">${p.reply_count||0}<span>replies</span></div>
-        </a>`).join('')
-        :`<div class="empty">Chưa có bài viết nào trong danh mục này.<br><small>Hãy là người đầu tiên đăng bài!</small></div>`}
-    </div>`);
+/* CATEGORY */
+async function renderCat(id){
+  view('<div class="spin"></div>');
+  try{
+    const[r1,r2]=await Promise.all([
+      sb.from('categories').select('*').eq('id',id).single(),
+      sb.from('posts').select('id,title,is_pinned,is_locked,reply_count,created_at,profiles!author_id(username,role)').eq('category_id',id).order('is_pinned',{ascending:false}).order('created_at',{ascending:false}).limit(50)
+    ]);
+    if(r1.error)throw r1.error;
+    const cat=r1.data,posts=r2.data||[];
+    view(`<div class="bc"><a href="#home">Forum</a> › ${esc(cat.name)}</div>
+      <div class="ph"><h1 class="pp">${esc(cat.icon||'💬')} ${esc(cat.name)}</h1>${me?`<a href="#new-post-${id}" class="btn btn-o btn-sm">+ Bài mới</a>`:''}</div>
+      <div class="post-list">${posts.length?posts.map(p=>`<a href="#post-${p.id}" class="post-row${p.is_pinned?' pinned':''}"><div class="post-info"><div class="post-title">${p.is_pinned?'📌 ':''}${p.is_locked?'🔒 ':''}${esc(p.title)}</div><div class="post-meta">bởi <b>${esc(p.profiles?.username)}</b> · ${ago(p.created_at)}</div></div><div class="post-replies">${p.reply_count||0}<span>replies</span></div></a>`).join(''):`<div class="empty">Chưa có bài viết nào.<br><small>Hãy là người đầu tiên!</small></div>`}</div>`);
+  }catch(err){view(errBox(err.message||String(err)));}
 }
 
+/* POST */
 async function renderPost(id){
-  view('<div class="loading">Đang tải...</div>');
-  const [{data:post},{data:cmts}]=await Promise.all([
-    sb.from('posts').select('*,profiles!author_id(id,username,role),categories(id,name)').eq('id',id).single(),
-    sb.from('comments').select('*,profiles!author_id(id,username,role)').eq('post_id',id).order('created_at')
-  ]);
-  if(!post){view('<div class="empty">Bài viết không tồn tại.</div>');return}
-  const canMod=prof?.role==='admin'||prof?.role==='moderator';
-  view(`
-    <div class="bc"><a href="#home">Forum</a> / <a href="#cat-${post.categories?.id}">${esc(post.categories?.name)}</a></div>
-    <div class="post-full">
-      <h1>${esc(post.title)}</h1>
-      <div class="post-byline">
-        <div class="avatar-sm" style="width:28px;height:28px;font-size:.75rem">${(post.profiles?.username||'?')[0].toUpperCase()}</div>
-        <b>${esc(post.profiles?.username)}</b>${roleBadgeSm(post.profiles?.role)}
-        <span>·</span><span>${ago(post.created_at)}</span>
-        ${canMod?`<button class="btn btn-sm" style="margin-left:auto" onclick="togglePin(${post.id},${post.is_pinned})">${post.is_pinned?'Bỏ ghim':'Ghim'}</button>
-          <button class="btn btn-sm" onclick="toggleLock(${post.id},${post.is_locked})">${post.is_locked?'Mở khóa':'Khóa'}</button>
-          <button class="btn btn-sm btn-danger" onclick="delPost(${post.id})">Xóa</button>`:
-          (me?.id===post.profiles?.id?`<button class="btn btn-sm btn-danger" style="margin-left:auto" onclick="delPost(${post.id})">Xóa bài</button>`:'')}
+  view('<div class="spin"></div>');
+  try{
+    const[r1,r2]=await Promise.all([
+      sb.from('posts').select('*,profiles!author_id(id,username,role),categories(id,name)').eq('id',id).single(),
+      sb.from('comments').select('*,profiles!author_id(id,username,role)').eq('post_id',id).order('created_at')
+    ]);
+    if(r1.error)throw r1.error;
+    const post=r1.data,cmts=r2.data||[];
+    const isMod=prof?.role==='admin'||prof?.role==='moderator';
+    const isOwn=me?.id===post.profiles?.id;
+    view(`<div class="bc"><a href="#home">Forum</a> › <a href="#cat-${post.categories?.id}">${esc(post.categories?.name)}</a></div>
+      <div class="post-full">
+        <h1>${esc(post.title)}</h1>
+        <div class="post-byline">
+          <div class="av" style="width:26px;height:26px;font-size:.7rem">${(post.profiles?.username||'?')[0].toUpperCase()}</div>
+          <b>${esc(post.profiles?.username)}</b>${bdg(post.profiles?.role)}<span>·</span><span>${ago(post.created_at)}</span>
+          ${isMod?`<span style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-g btn-sm" onclick="modPost(${post.id},'pin',${post.is_pinned})">${post.is_pinned?'Bỏ ghim':'Ghim'}</button>
+            <button class="btn btn-g btn-sm" onclick="modPost(${post.id},'lock',${post.is_locked})">${post.is_locked?'Mở khóa':'Khóa'}</button>
+            <button class="btn btn-red btn-sm" onclick="delPost(${post.id})">Xóa</button></span>`
+          :isOwn?`<button class="btn btn-red btn-sm" style="margin-left:auto" onclick="delPost(${post.id})">Xóa bài</button>`:''}
+        </div>
+        <div class="post-body">${esc(post.content)}</div>
       </div>
-      <div class="post-body">${esc(post.content)}</div>
-    </div>
-    <div class="comments-sec">
-      <h3>${cmts?.length||0} Phản hồi</h3>
-      <div class="comment-list" id="cmtList">
-        ${(cmts||[]).map(c=>`
-          <div class="comment" id="c${c.id}">
-            <div class="c-avatar">${(c.profiles?.username||'?')[0].toUpperCase()}</div>
-            <div class="c-body">
-              <div class="c-meta"><b>${esc(c.profiles?.username)}</b>${roleBadgeSm(c.profiles?.role)} · ${ago(c.created_at)}</div>
-              <div class="c-text">${esc(c.content)}</div>
-              ${(canMod||c.profiles?.id===me?.id)?`<button class="del-btn" onclick="delCmt(${c.id},${id})">Xóa</button>`:``}
-            </div>
-          </div>`).join('')}
-      </div>
-      ${me&&!post.is_locked?`
-        <form id="cmtForm">
-          <div class="field"><label>Phản hồi của bạn</label>
-            <textarea name="content" placeholder="Viết phản hồi..." required rows="4"></textarea></div>
-          <button class="btn btn-o" type="submit">Gửi phản hồi</button>
-        </form>`:
-        post.is_locked?`<div class="locked-msg">🔒 Bài viết đã bị khóa, không thể phản hồi.</div>`:
-        `<div class="login-msg"><a href="#login" style="color:var(--or);font-weight:700">Đăng nhập</a> để phản hồi.</div>`}
-    </div>`);
-
-  document.getElementById('cmtForm')?.addEventListener('submit',async e=>{
-    e.preventDefault();const btn=e.target.querySelector('button');btn.disabled=true;
-    const {error}=await sb.from('comments').insert({content:e.target.content.value.trim(),author_id:me.id,post_id:Number(id)});
-    if(!error){
-      await sb.from('posts').update({reply_count:(post.reply_count||0)+(cmts?.length||0)+1}).eq('id',id);
-      toast('Phản hồi đã gửi!');renderPost(id);
-    } else {toast(error.message,true);btn.disabled=false;}
-  });
+      <div class="cmts-sec">
+        <h3>${cmts.length} Phản hồi</h3>
+        <div id="clist">${cmts.map(c=>`<div class="comment" id="c${c.id}"><div class="c-av">${(c.profiles?.username||'?')[0].toUpperCase()}</div><div class="c-body"><div class="c-meta"><b>${esc(c.profiles?.username)}</b>${bdg(c.profiles?.role)}<span>${ago(c.created_at)}</span></div><div class="c-text">${esc(c.content)}</div>${(isMod||c.profiles?.id===me?.id)?`<button class="del-btn" onclick="delCmt(${c.id},${id})">Xóa</button>`:''}</div></div>`).join('')}</div>
+        ${me&&!post.is_locked?`<form id="cf" style="margin-top:16px"><div class="field"><label>Phản hồi của bạn</label><textarea name="content" rows="4" placeholder="Viết phản hồi..." required></textarea></div><button class="btn btn-o" type="submit">Gửi phản hồi</button></form>`
+        :post.is_locked?`<div class="locked-msg">🔒 Bài viết đã bị khóa.</div>`
+        :`<div class="login-cta"><a href="#login" style="color:var(--or);font-weight:700">Đăng nhập</a> để phản hồi.</div>`}
+      </div>`);
+    document.getElementById('cf')?.addEventListener('submit',async e=>{
+      e.preventDefault();const btn=e.target.querySelector('button');btn.disabled=true;
+      const{error}=await sb.from('comments').insert({content:e.target.content.value.trim(),author_id:me.id,post_id:Number(id)});
+      if(!error){await sb.from('posts').update({reply_count:cmts.length+1}).eq('id',id);toast('Phản hồi đã gửi!');renderPost(id);}
+      else{toast(error.message,true);btn.disabled=false;}
+    });
+  }catch(err){view(errBox(err.message||String(err)));}
 }
 
-window.togglePin=async(id,cur)=>{await sb.from('posts').update({is_pinned:!cur}).eq('id',id);renderPost(id);}
-window.toggleLock=async(id,cur)=>{await sb.from('posts').update({is_locked:!cur}).eq('id',id);renderPost(id);}
+window.modPost=async(id,act,cur)=>{
+  const f=act==='pin'?'is_pinned':'is_locked';
+  await sb.from('posts').update({[f]:!cur}).eq('id',id);renderPost(id);
+};
 window.delPost=async id=>{
   if(!confirm('Xóa bài viết này?'))return;
+  const{data:p}=await sb.from('posts').select('category_id').eq('id',id).single();
   await sb.from('comments').delete().eq('post_id',id);
   await sb.from('posts').delete().eq('id',id);
-  toast('Đã xóa bài viết.');goto('home');
-}
+  toast('Đã xóa.');goto(p?.category_id?'cat-'+p.category_id:'home');
+};
 window.delCmt=async(id,pid)=>{
-  if(!confirm('Xóa phản hồi này?'))return;
+  if(!confirm('Xóa phản hồi?'))return;
   await sb.from('comments').delete().eq('id',id);
-  toast('Đã xóa phản hồi.');renderPost(pid);
-}
+  toast('Đã xóa.');renderPost(pid);
+};
 
+/* NEW POST */
 async function renderNewPost(catId){
   if(!me){toast('Vui lòng đăng nhập.',true);goto('login');return}
-  const {data:cats}=await sb.from('categories').select('id,name').order('id');
-  view(`
-    <div class="form-box" style="max-width:600px">
-      <h2 class="disp">Đăng bài mới</h2>
-      <form id="postForm">
-        <div class="field"><label>Tiêu đề</label><input name="title" required maxlength="120" placeholder="Tiêu đề bài viết..."></div>
-        <div class="field"><label>Danh mục</label>
-          <select name="cat" required>
-            <option value="">-- Chọn danh mục --</option>
-            ${(cats||[]).map(c=>`<option value="${c.id}" ${catId==c.id?'selected':''}>${esc(c.name)}</option>`).join('')}
-          </select></div>
-        <div class="field"><label>Nội dung</label><textarea name="content" required rows="8" placeholder="Nội dung bài viết..."></textarea></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-o" type="submit">Đăng bài</button>
-          <button class="btn btn-g" type="button" onclick="history.back()">Hủy</button>
-        </div>
-      </form>
-    </div>`);
-  document.getElementById('postForm').onsubmit=async e=>{
-    e.preventDefault();const f=e.target;const btn=f.querySelector('[type=submit]');btn.disabled=true;
-    const {data,error}=await sb.from('posts').insert({
-      title:f.title.value.trim(),content:f.content.value.trim(),
-      author_id:me.id,category_id:Number(f.cat.value)
-    }).select().single();
+  const{data:cats}=await sb.from('categories').select('id,name').order('id');
+  view(`<div class="wide-form"><h2>Đăng bài mới</h2>
+    <form id="pf">
+      <div class="field"><label>Tiêu đề</label><input name="ptitle" required maxlength="120" placeholder="Tiêu đề bài viết..."></div>
+      <div class="field"><label>Danh mục</label><select name="cat" required><option value="">-- Chọn danh mục --</option>${(cats||[]).map(c=>`<option value="${c.id}"${catId==c.id?' selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+      <div class="field"><label>Nội dung</label><textarea name="content" required rows="8" placeholder="Nội dung bài viết..."></textarea></div>
+      <div style="display:flex;gap:10px"><button class="btn btn-o" type="submit">Đăng bài</button><button class="btn btn-g" type="button" onclick="history.back()">Hủy</button></div>
+    </form></div>`);
+  document.getElementById('pf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;
+    const{data,error}=await sb.from('posts').insert({title:e.target.ptitle.value.trim(),content:e.target.content.value.trim(),author_id:me.id,category_id:Number(e.target.cat.value)}).select().single();
     if(!error){toast('Bài viết đã đăng!');goto('post-'+data.id);}
     else{toast(error.message,true);btn.disabled=false;}
   };
 }
 
-/* ====== ADMIN ====== */
-let adminTab='users';
+/* PROFILE */
+async function renderProfile(){
+  if(!me){toast('Vui lòng đăng nhập.',true);goto('login');return}
+  view('<div class="spin"></div>');
+  const{data:posts}=await sb.from('posts').select('id,title,created_at,categories(name)').eq('author_id',me.id).order('created_at',{ascending:false}).limit(20);
+  view(`<div class="profile-hdr">
+    <div class="av-lg">${(prof?.username||me.email||'?')[0].toUpperCase()}</div>
+    <div><h2 class="pp" style="margin-bottom:6px">${esc(prof?.username||me.email)}</h2>${bdg(prof?.role||'member')}<div style="color:var(--tx2);font-size:.82rem;margin-top:6px">Tham gia: ${new Date(prof?.created_at||Date.now()).toLocaleDateString('vi')}</div></div>
+  </div>
+  <h3 style="font-size:.95rem;margin-bottom:12px;font-weight:700">Bài viết đã đăng</h3>
+  <div class="post-list">${(posts||[]).length?posts.map(p=>`<a href="#post-${p.id}" class="post-row"><div class="post-info"><div class="post-title">${esc(p.title)}</div><div class="post-meta">${esc(p.categories?.name||'—')} · ${ago(p.created_at)}</div></div></a>`).join(''):`<div class="empty">Chưa có bài viết nào.</div>`}</div>`);
+}
+
+/* ADMIN */
+let atab='users';
 async function renderAdmin(){
   if(prof?.role!=='admin'){view('<div class="empty">⛔ Bạn không có quyền truy cập.</div>');return}
-  view('<div class="loading">Đang tải...</div>');
-  if(adminTab==='users') await renderAdminUsers();
-  else if(adminTab==='perms') await renderAdminPerms();
-  else if(adminTab==='cats') await renderAdminCats();
+  if(atab==='users') await renderAUsers();
+  else if(atab==='perms') await renderAPerms();
+  else if(atab==='cats') await renderACats();
+}
+window.renderAdmin=renderAdmin;
+
+function adminTabs(cur){
+  return`<div class="ph"><h1 class="pp">⚙️ Quản trị</h1></div>
+    <div class="tabs">
+      <button class="tab${cur==='users'?' on':''}" onclick="atab='users';renderAdmin()">Người dùng</button>
+      <button class="tab${cur==='perms'?' on':''}" onclick="atab='perms';renderAdmin()">Quyền Tool</button>
+      <button class="tab${cur==='cats'?' on':''}" onclick="atab='cats';renderAdmin()">Danh mục</button>
+    </div>`;
 }
 
-async function renderAdminUsers(){
-  adminTab='users';
-  const {data:users}=await sb.from('profiles').select('*').order('created_at');
-  view(`
-    <div class="ph"><h1 class="disp">⚙️ Quản trị</h1></div>
-    <div class="admin-tabs">
-      <div class="tab on" onclick="adminTab='users';renderAdmin()">Người dùng</div>
-      <div class="tab" onclick="adminTab='perms';renderAdmin()">Quyền hạn Tool</div>
-      <div class="tab" onclick="adminTab='cats';renderAdmin()">Danh mục</div>
+async function renderAUsers(){
+  atab='users';view('<div class="spin"></div>');
+  const{data:users}=await sb.from('profiles').select('*').order('created_at');
+  view(`${adminTabs('users')}<div class="table-wrap"><table>
+    <thead><tr><th>Tên</th><th>ID</th><th>Vai trò</th><th>Tham gia</th><th>Đổi vai trò</th></tr></thead>
+    <tbody>${(users||[]).map(u=>`<tr>
+      <td><b>${esc(u.username)}</b></td>
+      <td style="color:var(--tx2);font-size:.75rem">${u.id.slice(0,8)}…</td>
+      <td>${bdg(u.role)}</td>
+      <td style="color:var(--tx2);font-size:.78rem">${new Date(u.created_at).toLocaleDateString('vi')}</td>
+      <td><select class="rsel" onchange="chRole('${u.id}',this.value)"${u.id===me?.id?' disabled':''}>
+        <option value="member"${u.role==='member'?' selected':''}>Thành viên</option>
+        <option value="moderator"${u.role==='moderator'?' selected':''}>Moderator</option>
+        <option value="admin"${u.role==='admin'?' selected':''}>Admin</option>
+      </select></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`);
+}
+window.chRole=async(uid,role)=>{
+  const{error}=await sb.from('profiles').update({role}).eq('id',uid);
+  if(error)toast(error.message,true);else toast('Đã cập nhật!');
+};
+
+async function renderAPerms(){
+  atab='perms';view('<div class="spin"></div>');
+  const[{data:users},{data:perms}]=await Promise.all([
+    sb.from('profiles').select('id,username').order('username'),
+    sb.from('user_permissions').select('*,profiles!user_id(username)').order('created_at',{ascending:false})
+  ]);
+  view(`${adminTabs('perms')}<div class="card" style="margin-bottom:20px">
+    <b style="font-size:.85rem">Cấp quyền mới</b>
+    <div class="perm-add">
+      <select id="pusr"><option value="">-- Người dùng --</option>${(users||[]).map(u=>`<option value="${u.id}">${esc(u.username)}</option>`).join('')}</select>
+      <input id="pinp" placeholder="vd: tool.designTool.edit" style="flex:2">
+      <button class="btn btn-o btn-sm" onclick="grantPerm()">Cấp quyền</button>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Tên</th><th>Email</th><th>Vai trò</th><th>Ngày tham gia</th><th>Hành động</th></tr></thead>
-        <tbody>
-          ${(users||[]).map(u=>`<tr>
-            <td><b>${esc(u.username)}</b></td>
-            <td style="color:var(--tx2);font-size:.85rem">${u.id}</td>
-            <td>${rolePill(u.role)}</td>
-            <td style="color:var(--tx2);font-size:.82rem">${new Date(u.created_at).toLocaleDateString('vi')}</td>
-            <td><select class="role-sel" onchange="changeRole('${u.id}',this.value)" ${u.id===me?.id?'disabled':''}>
-              <option value="member" ${u.role==='member'?'selected':''}>Thành viên</option>
-              <option value="moderator" ${u.role==='moderator'?'selected':''}>Moderator</option>
-              <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
-            </select></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`);
+  </div>
+  <div class="card">
+    <b style="font-size:.85rem">Quyền đang hoạt động</b>
+    ${(perms||[]).length?perms.map(p=>`<div class="perm-row"><span><b>${esc(p.profiles?.username)}</b> — <code style="font-size:.8rem">${esc(p.permission)}</code></span><button class="btn btn-red btn-sm" onclick="revokePerm(${p.id})">Thu hồi</button></div>`).join(''):`<div class="empty" style="padding:20px 0">Chưa có quyền nào.</div>`}
+  </div>`);
 }
-
-window.changeRole=async(uid,role)=>{
-  const {error}=await sb.from('profiles').update({role}).eq('id',uid);
-  if(error)toast(error.message,true);else toast('Đã cập nhật vai trò!');
-}
-
-async function renderAdminPerms(){
-  adminTab='perms';
-  const {data:users}=await sb.from('profiles').select('id,username').order('username');
-  const {data:perms}=await sb.from('user_permissions').select('*,profiles!user_id(username)').order('created_at',{ascending:false});
-  view(`
-    <div class="ph"><h1 class="disp">⚙️ Quản trị</h1></div>
-    <div class="admin-tabs">
-      <div class="tab" onclick="adminTab='users';renderAdmin()">Người dùng</div>
-      <div class="tab on" onclick="adminTab='perms';renderAdmin()">Quyền hạn Tool</div>
-      <div class="tab" onclick="adminTab='cats';renderAdmin()">Danh mục</div>
-    </div>
-    <div style="background:var(--wh);border-radius:var(--rad);padding:28px;box-shadow:var(--sh);margin-bottom:20px">
-      <h3 style="margin-bottom:18px;font-family:Poppins,sans-serif">Cấp quyền mới</h3>
-      <form id="permForm">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-          <div class="field" style="margin:0;flex:1;min-width:160px"><label>Người dùng</label>
-            <select name="uid" required><option value="">-- Chọn user --</option>
-              ${(users||[]).map(u=>`<option value="${u.id}">${esc(u.username)}</option>`).join('')}
-            </select></div>
-          <div class="field" style="margin:0;flex:2;min-width:200px"><label>Quyền (vd: tool.calendar.edit)</label>
-            <input name="perm" required placeholder="tool.tenTool.read | tool.tenTool.edit"></div>
-          <button class="btn btn-o" type="submit">Cấp quyền</button>
-        </div>
-      </form>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Người dùng</th><th>Quyền</th><th>Thời gian</th><th></th></tr></thead>
-        <tbody>
-          ${(perms||[]).length?(perms||[]).map(p=>`<tr>
-            <td><b>${esc(p.profiles?.username)}</b></td>
-            <td><span class="perm-chip" style="display:inline-flex">${esc(p.permission)}</span></td>
-            <td style="font-size:.82rem;color:var(--tx2)">${new Date(p.created_at).toLocaleDateString('vi')}</td>
-            <td><button class="btn btn-sm btn-danger" onclick="revokePerm(${p.id})">Thu hồi</button></td>
-          </tr>`).join('')
-          :`<tr><td colspan="4" style="text-align:center;padding:30px;color:var(--tx2)">Chưa có quyền nào được cấp.</td></tr>`}
-        </tbody>
-      </table>
-    </div>`);
-
-  document.getElementById('permForm').onsubmit=async e=>{
-    e.preventDefault();const f=e.target;
-    const {error}=await sb.from('user_permissions').insert({user_id:f.uid.value,permission:f.perm.value.trim(),granted_by:me.id});
-    if(!error){toast('Đã cấp quyền!');renderAdminPerms();}
-    else toast(error.message,true);
-  };
-}
-
+window.grantPerm=async()=>{
+  const uid=document.getElementById('pusr').value,perm=document.getElementById('pinp').value.trim();
+  if(!uid||!perm){toast('Chọn người dùng và nhập quyền.',true);return}
+  const{error}=await sb.from('user_permissions').insert({user_id:uid,permission:perm,granted_by:me.id});
+  if(error)toast(error.message,true);else{toast('Đã cấp quyền!');renderAPerms();}
+};
 window.revokePerm=async id=>{
   if(!confirm('Thu hồi quyền này?'))return;
   await sb.from('user_permissions').delete().eq('id',id);
-  toast('Đã thu hồi quyền.');renderAdminPerms();
-}
+  toast('Đã thu hồi.');renderAPerms();
+};
 
-async function renderAdminCats(){
-  adminTab='cats';
-  const {data:cats}=await sb.from('categories').select('*').order('id');
-  view(`
-    <div class="ph"><h1 class="disp">⚙️ Quản trị</h1></div>
-    <div class="admin-tabs">
-      <div class="tab" onclick="adminTab='users';renderAdmin()">Người dùng</div>
-      <div class="tab" onclick="adminTab='perms';renderAdmin()">Quyền hạn Tool</div>
-      <div class="tab on" onclick="adminTab='cats';renderAdmin()">Danh mục</div>
-    </div>
-    <div style="background:var(--wh);border-radius:var(--rad);padding:28px;box-shadow:var(--sh);margin-bottom:20px">
-      <h3 style="margin-bottom:18px;font-family:Poppins,sans-serif">Thêm danh mục mới</h3>
-      <form id="catForm">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-          <div class="field" style="margin:0;width:60px"><label>Icon</label><input name="icon" value="💬" maxlength="4"></div>
-          <div class="field" style="margin:0;flex:1;min-width:140px"><label>Tên</label><input name="name" required placeholder="Tên danh mục"></div>
-          <div class="field" style="margin:0;flex:2;min-width:180px"><label>Mô tả</label><input name="desc" placeholder="Mô tả ngắn"></div>
-          <button class="btn btn-o" type="submit">Thêm</button>
-        </div>
-      </form>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Icon</th><th>Tên</th><th>Slug</th><th></th></tr></thead>
-        <tbody>
-          ${(cats||[]).map(c=>`<tr>
-            <td>${esc(c.icon)}</td><td><b>${esc(c.name)}</b><br><small style="color:var(--tx2)">${esc(c.description||'')}</small></td>
-            <td style="font-size:.82rem;color:var(--tx2)">${esc(c.slug)}</td>
-            <td><button class="btn btn-sm btn-danger" onclick="delCat(${c.id})">Xóa</button></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`);
-
-  document.getElementById('catForm').onsubmit=async e=>{
-    e.preventDefault();const f=e.target;
-    const slug=f.name.value.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
-    const {error}=await sb.from('categories').insert({icon:f.icon.value||'💬',name:f.name.value.trim(),description:f.desc.value.trim(),slug:slug+'-'+Date.now()});
-    if(!error){toast('Thêm danh mục thành công!');renderAdminCats();}
-    else toast(error.message,true);
+async function renderACats(){
+  atab='cats';view('<div class="spin"></div>');
+  const{data:cats}=await sb.from('categories').select('*').order('id');
+  view(`${adminTabs('cats')}<div class="card" style="margin-bottom:20px">
+    <b style="font-size:.85rem;display:block;margin-bottom:12px">Thêm danh mục mới</b>
+    <form id="catf" style="display:flex;gap:8px;flex-wrap:wrap">
+      <input name="icon" placeholder="🗂️" style="width:60px;padding:8px;border:1.5px solid var(--bd);border-radius:8px;font-size:1.1rem;text-align:center">
+      <input name="cname" placeholder="Tên danh mục" required style="flex:2;padding:8px 12px;border:1.5px solid var(--bd);border-radius:8px;font-family:inherit;font-size:.88rem;min-width:100px">
+      <input name="cdesc" placeholder="Mô tả (tùy chọn)" style="flex:3;padding:8px 12px;border:1.5px solid var(--bd);border-radius:8px;font-family:inherit;font-size:.88rem;min-width:100px">
+      <button class="btn btn-o btn-sm" type="submit">Thêm</button>
+    </form>
+  </div>
+  <div class="cat-list">${(cats||[]).map(c=>`<div class="cat-card" style="cursor:default">
+    <div class="cat-icon">${esc(c.icon||'💬')}</div>
+    <div class="cat-info"><div class="cat-name">${esc(c.name)}</div><div class="cat-desc">${esc(c.description||'')}</div></div>
+    <button class="btn btn-red btn-sm" onclick="delCat(${c.id})">Xóa</button>
+  </div>`).join('')||`<div class="empty">Chưa có danh mục nào.</div>`}</div>`);
+  document.getElementById('catf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;
+    const{error}=await sb.from('categories').insert({name:e.target.cname.value.trim(),description:e.target.cdesc.value.trim()||null,icon:e.target.icon.value.trim()||'💬'});
+    if(error)toast(error.message,true);else{toast('Đã thêm danh mục!');renderACats();}
   };
 }
-
 window.delCat=async id=>{
-  if(!confirm('Xóa danh mục này? Các bài viết trong đó sẽ không bị xóa.'))return;
+  if(!confirm('Xóa danh mục?'))return;
   await sb.from('categories').delete().eq('id',id);
-  toast('Đã xóa danh mục.');renderAdminCats();
-}
+  toast('Đã xóa.');renderACats();
+};
 
-/* ====== PROFILE ====== */
-async function renderProfile(){
-  if(!me){goto('login');return}
-  const {data:posts}=await sb.from('posts').select('id,title,created_at,categories(name)').eq('author_id',me.id).order('created_at',{ascending:false}).limit(20);
-  const {data:myPerms}=await sb.from('user_permissions').select('permission').eq('user_id',me.id);
-  view(`
-    <div class="profile-card">
-      <div class="profile-avatar">${(prof?.username||'?')[0].toUpperCase()}</div>
-      <div class="profile-info">
-        <h2>${esc(prof?.username)}</h2>
-        <div class="meta">${rolePill(prof?.role||'member')} <span>${me.email}</span> <span>Tham gia ${new Date(prof?.created_at||Date.now()).toLocaleDateString('vi')}</span></div>
-        ${myPerms?.length?`<div style="margin-top:10px;font-size:.85rem"><b>Quyền tool:</b> ${myPerms.map(p=>`<span class="perm-chip" style="display:inline-flex;margin-top:4px">${esc(p.permission)}</span>`).join(' ')}</div>`:''}
-      </div>
-    </div>
-    <h3 style="margin-bottom:14px;font-family:Poppins,sans-serif">Bài đăng của bạn (${posts?.length||0})</h3>
-    <div class="post-list">
-      ${(posts||[]).length?(posts||[]).map(p=>`
-        <a href="#post-${p.id}" class="post-row">
-          <div class="post-info">
-            <div class="post-title">${esc(p.title)}</div>
-            <div class="post-meta">${esc(p.categories?.name)} · ${ago(p.created_at)}</div>
-          </div>
-        </a>`).join(''):`<div class="empty">Bạn chưa có bài đăng nào.</div>`}
-    </div>`);
-}
+/* SETUP */
+const SQL=`-- Chạy toàn bộ trong Supabase > SQL Editor > New Query
+-- Lưu ý: script này XÓA toàn bộ dữ liệu cũ và tạo lại từ đầu
+drop table if exists user_permissions cascade;
+drop table if exists comments cascade;
+drop table if exists posts cascade;
+drop table if exists categories cascade;
+drop table if exists profiles cascade;
 
-/* ====== SETUP SCREEN ====== */
-function renderSetup(){
-  document.getElementById('view').innerHTML=`<div class="setup-box">
-    <h2 class="disp">🔧 Cài đặt Supabase</h2>
-    <p>Để chạy forum, bạn cần tài khoản <b>Supabase</b> miễn phí và tạo project mới.<br>Sau đó điền thông tin bên dưới.</p>
-    <details><summary>📋 SQL Schema — chạy trong Supabase SQL Editor</summary>
-    <pre>-- Chạy từng khối trong Supabase > SQL Editor
 create table profiles (
-  id uuid references auth.users on delete cascade primary key,
-  username text unique not null default 'user',
+  id uuid primary key references auth.users on delete cascade,
+  username text unique not null,
   role text not null default 'member',
   created_at timestamptz default now()
 );
-
-create or replace function handle_new_user()
-returns trigger as $$ begin
-  insert into profiles(id,username)
-  values(new.id, split_part(new.email,'@',1));
-  return new;
-end; $$ language plpgsql security definer;
-
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure handle_new_user();
-
 create table categories (
   id serial primary key, name text not null,
-  description text, slug text unique not null,
-  icon text default '💬', created_at timestamptz default now()
+  description text, icon text default '💬',
+  created_at timestamptz default now()
 );
 create table posts (
   id serial primary key, title text not null, content text not null,
   author_id uuid references profiles(id) on delete cascade,
-  category_id integer references categories(id) on delete set null,
+  category_id int references categories(id) on delete set null,
   is_pinned boolean default false, is_locked boolean default false,
-  reply_count integer default 0, created_at timestamptz default now()
+  reply_count int default 0, created_at timestamptz default now()
 );
 create table comments (
   id serial primary key, content text not null,
   author_id uuid references profiles(id) on delete cascade,
-  post_id integer references posts(id) on delete cascade,
+  post_id int references posts(id) on delete cascade,
   created_at timestamptz default now()
 );
 create table user_permissions (
   id serial primary key,
   user_id uuid references profiles(id) on delete cascade,
-  permission text not null, granted_by uuid references profiles(id),
-  created_at timestamptz default now(), unique(user_id,permission)
+  permission text not null,
+  granted_by uuid references profiles(id),
+  created_at timestamptz default now(),
+  unique(user_id, permission)
 );
 
--- RLS
 alter table profiles enable row level security;
 alter table categories enable row level security;
 alter table posts enable row level security;
 alter table comments enable row level security;
 alter table user_permissions enable row level security;
 
-create policy "p_read" on profiles for select using(true);
-create policy "p_upd" on profiles for update using(auth.uid()=id or exists(select 1 from profiles where id=auth.uid() and role='admin'));
-create policy "c_read" on categories for select using(true);
-create policy "c_all" on categories for all using(exists(select 1 from profiles where id=auth.uid() and role='admin'));
-create policy "po_read" on posts for select using(true);
-create policy "po_ins" on posts for insert with check(auth.uid()=author_id);
-create policy "po_upd" on posts for update using(auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
-create policy "po_del" on posts for delete using(auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
-create policy "cm_read" on comments for select using(true);
-create policy "cm_ins" on comments for insert with check(auth.uid()=author_id);
-create policy "cm_del" on comments for delete using(auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
-create policy "pm_sel" on user_permissions for select using(auth.uid()=user_id or exists(select 1 from profiles where id=auth.uid() and role='admin'));
-create policy "pm_all" on user_permissions for all using(exists(select 1 from profiles where id=auth.uid() and role='admin'));
+create policy "p_sel" on profiles for select using (true);
+create policy "p_ins" on profiles for insert with check (auth.uid()=id);
+create policy "p_upd" on profiles for update using (
+  auth.uid()=id or exists(select 1 from profiles where id=auth.uid() and role='admin'));
 
--- Danh mục mẫu
-insert into categories(name,description,slug,icon) values
-  ('Thông báo','Thông báo từ Admin','thong-bao','📢'),
-  ('Thảo luận chung','Nói chuyện gì cũng được','chung','💬'),
-  ('Góp ý & Phản hồi','Ý kiến về forum và tool','gop-y','💡');
+create policy "c_sel" on categories for select using (true);
+create policy "c_adm" on categories for all using (
+  exists(select 1 from profiles where id=auth.uid() and role='admin'));
 
--- Sau khi đăng ký xong, set admin:
--- update profiles set role='admin' where id=(select id from auth.users where email='your@email.com');</pre>
+create policy "po_sel" on posts for select using (true);
+create policy "po_ins" on posts for insert with check (auth.uid()=author_id);
+create policy "po_upd" on posts for update using (
+  auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
+create policy "po_del" on posts for delete using (
+  auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
+
+create policy "cm_sel" on comments for select using (true);
+create policy "cm_ins" on comments for insert with check (auth.uid()=author_id);
+create policy "cm_del" on comments for delete using (
+  auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
+
+create policy "pm_sel" on user_permissions for select using (
+  auth.uid()=user_id or exists(select 1 from profiles where id=auth.uid() and role='admin'));
+create policy "pm_adm" on user_permissions for all using (
+  exists(select 1 from profiles where id=auth.uid() and role='admin'));
+
+insert into categories(name,description,icon) values
+  ('Thông báo','Thông báo từ Admin','📢'),
+  ('Thảo luận chung','Nói chuyện gì cũng được','💬'),
+  ('Góp ý & Phản hồi','Ý kiến về forum và tool','💡');
+
+-- Sau khi đăng ký xong, set admin (thay YOUR_USERNAME):
+-- update profiles set role='admin' where username='YOUR_USERNAME';`;
+
+function renderSetup(){
+  document.getElementById('navIn').innerHTML=`<a href="#" class="logo"><div class="logo-i">H</div> Forum</a>`;
+  view(`<div class="setup-box">
+    <h2>🔧 Cài đặt Supabase</h2>
+    <p style="color:var(--tx2);font-size:.88rem;margin-bottom:16px;line-height:1.65">Tạo project miễn phí tại <b>supabase.com</b>, chạy SQL bên dưới trong SQL Editor, rồi điền thông tin kết nối.</p>
+    <details>
+      <summary>📋 SQL Schema — nhấn để xem và copy</summary>
+      <div style="position:relative;margin-top:4px">
+        <pre class="sql-pre" id="sqlpre">${esc(SQL)}</pre>
+        <button class="btn btn-g btn-sm" style="position:absolute;top:8px;right:8px" onclick="navigator.clipboard.writeText(document.getElementById('sqlpre').textContent).then(()=>toast('Đã copy SQL!'))">📋 Copy</button>
+      </div>
     </details>
-    <form id="setupForm">
+    <form id="sf" style="margin-top:20px">
       <div class="field"><label>Supabase Project URL</label><input name="url" type="url" required placeholder="https://xxxx.supabase.co"></div>
       <div class="field"><label>Supabase Anon Key</label><input name="key" required placeholder="eyJhbGci..."></div>
-      <button class="btn btn-o" type="submit" style="width:100%">Kết nối Supabase</button>
+      <button class="btn btn-o" type="submit" style="width:100%">Kết nối & Kiểm tra</button>
     </form>
-  </div>`;
-  document.getElementById('setupForm').onsubmit=async e=>{
-    e.preventDefault();const f=e.target;
-    const url=f.url.value.trim();const key=f.key.value.trim();
+  </div>`);
+  document.getElementById('sf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');
+    btn.disabled=true;btn.textContent='Đang kiểm tra...';
+    const url=e.target.url.value.trim(),key=e.target.key.value.trim();
     try{
       initSb(url,key);
-      const {error}=await sb.from('categories').select('id').limit(1);
-      if(error)throw new Error('Kết nối thất bại: '+error.message);
+      const{error}=await sb.from('categories').select('id').limit(1);
+      if(error)throw error;
       saveCfg(url,key);toast('Kết nối thành công!');location.reload();
-    }catch(err){toast(err.message,true)}
+    }catch(err){toast('Kết nối thất bại: '+err.message,true);btn.disabled=false;btn.textContent='Kết nối & Kiểm tra';}
   };
 }
 
-/* ====== INIT ====== */
+/* INIT */
 (async()=>{
   const cfg=getCfg();
-  if(!cfg){renderSetup();document.getElementById('navIn').innerHTML='<a href="#" class="nav-logo"><span>H</span> Forum</a>';return}
+  if(!cfg){renderSetup();return}
   initSb(cfg.url,cfg.key);
+  try{
+    await loadUser();
+    renderNav();
+    await router();
+  }catch(err){
+    renderNav();
+    view(errBox(err.message||String(err)));
+  }
   sb.auth.onAuthStateChange(async(_ev,session)=>{
     try{
       me=session?.user||null;
-      if(me){const{data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data;}
+      if(me){const{data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data||null;}
       else prof=null;
       renderNav();
-    }catch(e){console.error('auth state error',e);}
+    }catch(e){console.error('auth change',e);}
   });
-  try{
-    await loadUser();
-    await router();
-  }catch(err){
-    view(`<div class="empty" style="padding:40px;text-align:center">
-      <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
-      <div style="font-weight:700;margin-bottom:8px">Lỗi khởi động forum</div>
-      <div style="color:var(--tx2);font-size:.88rem;margin-bottom:20px;word-break:break-all">${esc(err.message||String(err))}</div>
-      <button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình Supabase</button>
-    </div>`);
-  }
 })();
 </script>
 </body>
