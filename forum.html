@@ -136,11 +136,9 @@ details summary{cursor:pointer;font-size:.82rem;font-weight:600;color:var(--or);
 <main class="view"><div class="wrap" id="view"><div class="spin"></div></div></main>
 <script>
 /* CONFIG */
-const CFGK='hf2_cfg';
+const SB_URL='https://dmvomgmhsivifionnkiu.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtdm9tZ21oc2l2aWZpb25ua2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODcyMzAsImV4cCI6MjA5NzY2MzIzMH0.9HQDKLrzjaRwf1z44cWc3Wb-LMx6a4Ec-QN0QAOGZ00';
 let sb=null,me=null,prof=null;
-const getCfg=()=>{try{return JSON.parse(localStorage.getItem(CFGK)||'null')}catch{return null}};
-const saveCfg=(u,k)=>localStorage.setItem(CFGK,JSON.stringify({url:u,key:k}));
-window.clearCfg=()=>{localStorage.removeItem(CFGK);location.reload()};
 
 /* UTILS */
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -150,7 +148,7 @@ let _t;
 function toast(msg,err=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(err?' err':'');clearTimeout(_t);setTimeout(()=>t.classList.add('show'),10);_t=setTimeout(()=>t.classList.remove('show'),3500)}
 window.goto=r=>{location.hash=r};
 function bdg(r){if(r==='admin')return`<span class="bdg bdg-a">Admin</span>`;if(r==='moderator')return`<span class="bdg bdg-m">Mod</span>`;return`<span class="bdg bdg-u">Thành viên</span>`}
-function errBox(msg){return`<div class="err-box"><div style="font-size:2.5rem;margin-bottom:12px">⚠️</div><div style="font-weight:700;font-size:1.05rem;margin-bottom:8px">Không tải được dữ liệu</div><div style="color:var(--tx2);font-size:.85rem;word-break:break-all;margin-bottom:20px;line-height:1.6">${esc(msg)}</div><button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình Supabase</button></div>`}
+function errBox(msg){return`<div class="err-box"><div style="font-size:2.5rem;margin-bottom:12px">⚠️</div><div style="font-weight:700;font-size:1.05rem;margin-bottom:8px">Không tải được dữ liệu</div><div style="color:var(--tx2);font-size:.85rem;word-break:break-all;margin-bottom:20px;line-height:1.6">${esc(msg)}</div><button class="btn btn-g btn-sm" onclick="location.reload()">Thử lại</button></div>`}
 
 /* INIT SUPABASE */
 function initSb(url,key){sb=window.supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true}})}
@@ -176,7 +174,6 @@ function renderNav(){
     </div>
     <div class="nav-r">
       ${me?`<div class="av" onclick="goto('profile')" title="${esc(prof?.username||'')}">${(prof?.username||me.email||'?')[0].toUpperCase()}</div><button class="btn btn-g btn-sm" onclick="doLogout()">Đăng xuất</button>`:`<button class="btn btn-o btn-sm" onclick="goto('login')">Đăng nhập</button>`}
-      <button class="btn btn-g btn-sm" onclick="clearCfg()" title="Đổi cấu hình">⚙️</button>
     </div>`;
 }
 
@@ -470,124 +467,9 @@ window.delCat=async id=>{
   toast('Đã xóa.');renderACats();
 };
 
-/* SETUP */
-const SQL=`-- Chạy toàn bộ trong Supabase > SQL Editor > New Query
--- Lưu ý: script này XÓA toàn bộ dữ liệu cũ và tạo lại từ đầu
-drop table if exists user_permissions cascade;
-drop table if exists comments cascade;
-drop table if exists posts cascade;
-drop table if exists categories cascade;
-drop table if exists profiles cascade;
-
-create table profiles (
-  id uuid primary key references auth.users on delete cascade,
-  username text unique not null,
-  role text not null default 'member',
-  created_at timestamptz default now()
-);
-create table categories (
-  id serial primary key, name text not null,
-  description text, icon text default '💬',
-  created_at timestamptz default now()
-);
-create table posts (
-  id serial primary key, title text not null, content text not null,
-  author_id uuid references profiles(id) on delete cascade,
-  category_id int references categories(id) on delete set null,
-  is_pinned boolean default false, is_locked boolean default false,
-  reply_count int default 0, created_at timestamptz default now()
-);
-create table comments (
-  id serial primary key, content text not null,
-  author_id uuid references profiles(id) on delete cascade,
-  post_id int references posts(id) on delete cascade,
-  created_at timestamptz default now()
-);
-create table user_permissions (
-  id serial primary key,
-  user_id uuid references profiles(id) on delete cascade,
-  permission text not null,
-  granted_by uuid references profiles(id),
-  created_at timestamptz default now(),
-  unique(user_id, permission)
-);
-
-alter table profiles enable row level security;
-alter table categories enable row level security;
-alter table posts enable row level security;
-alter table comments enable row level security;
-alter table user_permissions enable row level security;
-
-create policy "p_sel" on profiles for select using (true);
-create policy "p_ins" on profiles for insert with check (auth.uid()=id);
-create policy "p_upd" on profiles for update using (
-  auth.uid()=id or exists(select 1 from profiles where id=auth.uid() and role='admin'));
-
-create policy "c_sel" on categories for select using (true);
-create policy "c_adm" on categories for all using (
-  exists(select 1 from profiles where id=auth.uid() and role='admin'));
-
-create policy "po_sel" on posts for select using (true);
-create policy "po_ins" on posts for insert with check (auth.uid()=author_id);
-create policy "po_upd" on posts for update using (
-  auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
-create policy "po_del" on posts for delete using (
-  auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
-
-create policy "cm_sel" on comments for select using (true);
-create policy "cm_ins" on comments for insert with check (auth.uid()=author_id);
-create policy "cm_del" on comments for delete using (
-  auth.uid()=author_id or exists(select 1 from profiles where id=auth.uid() and role in('admin','moderator')));
-
-create policy "pm_sel" on user_permissions for select using (
-  auth.uid()=user_id or exists(select 1 from profiles where id=auth.uid() and role='admin'));
-create policy "pm_adm" on user_permissions for all using (
-  exists(select 1 from profiles where id=auth.uid() and role='admin'));
-
-insert into categories(name,description,icon) values
-  ('Thông báo','Thông báo từ Admin','📢'),
-  ('Thảo luận chung','Nói chuyện gì cũng được','💬'),
-  ('Góp ý & Phản hồi','Ý kiến về forum và tool','💡');
-
--- Sau khi đăng ký xong, set admin (thay YOUR_USERNAME):
--- update profiles set role='admin' where username='YOUR_USERNAME';`;
-
-function renderSetup(){
-  document.getElementById('navIn').innerHTML=`<a href="#" class="logo"><div class="logo-i">H</div> Forum</a>`;
-  view(`<div class="setup-box">
-    <h2>🔧 Cài đặt Supabase</h2>
-    <p style="color:var(--tx2);font-size:.88rem;margin-bottom:16px;line-height:1.65">Tạo project miễn phí tại <b>supabase.com</b>, chạy SQL bên dưới trong SQL Editor, rồi điền thông tin kết nối.</p>
-    <details>
-      <summary>📋 SQL Schema — nhấn để xem và copy</summary>
-      <div style="position:relative;margin-top:4px">
-        <pre class="sql-pre" id="sqlpre">${esc(SQL)}</pre>
-        <button class="btn btn-g btn-sm" style="position:absolute;top:8px;right:8px" onclick="navigator.clipboard.writeText(document.getElementById('sqlpre').textContent).then(()=>toast('Đã copy SQL!'))">📋 Copy</button>
-      </div>
-    </details>
-    <form id="sf" style="margin-top:20px">
-      <div class="field"><label>Supabase Project URL</label><input name="url" type="url" required placeholder="https://xxxx.supabase.co"></div>
-      <div class="field"><label>Supabase Anon Key</label><input name="key" required placeholder="eyJhbGci..."></div>
-      <button class="btn btn-o" type="submit" style="width:100%">Kết nối & Kiểm tra</button>
-    </form>
-  </div>`);
-  document.getElementById('sf').onsubmit=async e=>{
-    e.preventDefault();const btn=e.target.querySelector('[type=submit]');
-    btn.disabled=true;btn.textContent='Đang kiểm tra...';
-    const url=e.target.url.value.trim(),key=e.target.key.value.trim();
-    try{
-      initSb(url,key);
-      const{error}=await sb.from('categories').select('id').limit(1);
-      if(error)throw error;
-      saveCfg(url,key);toast('Kết nối thành công!');location.reload();
-    }catch(err){toast('Kết nối thất bại: '+err.message,true);btn.disabled=false;btn.textContent='Kết nối & Kiểm tra';}
-  };
-}
-
 /* INIT */
 (async()=>{
-  const cfg=getCfg();
-  if(!cfg){renderSetup();return}
-  initSb(cfg.url,cfg.key);
+  initSb(SB_URL,SB_KEY);
   try{
     await loadUser();
     renderNav();
