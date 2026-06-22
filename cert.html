@@ -8,8 +8,11 @@
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Great+Vibes&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'MTD Brand Pro';src:url('fonts/MTD_Brand_Pro.otf') format('opentype');font-display:swap}
+@font-face{font-family:'RubikMKT';src:url('fonts/RubikMKT-Regular.otf') format('opentype');font-weight:400;font-display:swap}
+@font-face{font-family:'RubikMKT';src:url('fonts/RubikMKT-Bold.otf') format('opentype');font-weight:700;font-display:swap}
 :root{
   --cream:#F4EBDC;--cream2:#EADDC9;
   --navy1:#070F2B;--navy2:#0B2A78;--navy3:#1A4FCB;
@@ -177,6 +180,20 @@ function wrap(ctx,text,maxW,size,family,weight){
   for(const w of words){const t=cur?cur+' '+w:w;if(ctx.measureText(t).width>maxW&&cur){lines.push(cur);cur=w}else cur=t}
   if(cur)lines.push(cur);return lines;
 }
+// draw a line made of segments with different fonts, centered, single continuous gradient
+function gradSegments(ctx,segs,cx,y,size,solid){
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';
+  let total=0;for(const s of segs){ctx.font=`${s.weight} ${size}px ${s.family}`;total+=ctx.measureText(s.text).width}
+  let x=cx-total/2;const startX=x;
+  let fill;
+  if(solid)fill=solid;
+  else{const g=ctx.createLinearGradient(startX,y,startX+total,y);g.addColorStop(0,'#294998');g.addColorStop(1,'#dd2f8c');fill=g}
+  for(const s of segs){
+    ctx.font=`${s.weight} ${size}px ${s.family}`;ctx.fillStyle=fill;
+    ctx.fillText(s.text,x,y);x+=ctx.measureText(s.text).width;
+  }
+  ctx.textAlign='center';
+}
 function drawCircle(ctx,img,cx,cy,r){
   ctx.save();ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.closePath();ctx.clip();
   const ar=img.width/img.height;const d=r*2;let dw,dh;
@@ -189,28 +206,32 @@ function drawCert(ctx,W,H,data){
   else{ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.strokeStyle='#E2D8CC';ctx.lineWidth=4;ctx.strokeRect(20,20,W-40,H-40);}
   // photo
   if(data.photo)drawCircle(ctx,data.photo,W*POS.photoX,H*POS.photoY,W*POS.photoR);
-  // name (script)
-  if(data.name)gradText(ctx,data.name,W*POS.photoX,H*POS.nameY,W*POS.nameSize,'"Great Vibes"','400');
+  // name — MTD Brand Pro
+  if(data.name)gradText(ctx,data.name,W*POS.photoX,H*POS.nameY,W*POS.nameSize,'"MTD Brand Pro"','400');
   // divider
   if(data.name){ctx.strokeStyle='#c9b9a4';ctx.lineWidth=Math.max(1,W*0.0012);ctx.beginPath();ctx.moveTo(W*(POS.photoX-POS.lineW/2),H*POS.lineY);ctx.lineTo(W*(POS.photoX+POS.lineW/2),H*POS.lineY);ctx.stroke();}
-  // content (bold uppercase, wrap)
+  // content — RubikMKT Bold (wrap)
   if(data.content){
-    const lines=wrap(ctx,data.content,W*0.78,W*POS.contentSize,'Poppins','800');
-    lines.forEach((ln,i)=>gradText(ctx,ln,W*POS.photoX,H*POS.contentY+i*H*POS.contentGap,W*POS.contentSize,'Poppins','800'));
+    const lines=wrap(ctx,data.content,W*0.80,W*POS.contentSize,'RubikMKT','700');
+    lines.forEach((ln,i)=>gradText(ctx,ln,W*POS.photoX,H*POS.contentY+i*H*POS.contentGap,W*POS.contentSize,'RubikMKT','700'));
   }
-  // chapter
-  if(data.chapter)gradText(ctx,data.chapter,W*POS.photoX,H*POS.chapterY,W*POS.chapterSize,'Poppins','700');
-  // date (solid navy)
-  if(data.date)gradText(ctx,data.date,W*POS.photoX,H*POS.dateY,W*POS.dateSize,'Inter','600','#294998');
+  // chapter — "Chapter N:" Regular + name Bold
+  if(data.chapter){
+    const m=String(data.chapter).match(/^(.*?:)\s*(.*)$/);
+    const segs=m?[{text:m[1]+' ',family:'RubikMKT',weight:'400'},{text:m[2],family:'RubikMKT',weight:'700'}]
+                :[{text:data.chapter,family:'RubikMKT',weight:'700'}];
+    gradSegments(ctx,segs,W*POS.photoX,H*POS.chapterY,W*POS.chapterSize);
+  }
+  // date — RubikMKT Regular, solid navy
+  if(data.date)gradText(ctx,data.date,W*POS.photoX,H*POS.dateY,W*POS.dateSize,'RubikMKT','400','#294998');
 }
 let CW=1333,CH=2000;
 function canvasSize(){if(tplImg){CW=tplImg.naturalWidth||1333;CH=tplImg.naturalHeight||2000}}
 async function ensureFonts(){
   try{await Promise.all([
-    document.fonts.load('400 120px "Great Vibes"'),
-    document.fonts.load('800 60px Poppins'),
-    document.fonts.load('700 50px Poppins'),
-    document.fonts.load('600 40px Inter')
+    document.fonts.load('400 120px "MTD Brand Pro"'),
+    document.fonts.load('700 60px RubikMKT'),
+    document.fonts.load('400 50px RubikMKT')
   ]);await document.fonts.ready;}catch(e){}
 }
 function redraw(){
