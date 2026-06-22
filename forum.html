@@ -295,18 +295,23 @@ async function doLogout(){
 /* ====== VIEWS ====== */
 async function renderHome(){
   view('<div class="loading">Đang tải...</div>');
-  const [{data:cats},{data:posts}]=await Promise.all([
-    sb.from('categories').select('*').order('id'),
-    sb.from('posts').select('id,category_id').order('created_at',{ascending:false})
-  ]);
-  const cnt={};(posts||[]).forEach(p=>{cnt[p.category_id]=(cnt[p.category_id]||0)+1});
-  view(`
+  try{
+    const queries=Promise.all([
+      sb.from('categories').select('*').order('id'),
+      sb.from('posts').select('id,category_id').order('created_at',{ascending:false})
+    ]);
+    const timeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('Kết nối quá lâu. Kiểm tra lại URL và Key Supabase.')),10000));
+    const [{data:cats,error:e1},{data:posts,error:e2}]=await Promise.race([queries,timeout]);
+    if(e1)throw e1;
+    if(e2)throw e2;
+    const cnt={};(posts||[]).forEach(p=>{cnt[p.category_id]=(cnt[p.category_id]||0)+1});
+    view(`
     <div class="ph">
       <h1 class="disp">💬 Diễn đàn</h1>
       ${me?`<a href="#new-post" class="btn btn-o">+ Bài mới</a>`:`<button class="btn btn-o" onclick="goto('login')">Đăng nhập để đăng bài</button>`}
     </div>
     <div class="cat-list">
-      ${(cats||[]).map(c=>`
+      ${(cats||[]).length===0?`<div class="empty">Chưa có danh mục nào. <button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình</button></div>`:(cats||[]).map(c=>`
         <a href="#cat-${c.id}" class="cat-card">
           <div class="cat-icon">${esc(c.icon)}</div>
           <div class="cat-info">
@@ -316,6 +321,14 @@ async function renderHome(){
           <div class="cat-count">${cnt[c.id]||0} bài</div>
         </a>`).join('')}
     </div>`);
+  }catch(err){
+    view(`<div class="empty" style="padding:40px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
+      <div style="font-weight:700;margin-bottom:8px">Không tải được dữ liệu</div>
+      <div style="color:var(--tx2);font-size:.88rem;margin-bottom:20px;word-break:break-all">${esc(err.message||'Lỗi không xác định')}</div>
+      <button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình Supabase</button>
+    </div>`);
+  }
 }
 
 async function renderCategory(id){
@@ -723,13 +736,24 @@ insert into categories(name,description,slug,icon) values
   if(!cfg){renderSetup();document.getElementById('navIn').innerHTML='<a href="#" class="nav-logo"><span>H</span> Forum</a>';return}
   initSb(cfg.url,cfg.key);
   sb.auth.onAuthStateChange(async(_ev,session)=>{
-    me=session?.user||null;
-    if(me){const{data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data;}
-    else prof=null;
-    renderNav();
+    try{
+      me=session?.user||null;
+      if(me){const{data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data;}
+      else prof=null;
+      renderNav();
+    }catch(e){console.error('auth state error',e);}
   });
-  await loadUser();
-  await router();
+  try{
+    await loadUser();
+    await router();
+  }catch(err){
+    view(`<div class="empty" style="padding:40px;text-align:center">
+      <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
+      <div style="font-weight:700;margin-bottom:8px">Lỗi khởi động forum</div>
+      <div style="color:var(--tx2);font-size:.88rem;margin-bottom:20px;word-break:break-all">${esc(err.message||String(err))}</div>
+      <button class="btn btn-g btn-sm" onclick="clearCfg()">⚙️ Đổi cấu hình Supabase</button>
+    </div>`);
+  }
 })();
 </script>
 </body>
