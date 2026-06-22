@@ -125,14 +125,14 @@ const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 let _t;function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast'+(err?' err':'');clearTimeout(_t);setTimeout(()=>t.classList.add('show'),10);_t=setTimeout(()=>t.classList.remove('show'),3500)}
 
 /* ---------- position config (tunable, persisted) ---------- */
-const POS_KEY='cert_pos_v1';
+const POS_KEY='cert_pos_v2';
 const DEFAULT_POS={
-  photoX:0.500, photoY:0.466, photoR:0.156,
-  nameY:0.636, nameSize:0.060,
-  lineY:0.662, lineW:0.40,
-  contentY:0.700, contentSize:0.030, contentGap:0.036,
-  chapterY:0.766, chapterSize:0.026,
-  dateY:0.798, dateSize:0.022
+  photoX:0.500, photoY:0.468, photoR:0.122,
+  nameY:0.632, nameSize:0.058,
+  lineY:0.690, lineW:0.46,
+  contentY:0.722, contentSize:0.028, contentGap:0.034,
+  chapterY:0.760, chapterSize:0.026,
+  dateY:0.792, dateSize:0.022
 };
 let POS=loadPos();
 function loadPos(){try{return Object.assign({},DEFAULT_POS,JSON.parse(localStorage.getItem(POS_KEY)||'{}'))}catch{return{...DEFAULT_POS}}}
