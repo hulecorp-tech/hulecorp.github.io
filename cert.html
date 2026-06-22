@@ -125,9 +125,9 @@ const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 let _t;function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast'+(err?' err':'');clearTimeout(_t);setTimeout(()=>t.classList.add('show'),10);_t=setTimeout(()=>t.classList.remove('show'),3500)}
 
 /* ---------- position config (tunable, persisted) ---------- */
-const POS_KEY='cert_pos_v4';
+const POS_KEY='cert_pos_v5';
 const DEFAULT_POS={
-  photoX:0.491, photoY:0.427, photoR:0.115,
+  photoX:0.491, photoY:0.450, photoR:0.130,
   nameY:0.646, nameSize:0.056,
   lineY:0.668, lineW:0.46,
   contentY:0.700, contentSize:0.026, contentGap:0.031,
