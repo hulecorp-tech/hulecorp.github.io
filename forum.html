@@ -169,7 +169,7 @@ function renderNav(){
     <a href="#home" class="logo"><div class="logo-i">H</div> Forum</a>
     <div class="nav-links">
       <a href="#home" class="${on('home')}">Diễn đàn</a>
-      ${['admin','moderator'].includes(prof?.role)?`<a href="/cert.html" style="color:var(--or);font-weight:700">🏆 Vinh danh</a>`:''}
+      ${['admin','moderator'].includes(prof?.role)?`<a href="/midu_cbct" style="color:var(--or);font-weight:700">🏆 Vinh danh</a>`:''}
       ${prof?.role==='admin'?`<a href="#admin" class="${on('admin')}">Quản trị</a>`:''}
       ${me?`<a href="#profile" class="${on('profile')}">Hồ sơ</a>`:''}
     </div>
