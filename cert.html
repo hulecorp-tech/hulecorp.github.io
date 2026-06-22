@@ -125,14 +125,14 @@ const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>
 let _t;function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast'+(err?' err':'');clearTimeout(_t);setTimeout(()=>t.classList.add('show'),10);_t=setTimeout(()=>t.classList.remove('show'),3500)}
 
 /* ---------- position config (tunable, persisted) ---------- */
-const POS_KEY='cert_pos_v3';
+const POS_KEY='cert_pos_v4';
 const DEFAULT_POS={
   photoX:0.491, photoY:0.427, photoR:0.115,
   nameY:0.646, nameSize:0.056,
   lineY:0.668, lineW:0.46,
   contentY:0.700, contentSize:0.026, contentGap:0.031,
   chapterY:0.754, chapterSize:0.023,
-  dateY:0.774, dateSize:0.020
+  dateX:0.673, dateY:0.774, dateSize:0.020
 };
 let POS=loadPos();
 function loadPos(){try{return Object.assign({},DEFAULT_POS,JSON.parse(localStorage.getItem(POS_KEY)||'{}'))}catch{return{...DEFAULT_POS}}}
@@ -225,8 +225,8 @@ function drawCert(ctx,W,H,data){
                 :[{text:data.chapter,family:'RubikMKT',weight:'700'}];
     gradSegments(ctx,segs,W*POS.photoX,H*POS.chapterY,W*POS.chapterSize);
   }
-  // date — RubikMKT Regular, solid navy
-  if(data.date)gradText(ctx,data.date,W*POS.photoX,H*POS.dateY,W*POS.dateSize,'RubikMKT','400','#294998');
+  // date — RubikMKT Regular, solid navy, aligned above "CHỦ TỊCH" line
+  if(data.date)gradText(ctx,data.date,W*POS.dateX,H*POS.dateY,W*POS.dateSize,'RubikMKT','400','#294998');
 }
 let CW=1333,CH=2000;
 function canvasSize(){if(tplImg){CW=tplImg.naturalWidth||1333;CH=tplImg.naturalHeight||2000}}
@@ -301,7 +301,8 @@ const SLIDERS=[
   ['photoX','Ảnh ngang',0,1,0.001],['photoY','Ảnh dọc',0,1,0.001],['photoR','Ảnh kích thước',0.05,0.3,0.001],
   ['nameY','Tên dọc',0.4,0.8,0.001],['nameSize','Tên cỡ chữ',0.03,0.09,0.001],
   ['contentY','Nội dung dọc',0.5,0.85,0.001],['contentSize','Nội dung cỡ chữ',0.018,0.045,0.001],
-  ['chapterY','Chapter dọc',0.6,0.9,0.001],['dateY','Ngày dọc',0.65,0.92,0.001]
+  ['chapterY','Chapter dọc',0.6,0.9,0.001],
+  ['dateX','Ngày ngang',0.3,0.8,0.001],['dateY','Ngày dọc',0.65,0.92,0.001]
 ];
 
 /* ---------- render tool ---------- */
