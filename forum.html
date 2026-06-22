@@ -185,6 +185,8 @@ async function router(){
   if(h==='home') await renderHome();
   else if(h==='login') renderLogin();
   else if(h==='register') renderRegister();
+  else if(h==='forgot') renderForgot();
+  else if(h==='reset') renderReset();
   else if(h.startsWith('cat-')) await renderCat(h.slice(4));
   else if(h.startsWith('post-')) await renderPost(h.slice(5));
   else if(h==='new-post') await renderNewPost(null);
@@ -203,7 +205,7 @@ function renderLogin(){
       <div class="field"><label>Mật khẩu</label><input name="pw" type="password" required placeholder="••••••••" autocomplete="current-password"></div>
       <button class="btn btn-o" style="width:100%" type="submit">Đăng nhập</button>
     </form>
-    <div class="form-footer">Chưa có tài khoản? <a href="#register">Đăng ký ngay</a></div>
+    <div class="form-footer">Chưa có tài khoản? <a href="#register">Đăng ký ngay</a> · <a href="#forgot">Quên mật khẩu?</a></div>
   </div>`);
   document.getElementById('lf').onsubmit=async e=>{
     e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;btn.textContent='Đang đăng nhập...';
@@ -242,6 +244,49 @@ function renderRegister(){
 }
 
 window.doLogout=async()=>{await sb.auth.signOut();me=null;prof=null;renderNav();toast('Đã đăng xuất.');goto('home')};
+
+/* FORGOT PASSWORD */
+function renderForgot(){
+  view(`<div class="form-box"><h2>Quên mật khẩu</h2>
+    <p style="color:var(--tx2);font-size:.88rem;margin-bottom:20px;line-height:1.6">Nhập email tài khoản. Chúng tôi sẽ gửi link đặt lại mật khẩu.</p>
+    <form id="ff">
+      <div class="field"><label>Email</label><input name="email" type="email" required placeholder="you@email.com" autocomplete="email"></div>
+      <button class="btn btn-o" style="width:100%" type="submit">Gửi link đặt lại</button>
+    </form>
+    <div class="form-footer" style="margin-top:16px"><a href="#login">← Quay lại đăng nhập</a></div>
+  </div>`);
+  document.getElementById('ff').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;btn.textContent='Đang gửi...';
+    try{
+      const{error}=await sb.auth.resetPasswordForEmail(e.target.email.value.trim(),{redirectTo:'https://huyle.io.vn/forum.html'});
+      if(error)throw error;
+      view(`<div class="form-box"><div style="text-align:center;font-size:2.5rem;margin-bottom:16px">📬</div><h2 style="text-align:center">Kiểm tra email</h2><p style="color:var(--tx2);font-size:.9rem;line-height:1.7;text-align:center;margin-top:12px">Link đặt lại mật khẩu đã được gửi.<br>Kiểm tra hộp thư (và thư mục spam).</p><div class="form-footer" style="margin-top:24px"><a href="#login">← Quay lại đăng nhập</a></div></div>`);
+    }catch(err){toast(err.message||'Lỗi gửi email',true);btn.disabled=false;btn.textContent='Gửi link đặt lại';}
+  };
+}
+
+/* RESET PASSWORD */
+function renderReset(){
+  view(`<div class="form-box"><h2>Đặt lại mật khẩu</h2>
+    <form id="rsf">
+      <div class="field"><label>Mật khẩu mới</label><input name="pw" type="password" required minlength="6" placeholder="Ít nhất 6 ký tự" autocomplete="new-password"></div>
+      <div class="field"><label>Xác nhận mật khẩu</label><input name="pw2" type="password" required minlength="6" placeholder="Nhập lại mật khẩu" autocomplete="new-password"></div>
+      <button class="btn btn-o" style="width:100%" type="submit">Đặt lại mật khẩu</button>
+    </form>
+  </div>`);
+  document.getElementById('rsf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');
+    const pw=e.target.pw.value,pw2=e.target.pw2.value;
+    if(pw!==pw2){toast('Mật khẩu không khớp!',true);return}
+    btn.disabled=true;btn.textContent='Đang cập nhật...';
+    try{
+      const{error}=await sb.auth.updateUser({password:pw});
+      if(error)throw error;
+      toast('Mật khẩu đã được đặt lại thành công!');
+      await loadUser();goto('home');
+    }catch(err){toast(err.message||'Lỗi đặt lại mật khẩu',true);btn.disabled=false;btn.textContent='Đặt lại mật khẩu';}
+  };
+}
 
 /* HOME */
 async function renderHome(){
@@ -363,7 +408,24 @@ async function renderProfile(){
     <div><h2 class="pp" style="margin-bottom:6px">${esc(prof?.username||me.email)}</h2>${bdg(prof?.role||'member')}<div style="color:var(--tx2);font-size:.82rem;margin-top:6px">Tham gia: ${new Date(prof?.created_at||Date.now()).toLocaleDateString('vi')}</div></div>
   </div>
   <h3 style="font-size:.95rem;margin-bottom:12px;font-weight:700">Bài viết đã đăng</h3>
-  <div class="post-list">${(posts||[]).length?posts.map(p=>`<a href="#post-${p.id}" class="post-row"><div class="post-info"><div class="post-title">${esc(p.title)}</div><div class="post-meta">${esc(p.categories?.name||'—')} · ${ago(p.created_at)}</div></div></a>`).join(''):`<div class="empty">Chưa có bài viết nào.</div>`}</div>`);
+  <div class="post-list">${(posts||[]).length?posts.map(p=>`<a href="#post-${p.id}" class="post-row"><div class="post-info"><div class="post-title">${esc(p.title)}</div><div class="post-meta">${esc(p.categories?.name||'—')} · ${ago(p.created_at)}</div></div></a>`).join(''):`<div class="empty">Chưa có bài viết nào.</div>`}</div>
+  <div class="card" style="margin-top:28px;max-width:440px">
+    <h3 style="font-size:.95rem;margin-bottom:16px;font-weight:700">🔑 Đổi mật khẩu</h3>
+    <form id="cpf">
+      <div class="field"><label>Mật khẩu mới</label><input name="npw" type="password" required minlength="6" placeholder="Ít nhất 6 ký tự" autocomplete="new-password"></div>
+      <div class="field"><label>Xác nhận mật khẩu</label><input name="npw2" type="password" required minlength="6" placeholder="Nhập lại mật khẩu" autocomplete="new-password"></div>
+      <button class="btn btn-nv btn-sm" type="submit">Cập nhật mật khẩu</button>
+    </form>
+  </div>`);
+  document.getElementById('cpf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');
+    const pw=e.target.npw.value,pw2=e.target.npw2.value;
+    if(pw!==pw2){toast('Mật khẩu không khớp!',true);return}
+    btn.disabled=true;btn.textContent='Đang cập nhật...';
+    const{error}=await sb.auth.updateUser({password:pw});
+    if(error){toast(error.message,true);btn.disabled=false;btn.textContent='Cập nhật mật khẩu';}
+    else{toast('Mật khẩu đã được cập nhật!');btn.textContent='Đã cập nhật ✓';}
+  };
 }
 
 /* ADMIN */
@@ -470,21 +532,24 @@ window.delCat=async id=>{
 
 /* INIT */
 (async()=>{
+  const isRecovery=location.hash.includes('type=recovery');
   initSb(SB_URL,SB_KEY);
   try{
     await loadUser();
     renderNav();
-    await router();
+    if(isRecovery){renderReset();}
+    else{await router();}
   }catch(err){
     renderNav();
     view(errBox(err.message||String(err)));
   }
-  sb.auth.onAuthStateChange(async(_ev,session)=>{
+  sb.auth.onAuthStateChange(async(event,session)=>{
     try{
       me=session?.user||null;
       if(me){const{data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data||null;}
       else prof=null;
       renderNav();
+      if(event==='PASSWORD_RECOVERY'){goto('reset');}
     }catch(e){console.error('auth change',e);}
   });
 })();
