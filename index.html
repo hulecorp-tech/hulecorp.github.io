@@ -1,588 +1,469 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Huy Le Creative — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --orange: #FF6B2B;
-      --orange-light: #FF9F68;
-      --blue: #1E6EFF;
-      --blue-light: #64A8FF;
-      --bg: #FAFAFA;
-      --bg2: #F2F2F5;
-      --text: #1A1A2E;
-      --text2: #6B7280;
-      --card: #FFFFFF;
-      --border: #E5E7EB;
-      --nav-bg: rgba(250,250,250,0.88);
-      --shadow: 0 4px 24px rgba(0,0,0,0.08);
-      --radius: 16px;
-      --tr: all 0.3s cubic-bezier(0.4,0,0.2,1);
-    }
-    [data-theme="dark"] {
-      --bg: #0D0D14; --bg2: #161622; --text: #F0F0FA; --text2: #8B92A5;
-      --card: #1A1A2E; --border: #252538; --nav-bg: rgba(13,13,20,0.88);
-      --shadow: 0 4px 24px rgba(0,0,0,0.3);
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter','Noto Sans SC',-apple-system,sans-serif; background: var(--bg); color: var(--text); transition: background .3s,color .3s; overflow-x: hidden; }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
-    .section { padding: 96px 0; }
-    .grad-text { background: linear-gradient(135deg,var(--orange),var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .section-tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 14px; }
-    .section-title { font-size: clamp(1.9rem,4vw,2.9rem); font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
-    .section-desc { color: var(--text2); font-size: 1.05rem; line-height: 1.75; max-width: 540px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huy Le Creative — Interactive Portfolio</title>
+<meta name="description" content="Huy Le Creative — Graphic Designer. Event branding, mascot design & brand identity.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+SC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F4EBDC; --cream2:#EADDC9;
+  --navy1:#070F2B; --navy2:#0B2A78; --navy3:#1A4FCB;
+  --ink:#17130C; --ink2:#73695A;
+  --orange:#FF7A1A; --orange2:#FF9D4D;
+  --cyan:#41E2FF; --cyan-deep:#0AA9E0;
+  --badge:#1B2A66; --white:#fff;
+  --radius:26px; --ease:cubic-bezier(.4,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans SC',-apple-system,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.disp{font-family:'Poppins','Noto Sans SC',sans-serif}
+.mono{font-family:'Space Mono',monospace}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px}
 
-    /* NAV */
-    .navbar { position: fixed; top:0; left:0; right:0; z-index:1000; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-    .nav-inner { display:flex; align-items:center; justify-content:space-between; height:66px; }
-    .nav-logo { font-size:1.15rem; font-weight:900; letter-spacing:-0.5px; }
-    .nav-links { display:flex; gap:32px; list-style:none; }
-    .nav-links a { font-size:.875rem; font-weight:500; color:var(--text2); position:relative; transition:color .2s; }
-    .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; right:0; height:2px; background:linear-gradient(135deg,var(--orange),var(--blue)); border-radius:2px; transform:scaleX(0); transition:transform .2s; }
-    .nav-links a:hover { color:var(--text); }
-    .nav-links a:hover::after { transform:scaleX(1); }
-    .nav-controls { display:flex; align-items:center; gap:6px; }
-    .lang-btn { padding:5px 11px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--text2); font-size:.78rem; font-weight:700; cursor:pointer; transition:var(--tr); font-family:inherit; }
-    .lang-btn.active, .lang-btn:hover { background:linear-gradient(135deg,var(--orange),var(--blue)); color:#fff; border-color:transparent; }
-    .theme-btn { width:38px; height:38px; border-radius:50%; border:1px solid var(--border); background:transparent; color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; transition:var(--tr); }
-    .theme-btn:hover { background:var(--bg2); transform:rotate(20deg); }
-    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
-    .hamburger span { display:block; width:22px; height:2px; background:var(--text); border-radius:2px; transition:var(--tr); }
+/* ---------- NAV ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 0;transition:color .4s}
+.nav-in{display:flex;align-items:center;justify-content:space-between}
+.logo{width:46px;height:46px;border-radius:14px;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;transition:.4s var(--ease);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.logo:hover{transform:rotate(-12deg) scale(1.05)}
+.pill{display:flex;gap:6px;background:rgba(255,255,255,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:7px;border-radius:40px;box-shadow:0 6px 22px rgba(0,0,0,.08);border:1px solid rgba(255,255,255,.6)}
+.pill a{padding:9px 20px;border-radius:30px;font-weight:700;font-size:.82rem;letter-spacing:.5px;text-transform:uppercase;color:var(--ink);transition:.25s var(--ease)}
+.pill a:hover{background:rgba(0,0,0,.06)}
+.pill a.on{background:var(--navy3);color:#fff}
+.nav-r{display:flex;align-items:center;gap:10px}
+.langs{display:flex;gap:3px;background:rgba(255,255,255,.55);backdrop-filter:blur(14px);padding:5px;border-radius:30px;border:1px solid rgba(255,255,255,.6)}
+.langs button{border:0;background:transparent;font-family:inherit;font-weight:700;font-size:.72rem;padding:6px 11px;border-radius:20px;cursor:pointer;color:var(--ink);transition:.2s}
+.langs button.active{background:var(--ink);color:var(--cream)}
+.cta-btn{background:var(--orange);color:#fff;font-weight:800;font-size:.8rem;letter-spacing:.5px;text-transform:uppercase;padding:13px 24px;border-radius:30px;box-shadow:0 8px 22px rgba(255,122,26,.4);transition:.25s var(--ease);font-family:'Poppins',sans-serif}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(255,122,26,.5)}
+.round-btn{width:46px;height:46px;border-radius:50%;border:0;background:var(--ink);color:var(--cream);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:.3s var(--ease)}
+.round-btn:hover{transform:rotate(18deg)}
+/* nav adapts when over the dark section */
+.nav.on-dark .logo{background:var(--cyan);color:var(--navy1)}
+.nav.on-dark .pill{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+.nav.on-dark .pill a{color:#dfe8ff}
+.nav.on-dark .pill a:hover{background:rgba(255,255,255,.12)}
+.nav.on-dark .pill a.on{background:var(--cyan);color:var(--navy1)}
+.nav.on-dark .langs{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18)}
+.nav.on-dark .langs button{color:#dfe8ff}
+.nav.on-dark .langs button.active{background:var(--cyan);color:var(--navy1)}
+.nav.on-dark .round-btn{background:rgba(255,255,255,.14);color:#fff}
+.hamb{display:none;flex-direction:column;gap:5px;width:46px;height:46px;border-radius:14px;background:var(--ink);align-items:center;justify-content:center;cursor:pointer;border:0}
+.hamb span{width:20px;height:2px;background:var(--cream);border-radius:2px;transition:.3s}
 
-    /* MOBILE MENU */
-    .mobile-menu { display:none; position:fixed; inset:0; z-index:999; background:var(--bg); flex-direction:column; align-items:center; justify-content:center; gap:36px; }
-    .mobile-menu.open { display:flex; }
-    .mobile-menu a { font-size:1.6rem; font-weight:800; }
-    .mm-close { position:absolute; top:20px; right:24px; font-size:1.4rem; cursor:pointer; color:var(--text2); background:none; border:none; }
+/* ---------- HERO ---------- */
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;padding-top:90px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:30px;align-items:center;width:100%}
+.hero h1{font-family:'Poppins',sans-serif;font-weight:900;font-size:clamp(3rem,8vw,6.2rem);line-height:.95;letter-spacing:-2px}
+.hero .greet{font-weight:700;color:var(--ink2);font-size:1.05rem;margin-bottom:14px;letter-spacing:.5px}
+.role-badge{display:inline-block;margin-top:18px;background:var(--badge);color:#fff;font-family:'Space Mono',monospace;font-weight:700;letter-spacing:2px;font-size:1rem;padding:9px 18px;border-radius:10px;transform:rotate(-3deg);box-shadow:0 8px 20px rgba(27,42,102,.3)}
+.hero .tag{margin-top:28px;font-size:1.1rem;line-height:1.6;color:var(--ink2);max-width:420px}
+.hero-actions{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap}
+.btn-solid{background:var(--ink);color:var(--cream);font-weight:700;padding:15px 28px;border-radius:30px;transition:.25s var(--ease);font-family:'Poppins',sans-serif}
+.btn-solid:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.22)}
+.btn-ghost{border:2px solid var(--ink);color:var(--ink);font-weight:700;padding:13px 26px;border-radius:30px;transition:.25s var(--ease);font-family:'Poppins',sans-serif}
+.btn-ghost:hover{background:var(--ink);color:var(--cream)}
+/* hero visual */
+.hero-vis{position:relative;display:flex;align-items:center;justify-content:center;min-height:440px}
+.blob{position:absolute;width:min(440px,82%);aspect-ratio:1;background:radial-gradient(circle at 35% 30%,var(--orange2),var(--orange));border-radius:46% 54% 58% 42%/52% 44% 56% 48%;filter:blur(2px);opacity:.92;animation:morph 10s ease-in-out infinite;box-shadow:0 30px 70px rgba(255,122,26,.35)}
+@keyframes morph{0%,100%{border-radius:46% 54% 58% 42%/52% 44% 56% 48%}50%{border-radius:58% 42% 44% 56%/46% 58% 42% 54%}}
+.hero-photo{position:relative;width:min(330px,70%);aspect-ratio:.92;border-radius:34px;object-fit:cover;box-shadow:0 24px 60px rgba(0,0,0,.28);border:6px solid #fff;z-index:2;animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.chip{position:absolute;background:#fff;border-radius:18px;width:74px;height:74px;display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 14px 30px rgba(0,0,0,.16);z-index:3;animation:float 5s ease-in-out infinite}
+.chip.c1{top:4%;right:8%;animation-delay:.2s}
+.chip.c2{bottom:10%;left:0;animation-delay:1.1s;background:var(--navy3)}
+.chip.c3{bottom:24%;right:2%;animation-delay:.7s}
+.scroll-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:2px;color:var(--ink2);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px}
+.scroll-hint::after{content:'';width:1px;height:30px;background:var(--ink2);animation:scrolldot 1.6s infinite}
+@keyframes scrolldot{0%{opacity:.2;transform:scaleY(.3)}50%{opacity:1}100%{opacity:.2;transform:scaleY(.3)}}
 
-    /* HERO */
-    .hero { min-height:100vh; display:flex; align-items:center; padding-top:66px; position:relative; overflow:hidden; }
-    .hero::before { content:''; position:absolute; top:-180px; right:-180px; width:560px; height:560px; background:radial-gradient(circle,rgba(255,107,43,.13) 0%,transparent 70%); border-radius:50%; pointer-events:none; }
-    .hero::after { content:''; position:absolute; bottom:-180px; left:-180px; width:480px; height:480px; background:radial-gradient(circle,rgba(30,110,255,.1) 0%,transparent 70%); border-radius:50%; pointer-events:none; }
-    .hero-inner { display:grid; grid-template-columns:1fr 400px; gap:72px; align-items:center; }
-    .hero-greeting { font-size:1.05rem; color:var(--text2); margin-bottom:10px; }
-    .hero-name { font-size:clamp(2.6rem,5.5vw,4.2rem); font-weight:900; line-height:1.05; letter-spacing:-2px; margin-bottom:16px; }
-    .hero-role { display:inline-flex; align-items:center; gap:8px; background:var(--bg2); border:1px solid var(--border); padding:7px 16px; border-radius:24px; font-size:.875rem; font-weight:500; margin-bottom:24px; }
-    .dot { width:8px; height:8px; background:#22C55E; border-radius:50%; animation:pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(.85)} }
-    .hero-tagline { font-size:1.2rem; color:var(--text2); line-height:1.65; margin-bottom:36px; max-width:500px; }
-    .hero-cta { display:flex; gap:14px; flex-wrap:wrap; }
-    .btn { display:inline-flex; align-items:center; gap:8px; padding:13px 26px; border-radius:12px; font-size:.9rem; font-weight:600; cursor:pointer; transition:var(--tr); border:none; font-family:inherit; }
-    .btn-primary { background:linear-gradient(135deg,var(--orange),var(--blue)); color:#fff; box-shadow:0 8px 24px rgba(255,107,43,.32); }
-    .btn-primary:hover { transform:translateY(-3px); box-shadow:0 12px 32px rgba(255,107,43,.44); }
-    .btn-secondary { background:var(--card); color:var(--text); border:1px solid var(--border); box-shadow:var(--shadow); }
-    .btn-secondary:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.1); }
-    .hero-photo-wrap { position:relative; }
-    .hero-blob { position:absolute; inset:-24px; background:linear-gradient(135deg,rgba(255,107,43,.18),rgba(30,110,255,.18)); border-radius:50% 50% 50% 50%/60% 60% 40% 40%; animation:morphBlob 9s ease-in-out infinite; }
-    @keyframes morphBlob { 0%,100%{border-radius:50% 50% 50% 50%/60% 60% 40% 40%} 33%{border-radius:60% 40% 60% 40%/50% 60% 40% 50%} 66%{border-radius:40% 60% 40% 60%/60% 40% 60% 40%} }
-    .hero-photo { position:relative; z-index:1; width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:40% 60% 60% 40%/40% 40% 60% 60%; animation:morphPhoto 9s ease-in-out infinite; }
-    @keyframes morphPhoto { 0%,100%{border-radius:40% 60% 60% 40%/40% 40% 60% 60%} 33%{border-radius:60% 40% 60% 40%/50% 50% 50% 50%} 66%{border-radius:50% 50% 40% 60%/60% 40% 60% 40%} }
-    .hero-badge { position:absolute; z-index:2; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:10px 14px; box-shadow:var(--shadow); font-size:.78rem; font-weight:600; display:flex; align-items:center; gap:8px; }
-    .hb1 { bottom:28px; left:-16px; }
-    .hb2 { top:36px; right:-16px; }
-    .badge-icon { font-size:1.2rem; }
+/* ---------- ABOUT (hologram scroll stage) ---------- */
+.about{position:relative;background:radial-gradient(120% 80% at 50% 0%,var(--navy2),var(--navy1));border-radius:54px 54px 0 0;margin-top:-54px;height:340vh;color:#eaf1ff}
+.about::before{content:'';position:absolute;inset:0;border-radius:54px 54px 0 0;background-image:linear-gradient(rgba(65,226,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(65,226,255,.07) 1px,transparent 1px);background-size:46px 46px;mask:radial-gradient(120% 70% at 50% 60%,#000,transparent 80%);-webkit-mask:radial-gradient(120% 70% at 50% 60%,#000,transparent 80%);pointer-events:none}
+.holo-stage{position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.holo-core{position:relative;width:min(1100px,92%);height:100%;display:flex;align-items:center;justify-content:center}
+.holo-figure{position:relative;width:min(300px,62vw);z-index:2}
+.holo-img-wrap{position:relative;border-radius:30px;overflow:hidden;aspect-ratio:.9}
+.holo-base{width:100%;height:100%;object-fit:cover;filter:grayscale(1) brightness(.5) contrast(.9);opacity:.5}
+.holo-cyan{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(1.15) sepia(1) hue-rotate(150deg) saturate(4.5) contrast(1.05);clip-path:inset(100% 0 0 0);transition:clip-path .08s linear}
+.holo-img-wrap::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(65,226,255,.18) 4px);pointer-events:none;mix-blend-mode:screen}
+.scanline{position:absolute;left:-6%;width:112%;height:3px;background:var(--cyan);box-shadow:0 0 14px 3px var(--cyan),0 0 30px 8px rgba(65,226,255,.6);bottom:0;z-index:3;border-radius:3px}
+.platform{position:absolute;bottom:-34px;left:50%;transform:translateX(-50%);width:120%;height:60px;border-radius:50%;background:radial-gradient(ellipse,rgba(65,226,255,.55),transparent 70%);filter:blur(3px)}
+.platform::after{content:'';position:absolute;inset:18px 10%;border-radius:50%;border:2px solid rgba(65,226,255,.7);box-shadow:0 0 20px rgba(65,226,255,.6)}
+.holo-num{position:absolute;bottom:-78px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-weight:700;font-size:1.5rem;color:var(--cyan);letter-spacing:4px;background:rgba(7,15,43,.6);padding:5px 16px;border-radius:8px;border:1px solid rgba(65,226,255,.35)}
+/* floating HUD cards */
+.hud{position:absolute;opacity:0;transform:translateY(18px);transition:.6s var(--ease);z-index:4}
+.hud.show{opacity:1;transform:translateY(0)}
+.hud-card{background:rgba(13,32,84,.72);border:1px solid rgba(65,226,255,.4);border-radius:14px;padding:14px 18px;backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.hud-name{top:24%;left:2%}
+.hud-name .nm{font-family:'Space Mono',monospace;font-weight:700;font-size:1.3rem;color:#fff}
+.hud-name .loc{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--cyan);margin-top:3px;display:flex;align-items:center;gap:5px}
+.hud-desc{bottom:26%;left:0;max-width:280px}
+.hud-desc p{font-family:'Space Mono',monospace;font-size:.82rem;line-height:1.7;color:#cfe0ff}
+.hud-skills{top:14%;right:1%}
+.hud-skills h4{font-family:'Space Mono',monospace;color:var(--cyan);font-size:.78rem;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase}
+.hud-skills li{list-style:none;font-family:'Space Mono',monospace;font-size:.85rem;color:#eaf1ff;padding:5px 0;padding-left:18px;position:relative;opacity:0;transform:translateX(12px);transition:.4s var(--ease)}
+.hud-skills li.show{opacity:1;transform:translateX(0)}
+.hud-skills li::before{content:'▹';position:absolute;left:0;color:var(--cyan)}
+.about-tag{position:absolute;top:90px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;letter-spacing:3px;text-transform:uppercase;font-size:.78rem;color:var(--cyan);z-index:5}
 
-    /* STATS */
-    .stats-bar { background:var(--card); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-    .stats-inner { display:grid; grid-template-columns:repeat(4,1fr); }
-    .stat-item { padding:28px 20px; text-align:center; border-right:1px solid var(--border); }
-    .stat-item:last-child { border-right:none; }
-    .stat-number { font-size:2rem; font-weight:800; display:block; margin-bottom:4px; }
-    .stat-label { font-size:.82rem; color:var(--text2); font-weight:500; }
+/* ---------- PROJECTS ---------- */
+.projects{position:relative;background:var(--cream);border-radius:54px 54px 0 0;margin-top:-54px;padding:120px 0 110px;z-index:2}
+.sec-head{margin-bottom:46px}
+.kicker{display:inline-block;background:var(--badge);color:#fff;font-family:'Space Mono',monospace;font-weight:700;letter-spacing:2px;font-size:.8rem;padding:7px 14px;border-radius:8px;transform:rotate(-3deg);text-transform:uppercase}
+.sec-title{font-family:'Poppins',sans-serif;font-weight:900;font-size:clamp(2.4rem,6vw,4.4rem);line-height:1;margin-top:18px;letter-spacing:-1.5px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:30px 0 4px}
+.filters button{border:2px solid rgba(0,0,0,.12);background:transparent;font-family:'Poppins',sans-serif;font-weight:700;font-size:.82rem;padding:9px 18px;border-radius:24px;cursor:pointer;transition:.2s var(--ease);color:var(--ink)}
+.filters button.active,.filters button:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:30px}
+.card{background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.08);transition:.35s var(--ease);opacity:0;transform:translateY(30px)}
+.card.in{opacity:1;transform:translateY(0)}
+.card:hover{transform:translateY(-8px) rotate(-.5deg);box-shadow:0 26px 60px rgba(0,0,0,.16)}
+.thumb{height:190px;display:flex;align-items:center;justify-content:center;font-size:62px;position:relative}
+.thumb span{filter:drop-shadow(0 8px 14px rgba(0,0,0,.2))}
+.card-body{padding:22px 22px 26px}
+.card-cat{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--orange);font-weight:700}
+.card-name{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.18rem;margin:8px 0 8px}
+.card-desc{color:var(--ink2);font-size:.92rem;line-height:1.6}
 
-    /* ABOUT */
-    .about-inner { display:grid; grid-template-columns:360px 1fr; gap:72px; align-items:start; }
-    .about-img-wrap { position:relative; }
-    .about-img { width:100%; border-radius:var(--radius); aspect-ratio:1; object-fit:cover; object-position:top; }
-    .about-accent { position:absolute; bottom:-14px; right:-14px; width:100px; height:100px; background:linear-gradient(135deg,var(--orange),var(--blue)); border-radius:var(--radius); z-index:-1; }
-    .about-bio { font-size:1rem; line-height:1.8; color:var(--text2); margin-bottom:26px; }
-    .company-card { display:flex; align-items:center; gap:12px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:15px 18px; margin-bottom:28px; }
-    .company-icon { width:42px; height:42px; background:linear-gradient(135deg,var(--orange),var(--blue)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; font-weight:900; color:#fff; flex-shrink:0; }
-    .company-name { font-weight:700; font-size:.95rem; }
-    .company-role { font-size:.8rem; color:var(--text2); margin-top:2px; }
+/* ---------- CONTACT ---------- */
+.contact{position:relative;background:var(--cream2);border-radius:54px 54px 0 0;margin-top:-54px;padding:120px 0 130px;z-index:3;overflow:hidden}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center}
+.contact h2{font-family:'Poppins',sans-serif;font-weight:900;font-size:clamp(2.6rem,7vw,5rem);line-height:.98;letter-spacing:-1.5px}
+.contact p{margin-top:22px;color:var(--ink2);font-size:1.08rem;line-height:1.7;max-width:430px}
+.socials{display:flex;gap:14px;margin-top:34px}
+.soc{width:58px;height:58px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 10px 26px rgba(0,0,0,.1);transition:.25s var(--ease)}
+.soc:hover{transform:translateY(-5px) scale(1.06);background:var(--orange);color:#fff}
+.contact-visual{position:relative;display:flex;align-items:center;justify-content:center;min-height:360px}
+.contact-photo{width:min(300px,72%);border-radius:30px;border:6px solid #fff;box-shadow:0 22px 56px rgba(0,0,0,.22);animation:float 6s ease-in-out infinite;object-fit:cover;aspect-ratio:.92}
+.c-chip{position:absolute;width:64px;height:64px;border-radius:16px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;box-shadow:0 12px 28px rgba(0,0,0,.14);animation:float 5s ease-in-out infinite}
+.c-chip.a{top:6%;left:10%;background:var(--orange);animation-delay:.3s}
+.c-chip.b{bottom:8%;right:12%;animation-delay:1s}
+footer{background:var(--ink);color:var(--cream);text-align:center;padding:36px 0;font-size:.9rem}
+footer .mono{color:var(--orange2)}
+.back-top{position:fixed;bottom:26px;right:26px;width:52px;height:52px;border-radius:50%;background:var(--orange);color:#fff;border:0;font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;transition:.3s var(--ease);z-index:900;box-shadow:0 10px 26px rgba(255,122,26,.45)}
+.back-top.show{opacity:1;pointer-events:auto}
+.back-top:hover{transform:translateY(-4px)}
 
-    /* SKILLS */
-    .skills-bg { background:var(--bg2); }
-    .skills-header { text-align:center; margin-bottom:56px; }
-    .skills-header .section-desc { margin:0 auto; }
-    .skills-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
-    .skill-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px 24px; transition:var(--tr); position:relative; overflow:hidden; }
-    .skill-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(135deg,var(--orange),var(--blue)); transform:scaleX(0); transform-origin:left; transition:transform .3s; }
-    .skill-card:hover { transform:translateY(-6px); box-shadow:var(--shadow); }
-    .skill-card:hover::before { transform:scaleX(1); }
-    .skill-icon { width:48px; height:48px; background:linear-gradient(135deg,rgba(255,107,43,.1),rgba(30,110,255,.1)); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; margin-bottom:18px; }
-    .skill-name { font-size:1rem; font-weight:700; margin-bottom:8px; }
-    .skill-desc { font-size:.85rem; color:var(--text2); line-height:1.6; }
-
-    /* PROJECTS */
-    .filter-tabs { display:flex; gap:9px; flex-wrap:wrap; margin-top:28px; }
-    .filter-tab { padding:7px 18px; border-radius:24px; border:1px solid var(--border); background:transparent; color:var(--text2); font-size:.84rem; font-weight:500; cursor:pointer; transition:var(--tr); font-family:inherit; }
-    .filter-tab.active, .filter-tab:hover { background:linear-gradient(135deg,var(--orange),var(--blue)); color:#fff; border-color:transparent; }
-    .projects-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:32px; }
-    .project-card { border-radius:var(--radius); overflow:hidden; background:var(--card); border:1px solid var(--border); transition:var(--tr); }
-    .project-card:hover { transform:translateY(-8px); box-shadow:0 20px 48px rgba(0,0,0,.13); }
-    .project-thumb { height:190px; position:relative; display:flex; align-items:center; justify-content:center; }
-    .project-thumb-icon { font-size:2.8rem; opacity:.85; }
-    .project-overlay { position:absolute; inset:0; background:rgba(0,0,0,.38); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .3s; }
-    .project-card:hover .project-overlay { opacity:1; }
-    .overlay-text { color:#fff; font-weight:600; font-size:.84rem; background:rgba(255,255,255,.18); padding:7px 16px; border-radius:20px; backdrop-filter:blur(4px); }
-    .project-body { padding:18px 20px; }
-    .project-cat { font-size:.72rem; font-weight:700; color:var(--orange); letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
-    .project-name { font-size:.95rem; font-weight:700; margin-bottom:5px; }
-    .project-desc { font-size:.82rem; color:var(--text2); line-height:1.5; }
-
-    /* CLIENTS */
-    .clients-bg { background:var(--bg2); }
-    .clients-center { text-align:center; }
-    .clients-center .section-desc { margin:0 auto 48px; }
-    .client-card { display:inline-flex; align-items:center; gap:18px; background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px 36px; box-shadow:var(--shadow); }
-    .client-logo { width:58px; height:58px; background:linear-gradient(135deg,var(--orange),var(--blue)); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:900; color:#fff; }
-    .client-name { font-size:1.2rem; font-weight:800; }
-    .client-sub { font-size:.875rem; color:var(--text2); margin-top:3px; }
-
-    /* CONTACT */
-    .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
-    .contact-items { display:flex; flex-direction:column; gap:14px; margin-top:36px; }
-    .contact-item { display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px 18px; transition:var(--tr); color:var(--text); }
-    .contact-item:hover { transform:translateX(6px); border-color:var(--orange); }
-    .contact-icon { width:42px; height:42px; background:linear-gradient(135deg,rgba(255,107,43,.1),rgba(30,110,255,.1)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex-shrink:0; }
-    .contact-label { font-size:.75rem; color:var(--text2); }
-    .contact-value { font-weight:600; font-size:.9rem; margin-top:1px; }
-    .contact-right { padding-top:8px; }
-    .contact-cta-text { font-size:1rem; line-height:1.75; color:var(--text2); margin-bottom:24px; margin-top:36px; }
-    .social-row { display:flex; gap:10px; }
-    .social-btn { width:46px; height:46px; border-radius:12px; background:var(--card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:1.2rem; transition:var(--tr); }
-    .social-btn:hover { background:linear-gradient(135deg,var(--orange),var(--blue)); border-color:transparent; transform:translateY(-4px); }
-
-    /* FOOTER */
-    .footer { background:var(--bg2); border-top:1px solid var(--border); padding:28px 0; text-align:center; }
-    .footer-text { font-size:.85rem; color:var(--text2); }
-
-    /* FADE-UP */
-    .fade-up { opacity:0; transform:translateY(28px); transition:opacity .65s ease,transform .65s ease; }
-    .fade-up.visible { opacity:1; transform:translateY(0); }
-
-    /* RESPONSIVE */
-    @media(max-width:1024px) {
-      .hero-inner { grid-template-columns:1fr; gap:48px; }
-      .hero-photo-wrap { max-width:340px; margin:0 auto; }
-      .about-inner { grid-template-columns:1fr; gap:40px; }
-      .about-img-wrap { max-width:280px; }
-    }
-    @media(max-width:768px) {
-      .nav-links { display:none; }
-      .hamburger { display:flex; }
-      .skills-grid { grid-template-columns:1fr 1fr; }
-      .projects-grid { grid-template-columns:1fr 1fr; }
-      .contact-inner { grid-template-columns:1fr; gap:36px; }
-      .stats-inner { grid-template-columns:repeat(2,1fr); }
-      .section { padding:64px 0; }
-      .hb1,.hb2 { display:none; }
-    }
-    @media(max-width:520px) {
-      .skills-grid { grid-template-columns:1fr; }
-      .projects-grid { grid-template-columns:1fr; }
-      .hero-name { font-size:2.4rem; }
-    }
-  </style>
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:920px){
+  .hero-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+  .hero-vis{order:-1;min-height:340px}
+  .pill{display:none}
+  .hamb{display:flex}
+  .hud-desc,.hud-name{position:static;margin:10px auto;max-width:90%}
+  .hud-skills{position:absolute;top:auto;bottom:8%;right:50%;transform:translateX(50%)}
+  .mnav{position:fixed;inset:0;background:var(--navy1);z-index:1500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transform:translateX(100%);transition:.4s var(--ease)}
+  .mnav.open{transform:translateX(0)}
+  .mnav a{color:#fff;font-family:'Poppins',sans-serif;font-weight:800;font-size:1.8rem}
+  .mnav-close{position:absolute;top:24px;right:24px;font-size:2rem;color:#fff;background:0;border:0;cursor:pointer}
+}
+@media(min-width:921px){.mnav{display:none}}
+@media(max-width:680px){
+  .grid{grid-template-columns:1fr}
+  .nav-r .cta-btn{display:none}
+  .about{height:300vh}
+  .hud-skills{display:none}
+}
+</style>
 </head>
 <body>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mm-close" id="menuClose">✕</button>
-  <a href="#about" onclick="closeMM()"><span data-i18n="nav.about">Về tôi</span></a>
-  <a href="#skills" onclick="closeMM()"><span data-i18n="nav.skills">Kỹ năng</span></a>
-  <a href="#projects" onclick="closeMM()"><span data-i18n="nav.projects">Dự án</span></a>
-  <a href="#contact" onclick="closeMM()"><span data-i18n="nav.contact">Liên hệ</span></a>
-  <a href="/forum.html" onclick="closeMM()">💬 Forum</a>
-</div>
-
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="container nav-inner">
-    <a href="#" class="nav-logo grad-text">Huy Le Creative</a>
-    <ul class="nav-links">
-      <li><a href="#about" data-i18n="nav.about">Về tôi</a></li>
-      <li><a href="#skills" data-i18n="nav.skills">Kỹ năng</a></li>
-      <li><a href="#projects" data-i18n="nav.projects">Dự án</a></li>
-      <li><a href="#contact" data-i18n="nav.contact">Liên hệ</a></li>
-      <li><a href="/forum.html" style="color:var(--orange);font-weight:600">💬 Forum</a></li>
-    </ul>
-    <div class="nav-controls">
-      <button class="lang-btn active" data-lang="vi">VI</button>
-      <button class="lang-btn" data-lang="en">EN</button>
-      <button class="lang-btn" data-lang="zh">中</button>
-      <button class="theme-btn" id="themeBtn">🌙</button>
-      <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="logo disp">H</a>
+    <div class="pill">
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#projects" data-i18n="nav.projects">Projects</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+      <a href="/forum.html" style="color:#FF7A1A;font-weight:700">💬 Forum</a>
+    </div>
+    <div class="nav-r">
+      <div class="langs">
+        <button data-lang="vi" class="active">VI</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="zh">中</button>
+      </div>
+      <button class="round-btn" id="theme" aria-label="theme">🌙</button>
+      <a href="#contact" class="cta-btn" data-i18n="v2.touch">Get in touch</a>
+      <button class="hamb" id="hamb" aria-label="menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="container">
-    <div class="hero-inner">
-      <div class="fade-up">
-        <p class="hero-greeting" data-i18n="hero.greeting">Xin chào, tôi là</p>
-        <h1 class="hero-name grad-text">Huy Le Creative</h1>
-        <div class="hero-role">
-          <span class="dot"></span>
-          <span data-i18n="hero.role">Creative Designer tại Midu MenaQ7</span>
-        </div>
-        <p class="hero-tagline" data-i18n="hero.tagline">Thiết kế sáng tạo — Thương hiệu biết kể chuyện.</p>
-        <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary"><span>✦</span><span data-i18n="hero.cta1">Xem dự án</span></a>
-          <a href="#contact" class="btn btn-secondary"><span data-i18n="hero.cta2">Liên hệ ngay</span><span>→</span></a>
-        </div>
-      </div>
-      <div class="hero-photo-wrap fade-up">
-        <div class="hero-blob"></div>
-        <img src="avatar.jpg" alt="Huy Le Creative" class="hero-photo">
-        <div class="hero-badge hb1">
-          <span class="badge-icon">🎨</span>
-          <div><div style="font-size:.68rem;color:var(--text2)" data-i18n="badge.projects">Dự án</div><div>10+</div></div>
-        </div>
-        <div class="hero-badge hb2">
-          <span class="badge-icon">⭐</span>
-          <div><div style="font-size:.68rem;color:var(--text2)" data-i18n="badge.skills">Kỹ năng</div><div>6 Skills</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats-bar">
-  <div class="container">
-    <div class="stats-inner">
-      <div class="stat-item fade-up"><span class="stat-number grad-text">10+</span><span class="stat-label" data-i18n="stats.projects">Dự án hoàn thành</span></div>
-      <div class="stat-item fade-up"><span class="stat-number grad-text">6</span><span class="stat-label" data-i18n="stats.skills">Lĩnh vực thiết kế</span></div>
-      <div class="stat-item fade-up"><span class="stat-number grad-text">3</span><span class="stat-label" data-i18n="stats.categories">Danh mục sáng tạo</span></div>
-      <div class="stat-item fade-up"><span class="stat-number grad-text">100%</span><span class="stat-label" data-i18n="stats.passion">Tận tâm & sáng tạo</span></div>
-    </div>
-  </div>
+<div class="mnav" id="mnav">
+  <button class="mnav-close" id="mclose">✕</button>
+  <a href="#about" data-i18n="nav.about">About</a>
+  <a href="#projects" data-i18n="nav.projects">Projects</a>
+  <a href="#contact" data-i18n="nav.contact">Contact</a>
+  <a href="/forum.html">💬 Forum</a>
 </div>
 
-<!-- ABOUT -->
-<section class="section" id="about">
-  <div class="container">
-    <div class="about-inner">
-      <div class="about-img-wrap fade-up">
-        <img src="avatar.jpg" alt="Lê Ngọc Huy" class="about-img">
-        <div class="about-accent"></div>
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="greet mono" data-i18n="hero.greeting">Hello, I'm</div>
+      <h1 class="disp">Huy Le</h1>
+      <div class="role-badge" data-i18n="v2.role">GRAPHIC DESIGNER</div>
+      <p class="tag" data-i18n="hero.tagline">Creative Design — Brands That Tell Stories.</p>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-solid" data-i18n="hero.cta1">View Projects</a>
+        <a href="#contact" class="btn-ghost" data-i18n="hero.cta2">Contact Me</a>
       </div>
-      <div class="fade-up">
-        <span class="section-tag grad-text" data-i18n="about.tag">Về tôi</span>
-        <h2 class="section-title" data-i18n="about.title">Creative Designer với đam mê thương hiệu</h2>
-        <p class="about-bio" data-i18n="about.bio">Tôi là Lê Ngọc Huy — nhà thiết kế đồ họa sáng tạo với niềm đam mê xây dựng thương hiệu và tạo ra những ấn phẩm trực quan ấn tượng. Chuyên sâu về event branding, mascot design, và brand identity với phong cách tươi sáng, năng động, phù hợp thị trường Việt Nam.</p>
-        <div class="company-card">
-          <div class="company-icon">M</div>
-          <div>
-            <div class="company-name">Midu MenaQ7</div>
-            <div class="company-role" data-i18n="about.current">Hiện đang làm việc tại đây</div>
-          </div>
-        </div>
-        <a href="#contact" class="btn btn-primary" data-i18n="about.cta">Cùng làm việc nhé →</a>
-      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="blob"></div>
+      <!-- Thay avatar.jpg bằng PNG nhân vật 3D của bạn tại đây nếu muốn -->
+      <img src="./avatar.jpg" alt="Huy Le" class="hero-photo">
+      <div class="chip c1">🎨</div>
+      <div class="chip c2">🖌️</div>
+      <div class="chip c3">✨</div>
     </div>
   </div>
-</section>
+  <div class="scroll-hint mono" data-i18n="v2.scroll">SCROLL</div>
+</header>
 
-<!-- SKILLS -->
-<section class="section skills-bg" id="skills">
-  <div class="container">
-    <div class="skills-header fade-up">
-      <span class="section-tag grad-text" data-i18n="skills.tag">Kỹ năng</span>
-      <h2 class="section-title" data-i18n="skills.title">Những gì tôi làm được</h2>
-      <p class="section-desc" data-i18n="skills.desc">Từ sự kiện đến thương hiệu — tôi mang lại thiết kế đồng nhất, ấn tượng và đúng thời hạn.</p>
-    </div>
-    <div class="skills-grid">
-      <div class="skill-card fade-up"><div class="skill-icon">🎪</div><div class="skill-name" data-i18n="sk1n">Event Branding</div><div class="skill-desc" data-i18n="sk1d">Thiết kế bộ nhận diện sự kiện đồng bộ: backdrop, banner, áo đồng phục, standee — nhất quán từ đầu đến cuối.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">🦸</div><div class="skill-name" data-i18n="sk2n">Mascot Design</div><div class="skill-desc" data-i18n="sk2d">Tạo nhân vật linh vật đại diện thương hiệu — cá tính, đáng yêu, dễ nhận diện và ứng dụng linh hoạt.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">🖼️</div><div class="skill-name" data-i18n="sk3n">Banner & Panel</div><div class="skill-desc" data-i18n="sk3d">Thiết kế banner sự kiện, panel thông tin ngoài trời và nội thất — truyền đạt thông điệp rõ ràng, thu hút.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">📦</div><div class="skill-name" data-i18n="sk4n">Packaging Design</div><div class="skill-desc" data-i18n="sk4d">Thiết kế bao bì sản phẩm đẹp mắt, chuyên nghiệp — tạo ấn tượng đầu tiên mạnh mẽ trên kệ hàng.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">✦</div><div class="skill-name" data-i18n="sk5n">Brand Identity</div><div class="skill-desc" data-i18n="sk5d">Xây dựng hệ thống nhận diện thương hiệu toàn diện: logo, màu sắc, font chữ, và guideline ứng dụng.</div></div>
-      <div class="skill-card fade-up"><div class="skill-icon">📢</div><div class="skill-name" data-i18n="sk6n">Promotion Design</div><div class="skill-desc" data-i18n="sk6d">Thiết kế ấn phẩm khuyến mãi, truyền thông hành động — kích thích tương tác và chuyển đổi người dùng.</div></div>
+<!-- ABOUT — hologram scroll stage -->
+<section class="about" id="about">
+  <div class="about-tag" data-i18n="about.tag">About Me</div>
+  <div class="holo-stage">
+    <div class="holo-core">
+      <!-- Name card -->
+      <div class="hud hud-name" id="hudName">
+        <div class="hud-card">
+          <div class="nm">Huy Le</div>
+          <div class="loc">📍 <span data-i18n="v2.country">Vietnam</span></div>
+        </div>
+      </div>
+      <!-- Description -->
+      <div class="hud hud-desc" id="hudDesc">
+        <div class="hud-card"><p data-i18n="v2.holoDesc">Builds bold brand identities and event visuals that are vibrant, memorable, and full of personality.</p></div>
+      </div>
+      <!-- Skills -->
+      <div class="hud hud-skills" id="hudSkills">
+        <div class="hud-card">
+          <h4 data-i18n="skills.title">Skills</h4>
+          <ul>
+            <li data-i18n="sk1n">Event Branding</li>
+            <li data-i18n="sk2n">Mascot Design</li>
+            <li data-i18n="sk5n">Brand Identity</li>
+            <li data-i18n="sk4n">Packaging</li>
+            <li data-i18n="sk6n">Promotion</li>
+          </ul>
+        </div>
+      </div>
+      <!-- Hologram figure -->
+      <div class="holo-figure">
+        <div class="holo-img-wrap">
+          <img src="./avatar.jpg" class="holo-base" alt="">
+          <img src="./avatar.jpg" class="holo-cyan" id="holoCyan" alt="">
+          <div class="scanline" id="scanline"></div>
+        </div>
+        <div class="platform"></div>
+        <div class="holo-num mono" id="holoNum">000</div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- PROJECTS -->
-<section class="section" id="projects">
-  <div class="container">
-    <div class="fade-up">
-      <span class="section-tag grad-text" data-i18n="proj.tag">Dự án</span>
-      <h2 class="section-title" data-i18n="proj.title">Portfolio của tôi</h2>
-      <p class="section-desc" data-i18n="proj.desc">Các dự án thiết kế từ event branding đến brand identity — mỗi dự án là một câu chuyện khác nhau.</p>
-      <div class="filter-tabs">
-        <button class="filter-tab active" data-filter="all" data-i18n="ft.all">Tất cả</button>
-        <button class="filter-tab" data-filter="event" data-i18n="ft.event">Event Branding</button>
-        <button class="filter-tab" data-filter="mascot" data-i18n="ft.mascot">Mascot</button>
-        <button class="filter-tab" data-filter="packaging" data-i18n="ft.pack">Packaging</button>
-        <button class="filter-tab" data-filter="brand" data-i18n="ft.brand">Brand Identity</button>
-        <button class="filter-tab" data-filter="promo" data-i18n="ft.promo">Promotion</button>
+<section class="projects" id="projects">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker" data-i18n="v2.selected">Selected</span>
+      <h2 class="sec-title" data-i18n="proj.title">Projects</h2>
+      <div class="filters">
+        <button data-f="all" class="active" data-i18n="ft.all">All</button>
+        <button data-f="event" data-i18n="ft.event">Event Branding</button>
+        <button data-f="mascot" data-i18n="ft.mascot">Mascot</button>
+        <button data-f="brand" data-i18n="ft.brand">Brand Identity</button>
+        <button data-f="pack" data-i18n="ft.pack">Packaging</button>
+        <button data-f="promo" data-i18n="ft.promo">Promotion</button>
       </div>
     </div>
-    <div class="projects-grid" id="projGrid">
-      <div class="project-card fade-up" data-category="event">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#FF9F68)"><span class="project-thumb-icon">🎪</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p1n">Event Brand Kit Vol.1</div><div class="project-desc" data-i18n="p1d">Bộ nhận diện sự kiện đồng bộ: backdrop sân khấu, banner dọc/ngang, áo đồng phục BTC.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="event">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#1E6EFF,#64A8FF)"><span class="project-thumb-icon">🎉</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p2n">Event Brand Kit Vol.2</div><div class="project-desc" data-i18n="p2d">Nhận diện sự kiện cộng đồng — hệ thống truyền thông đầy đủ với bộ ấn phẩm xúc tiến.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="event">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#1E6EFF)"><span class="project-thumb-icon">✨</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.event">Event Branding</div><div class="project-name" data-i18n="p3n">Event Brand Kit Vol.3</div><div class="project-desc" data-i18n="p3d">Brand kit sự kiện phong cách năng động — backdrop, standee và ấn phẩm đồng bộ.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="mascot">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF4E9A,#FF6B2B)"><span class="project-thumb-icon">🦸</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.mascot">Mascot Design</div><div class="project-name" data-i18n="p4n">Mascot Design Vol.1</div><div class="project-desc" data-i18n="p4d">Thiết kế nhân vật linh vật thương hiệu — nhiều biểu cảm và tư thế ứng dụng đa dạng.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="mascot">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#9B59B6,#FF4E9A)"><span class="project-thumb-icon">🐾</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.mascot">Mascot Design</div><div class="project-name" data-i18n="p5n">Mascot Design Vol.2</div><div class="project-desc" data-i18n="p5d">Bộ linh vật thương hiệu với nhiều biến thể — phong phú cảm xúc, nhất quán nhận diện.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="brand">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#1E6EFF,#00C6FF)"><span class="project-thumb-icon">🖼️</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.brand">Brand Identity</div><div class="project-name" data-i18n="p6n">Banner & Panel System</div><div class="project-desc" data-i18n="p6d">Hệ thống banner và panel thông tin cho sự kiện — rõ ràng, dễ đọc, chuyên nghiệp.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="brand">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#2ECC71,#1E6EFF)"><span class="project-thumb-icon">✦</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.brand">Brand Identity</div><div class="project-name" data-i18n="p7n">AGIE Brand Identity</div><div class="project-desc" data-i18n="p7d">Xây dựng hệ thống nhận diện thương hiệu AGIE — logo, màu sắc và ứng dụng đồng bộ.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="promo">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#FF6B2B,#FFD700)"><span class="project-thumb-icon">📢</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.promo">Promotion</div><div class="project-name" data-i18n="p8n">Promotion Campaign</div><div class="project-desc" data-i18n="p8d">Ấn phẩm truyền thông khuyến mãi hành động — thiết kế kích thích tương tác và chuyển đổi.</div></div>
-      </div>
-      <div class="project-card fade-up" data-category="packaging">
-        <div class="project-thumb" style="background:linear-gradient(135deg,#0F0F0F,#1E6EFF)"><span class="project-thumb-icon">📦</span><div class="project-overlay"><span class="overlay-text" data-i18n="pv">Xem chi tiết</span></div></div>
-        <div class="project-body"><div class="project-cat" data-i18n="ft.pack">Packaging</div><div class="project-name" data-i18n="p9n">Ifinix Packaging</div><div class="project-desc" data-i18n="p9d">Thiết kế bao bì và nhận diện thương hiệu Ifinix — hiện đại, tối giản, ấn tượng.</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CLIENTS -->
-<section class="section clients-bg" id="clients">
-  <div class="container">
-    <div class="clients-center fade-up">
-      <span class="section-tag grad-text" data-i18n="cl.tag">Khách hàng & Đối tác</span>
-      <h2 class="section-title" data-i18n="cl.title">Đang cộng tác cùng</h2>
-      <p class="section-desc" data-i18n="cl.desc">Tôi tự hào được là một phần của đội ngũ sáng tạo tại Midu MenaQ7.</p>
-      <div style="margin-top:48px">
-        <div class="client-card">
-          <div class="client-logo">M</div>
-          <div><div class="client-name">Midu MenaQ7</div><div class="client-sub" data-i18n="cl.role">Creative Designer — In-house</div></div>
-        </div>
-      </div>
+    <div class="grid" id="grid">
+      <div class="card" data-c="event"><div class="thumb" style="background:linear-gradient(135deg,#FF6B2B,#FF9F68)"><span>🎪</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.event">Event Branding</div><div class="card-name" data-i18n="p1n">Event Brand Kit Vol.1</div><div class="card-desc" data-i18n="p1d">desc</div></div></div>
+      <div class="card" data-c="event"><div class="thumb" style="background:linear-gradient(135deg,#1E6EFF,#64A8FF)"><span>🎉</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.event">Event Branding</div><div class="card-name" data-i18n="p2n">Event Brand Kit Vol.2</div><div class="card-desc" data-i18n="p2d">desc</div></div></div>
+      <div class="card" data-c="event"><div class="thumb" style="background:linear-gradient(135deg,#FF6B2B,#1E6EFF)"><span>🎭</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.event">Event Branding</div><div class="card-name" data-i18n="p3n">Event Brand Kit Vol.3</div><div class="card-desc" data-i18n="p3d">desc</div></div></div>
+      <div class="card" data-c="mascot"><div class="thumb" style="background:linear-gradient(135deg,#FFB02E,#FF6B2B)"><span>🐯</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.mascot">Mascot</div><div class="card-name" data-i18n="p4n">Mascot Design Vol.1</div><div class="card-desc" data-i18n="p4d">desc</div></div></div>
+      <div class="card" data-c="mascot"><div class="thumb" style="background:linear-gradient(135deg,#16C79A,#1E6EFF)"><span>🦊</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.mascot">Mascot</div><div class="card-name" data-i18n="p5n">Mascot Design Vol.2</div><div class="card-desc" data-i18n="p5d">desc</div></div></div>
+      <div class="card" data-c="event"><div class="thumb" style="background:linear-gradient(135deg,#7C3AED,#1E6EFF)"><span>🖼️</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.event">Event Branding</div><div class="card-name" data-i18n="p6n">Banner &amp; Panel System</div><div class="card-desc" data-i18n="p6d">desc</div></div></div>
+      <div class="card" data-c="brand"><div class="thumb" style="background:linear-gradient(135deg,#FF6B2B,#FFB02E)"><span>🅰️</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.brand">Brand Identity</div><div class="card-name" data-i18n="p7n">AGIE Brand Identity</div><div class="card-desc" data-i18n="p7d">desc</div></div></div>
+      <div class="card" data-c="promo"><div class="thumb" style="background:linear-gradient(135deg,#EF4444,#FF6B2B)"><span>📣</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.promo">Promotion</div><div class="card-name" data-i18n="p8n">Promotion Campaign</div><div class="card-desc" data-i18n="p8d">desc</div></div></div>
+      <div class="card" data-c="pack"><div class="thumb" style="background:linear-gradient(135deg,#0EA5E9,#16C79A)"><span>📦</span></div><div class="card-body"><div class="card-cat" data-i18n="ft.pack">Packaging</div><div class="card-name" data-i18n="p9n">Ifinix Packaging</div><div class="card-desc" data-i18n="p9d">desc</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section class="section" id="contact">
-  <div class="container">
-    <div class="contact-inner">
-      <div class="fade-up">
-        <span class="section-tag grad-text" data-i18n="ct.tag">Liên hệ</span>
-        <h2 class="section-title" data-i18n="ct.title">Hãy cùng tạo ra điều gì đó</h2>
-        <div class="contact-items">
-          <a href="mailto:huysnt@gmail.com" class="contact-item"><div class="contact-icon">📧</div><div><div class="contact-label">Email</div><div class="contact-value">huysnt@gmail.com</div></div></a>
-          <a href="tel:0987467621" class="contact-item"><div class="contact-icon">📱</div><div><div class="contact-label" data-i18n="ct.phone">Điện thoại</div><div class="contact-value">0987 467 621</div></div></a>
-          <a href="https://facebook.com/huylet8" target="_blank" class="contact-item"><div class="contact-icon">💬</div><div><div class="contact-label">Facebook</div><div class="contact-value">facebook.com/huylet8</div></div></a>
-          <a href="https://behance.net/huyle3008" target="_blank" class="contact-item"><div class="contact-icon">🎨</div><div><div class="contact-label">Behance</div><div class="contact-value">behance.net/huyle3008</div></div></a>
-        </div>
+<section class="contact" id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <h2 class="disp" data-i18n="v2.workTitle">Let's work together!</h2>
+      <p data-i18n="ct.cta">Got a project? Let's talk.</p>
+      <div class="socials">
+        <a href="mailto:huysnt@gmail.com" class="soc" title="Email">📧</a>
+        <a href="https://facebook.com/huylet8" target="_blank" rel="noopener" class="soc" title="Facebook">📘</a>
+        <a href="https://behance.net/huyle3008" target="_blank" rel="noopener" class="soc" title="Behance">🅱️</a>
+        <a href="tel:0987467621" class="soc" title="Phone">📞</a>
       </div>
-      <div class="contact-right fade-up">
-        <div style="padding-top:56px">
-          <p class="contact-cta-text" data-i18n="ct.cta">Bạn có dự án cần một designer sáng tạo? Tôi luôn sẵn sàng lắng nghe và biến ý tưởng của bạn thành hiện thực. Hãy liên hệ ngay — tôi thường phản hồi trong vòng 24 giờ.</p>
-          <div class="social-row">
-            <a href="https://facebook.com/huylet8" target="_blank" class="social-btn" title="Facebook">📘</a>
-            <a href="https://behance.net/huyle3008" target="_blank" class="social-btn" title="Behance">🅱️</a>
-            <a href="mailto:huysnt@gmail.com" class="social-btn" title="Email">📧</a>
-            <a href="tel:0987467621" class="social-btn" title="Phone">📞</a>
-          </div>
-        </div>
-      </div>
+    </div>
+    <div class="contact-visual">
+      <div class="c-chip a">💌</div>
+      <img src="./avatar.jpg" class="contact-photo" alt="Huy Le">
+      <div class="c-chip b">📦</div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="container">
-    <p class="footer-text">© 2026 <span class="grad-text" style="-webkit-text-fill-color:unset;background:none;font-weight:700">Huy Le Creative</span> · Designed with ♥ in Vietnam</p>
-  </div>
+<footer>
+  <div class="wrap">© 2026 <span class="mono">Huy Le Creative</span> · Designed with ♥ in Vietnam</div>
 </footer>
 
-<script>
-const T = {
-  vi: {
-    "nav.about":"Về tôi","nav.skills":"Kỹ năng","nav.projects":"Dự án","nav.contact":"Liên hệ",
-    "hero.greeting":"Xin chào, tôi là","hero.role":"Creative Designer tại Midu MenaQ7",
-    "hero.tagline":"Thiết kế sáng tạo — Thương hiệu biết kể chuyện.",
-    "hero.cta1":"Xem dự án","hero.cta2":"Liên hệ ngay",
-    "badge.projects":"Dự án","badge.skills":"Kỹ năng",
-    "stats.projects":"Dự án hoàn thành","stats.skills":"Lĩnh vực thiết kế",
-    "stats.categories":"Danh mục sáng tạo","stats.passion":"Tận tâm & sáng tạo",
-    "about.tag":"Về tôi","about.title":"Creative Designer với đam mê thương hiệu",
-    "about.bio":"Tôi là Lê Ngọc Huy — nhà thiết kế đồ họa sáng tạo với niềm đam mê xây dựng thương hiệu và tạo ra những ấn phẩm trực quan ấn tượng. Chuyên sâu về event branding, mascot design, và brand identity với phong cách tươi sáng, năng động, phù hợp thị trường Việt Nam.",
-    "about.current":"Hiện đang làm việc tại đây","about.cta":"Cùng làm việc nhé →",
-    "skills.tag":"Kỹ năng","skills.title":"Những gì tôi làm được",
-    "skills.desc":"Từ sự kiện đến thương hiệu — tôi mang lại thiết kế đồng nhất, ấn tượng và đúng thời hạn.",
-    "sk1n":"Event Branding","sk1d":"Thiết kế bộ nhận diện sự kiện đồng bộ: backdrop, banner, áo đồng phục, standee — nhất quán từ đầu đến cuối.",
-    "sk2n":"Mascot Design","sk2d":"Tạo nhân vật linh vật đại diện thương hiệu — cá tính, đáng yêu, dễ nhận diện và ứng dụng linh hoạt.",
-    "sk3n":"Banner & Panel","sk3d":"Thiết kế banner sự kiện, panel thông tin ngoài trời và nội thất — truyền đạt thông điệp rõ ràng, thu hút.",
-    "sk4n":"Packaging Design","sk4d":"Thiết kế bao bì sản phẩm đẹp mắt, chuyên nghiệp — tạo ấn tượng đầu tiên mạnh mẽ trên kệ hàng.",
-    "sk5n":"Brand Identity","sk5d":"Xây dựng hệ thống nhận diện thương hiệu toàn diện: logo, màu sắc, font chữ, và guideline ứng dụng.",
-    "sk6n":"Promotion Design","sk6d":"Thiết kế ấn phẩm khuyến mãi, truyền thông hành động — kích thích tương tác và chuyển đổi người dùng.",
-    "proj.tag":"Dự án","proj.title":"Portfolio của tôi",
-    "proj.desc":"Các dự án thiết kế từ event branding đến brand identity — mỗi dự án là một câu chuyện khác nhau.",
-    "ft.all":"Tất cả","ft.event":"Event Branding","ft.mascot":"Mascot","ft.pack":"Packaging","ft.brand":"Brand Identity","ft.promo":"Promotion",
-    "pv":"Xem chi tiết",
-    "p1n":"Event Brand Kit Vol.1","p1d":"Bộ nhận diện sự kiện đồng bộ: backdrop sân khấu, banner dọc/ngang, áo đồng phục BTC.",
-    "p2n":"Event Brand Kit Vol.2","p2d":"Nhận diện sự kiện cộng đồng — hệ thống truyền thông đầy đủ với bộ ấn phẩm xúc tiến.",
-    "p3n":"Event Brand Kit Vol.3","p3d":"Brand kit sự kiện phong cách năng động — backdrop, standee và ấn phẩm đồng bộ.",
-    "p4n":"Mascot Design Vol.1","p4d":"Thiết kế nhân vật linh vật thương hiệu — nhiều biểu cảm và tư thế ứng dụng đa dạng.",
-    "p5n":"Mascot Design Vol.2","p5d":"Bộ linh vật thương hiệu với nhiều biến thể — phong phú cảm xúc, nhất quán nhận diện.",
-    "p6n":"Banner & Panel System","p6d":"Hệ thống banner và panel thông tin cho sự kiện — rõ ràng, dễ đọc, chuyên nghiệp.",
-    "p7n":"AGIE Brand Identity","p7d":"Xây dựng hệ thống nhận diện thương hiệu AGIE — logo, màu sắc và ứng dụng đồng bộ.",
-    "p8n":"Promotion Campaign","p8d":"Ấn phẩm truyền thông khuyến mãi hành động — thiết kế kích thích tương tác và chuyển đổi.",
-    "p9n":"Ifinix Packaging","p9d":"Thiết kế bao bì và nhận diện thương hiệu Ifinix — hiện đại, tối giản, ấn tượng.",
-    "cl.tag":"Khách hàng & Đối tác","cl.title":"Đang cộng tác cùng",
-    "cl.desc":"Tôi tự hào được là một phần của đội ngũ sáng tạo tại Midu MenaQ7.","cl.role":"Creative Designer — In-house",
-    "ct.tag":"Liên hệ","ct.title":"Hãy cùng tạo ra điều gì đó","ct.phone":"Điện thoại",
-    "ct.cta":"Bạn có dự án cần một designer sáng tạo? Tôi luôn sẵn sàng lắng nghe và biến ý tưởng của bạn thành hiện thực. Hãy liên hệ ngay — tôi thường phản hồi trong vòng 24 giờ."
-  },
-  en: {
-    "nav.about":"About","nav.skills":"Skills","nav.projects":"Projects","nav.contact":"Contact",
-    "hero.greeting":"Hello, I'm","hero.role":"Creative Designer at Midu MenaQ7",
-    "hero.tagline":"Creative Design — Brands That Tell Stories.",
-    "hero.cta1":"View Projects","hero.cta2":"Contact Me",
-    "badge.projects":"Projects","badge.skills":"Skills",
-    "stats.projects":"Completed Projects","stats.skills":"Design Disciplines",
-    "stats.categories":"Creative Categories","stats.passion":"Passion & Dedication",
-    "about.tag":"About Me","about.title":"Creative Designer with a Passion for Brands",
-    "about.bio":"I'm Le Ngoc Huy — a creative graphic designer passionate about brand building and creating visually striking works. Specializing in event branding, mascot design, and brand identity with a vibrant, dynamic style tailored to the Vietnamese market.",
-    "about.current":"Currently working here","about.cta":"Let's work together →",
-    "skills.tag":"Skills","skills.title":"What I Do",
-    "skills.desc":"From events to brands — I deliver consistent, impressive designs on time.",
-    "sk1n":"Event Branding","sk1d":"Synchronized event identity kits: backdrops, banners, uniforms, standees — consistent from start to finish.",
-    "sk2n":"Mascot Design","sk2d":"Creating brand mascot characters — distinct, lovable, recognizable, and flexibly applicable.",
-    "sk3n":"Banner & Panel","sk3d":"Event banners and information panels for indoor and outdoor — clear messaging, visually engaging.",
-    "sk4n":"Packaging Design","sk4d":"Beautiful, professional product packaging — creating a strong first impression on the shelf.",
-    "sk5n":"Brand Identity","sk5d":"Building comprehensive brand identity systems: logo, colors, typography, and application guidelines.",
-    "sk6n":"Promotion Design","sk6d":"Promotional and action marketing materials — designs that drive engagement and conversion.",
-    "proj.tag":"Projects","proj.title":"My Portfolio",
-    "proj.desc":"Design projects ranging from event branding to brand identity — each project tells a different story.",
-    "ft.all":"All","ft.event":"Event Branding","ft.mascot":"Mascot","ft.pack":"Packaging","ft.brand":"Brand Identity","ft.promo":"Promotion",
-    "pv":"View Details",
-    "p1n":"Event Brand Kit Vol.1","p1d":"Synchronized event identity: stage backdrop, vertical/horizontal banners, organizer uniforms.",
-    "p2n":"Event Brand Kit Vol.2","p2d":"Community event branding — complete communication system with full promotional materials.",
-    "p3n":"Event Brand Kit Vol.3","p3d":"Dynamic event brand kit — backdrop, standees, and synchronized print materials.",
-    "p4n":"Mascot Design Vol.1","p4d":"Brand mascot character design — multiple expressions and poses for diverse applications.",
-    "p5n":"Mascot Design Vol.2","p5d":"Brand mascot set with multiple variants — rich emotions, consistent identity.",
-    "p6n":"Banner & Panel System","p6d":"Event banner and information panel system — clear, readable, professional design.",
-    "p7n":"AGIE Brand Identity","p7d":"Building the AGIE brand identity system — logo, colors, and synchronized applications.",
-    "p8n":"Promotion Campaign","p8d":"Action marketing promotional materials — designs that stimulate interaction and conversion.",
-    "p9n":"Ifinix Packaging","p9d":"Ifinix brand packaging and identity design — modern, minimal, and impactful.",
-    "cl.tag":"Clients & Partners","cl.title":"Currently Collaborating With",
-    "cl.desc":"I am proud to be part of the creative team at Midu MenaQ7.","cl.role":"Creative Designer — In-house",
-    "ct.tag":"Contact","ct.title":"Let's Create Something Together","ct.phone":"Phone",
-    "ct.cta":"Do you have a project that needs a creative designer? I'm always ready to listen and turn your ideas into reality. Get in touch — I usually respond within 24 hours."
-  },
-  zh: {
-    "nav.about":"关于我","nav.skills":"技能","nav.projects":"作品","nav.contact":"联系",
-    "hero.greeting":"你好，我是","hero.role":"创意设计师 · Midu MenaQ7",
-    "hero.tagline":"创意设计 — 会讲故事的品牌。",
-    "hero.cta1":"查看作品","hero.cta2":"立即联系",
-    "badge.projects":"项目","badge.skills":"技能",
-    "stats.projects":"完成项目","stats.skills":"设计领域",
-    "stats.categories":"创意类别","stats.passion":"热情与专注",
-    "about.tag":"关于我","about.title":"创意设计师 · 热爱品牌建设",
-    "about.bio":"我是黎玉辉（Lê Ngọc Huy）——充满热情的创意平面设计师，专注于品牌建设和视觉冲击力强的设计作品。专长于活动品牌策划、吉祥物设计和品牌视觉识别，风格明亮活泼，主要面向越南市场。",
-    "about.current":"目前就职于此","about.cta":"一起合作吧 →",
-    "skills.tag":"技能","skills.title":"我能做什么",
-    "skills.desc":"从活动到品牌——我提供一致、出色且准时的设计。",
-    "sk1n":"活动品牌策划","sk1d":"同步活动视觉识别套装：舞台背景、横幅、工作服、易拉宝——始终保持一致。",
-    "sk2n":"吉祥物设计","sk2d":"创作品牌吉祥物形象——个性鲜明、可爱讨喜、易于识别、灵活应用。",
-    "sk3n":"横幅与展板","sk3d":"室内外活动横幅和信息展板——信息传达清晰，视觉吸引力强。",
-    "sk4n":"包装设计","sk4d":"美观专业的产品包装设计——在货架上留下强烈的第一印象。",
-    "sk5n":"品牌视觉识别","sk5d":"构建完整的品牌视觉识别系统：标志、色彩、字体及应用规范。",
-    "sk6n":"推广设计","sk6d":"促销及行动营销材料——激励互动与转化的设计。",
-    "proj.tag":"作品","proj.title":"我的作品集",
-    "proj.desc":"从活动品牌策划到品牌视觉识别——每个项目都有其独特的故事。",
-    "ft.all":"全部","ft.event":"活动品牌","ft.mascot":"吉祥物","ft.pack":"包装","ft.brand":"品牌识别","ft.promo":"推广",
-    "pv":"查看详情",
-    "p1n":"活动品牌套装 Vol.1","p1d":"同步活动视觉：舞台背景、竖/横横幅、组委会工作服。",
-    "p2n":"活动品牌套装 Vol.2","p2d":"社区活动品牌——完整传播体系，含全套推广材料。",
-    "p3n":"活动品牌套装 Vol.3","p3d":"动感活动品牌套装——背景板、易拉宝及同步印刷材料。",
-    "p4n":"吉祥物设计 Vol.1","p4d":"品牌吉祥物角色设计——多种表情与姿势，应用多样。",
-    "p5n":"吉祥物设计 Vol.2","p5d":"多款变体品牌吉祥物套装——情感丰富，识别统一。",
-    "p6n":"横幅与展板系统","p6d":"活动横幅与信息展板系统——清晰、易读、专业设计。",
-    "p7n":"AGIE 品牌识别","p7d":"构建 AGIE 品牌视觉识别系统——标志、色彩及同步应用。",
-    "p8n":"推广活动","p8d":"行动营销推广材料——激励互动与转化的设计。",
-    "p9n":"Ifinix 包装设计","p9d":"Ifinix 品牌包装与视觉识别设计——现代、简约、印象深刻。",
-    "cl.tag":"客户与合作伙伴","cl.title":"当前合作方",
-    "cl.desc":"我很荣幸成为 Midu MenaQ7 创意团队的一员。","cl.role":"创意设计师 — 内部",
-    "ct.tag":"联系我","ct.title":"让我们一起创造精彩","ct.phone":"电话",
-    "ct.cta":"您有需要创意设计师的项目吗？我随时准备倾听并将您的想法变为现实。立即联系我——我通常在24小时内回复。"
-  }
-};
+<button class="back-top" id="backTop" aria-label="top">↑</button>
 
-let lang = 'vi';
-function applyLang(l) {
-  lang = l;
-  const t = T[l];
-  document.querySelectorAll('[data-i18n]').forEach(el => { const k=el.getAttribute('data-i18n'); if(t[k]) el.textContent=t[k]; });
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang===l));
+<script>
+/* ---------- i18n ---------- */
+const T = {
+ vi:{"nav.about":"Về tôi","nav.projects":"Dự án","nav.contact":"Liên hệ",
+  "hero.greeting":"Xin chào, tôi là","hero.tagline":"Thiết kế sáng tạo — Thương hiệu biết kể chuyện.",
+  "hero.cta1":"Xem dự án","hero.cta2":"Liên hệ ngay",
+  "about.tag":"Về tôi","skills.title":"Kỹ năng",
+  "sk1n":"Event Branding","sk2n":"Mascot Design","sk4n":"Packaging","sk5n":"Brand Identity","sk6n":"Promotion",
+  "proj.title":"Dự án",
+  "ft.all":"Tất cả","ft.event":"Event Branding","ft.mascot":"Mascot","ft.pack":"Packaging","ft.brand":"Brand Identity","ft.promo":"Promotion",
+  "p1n":"Event Brand Kit Vol.1","p1d":"Bộ nhận diện sự kiện đồng bộ: backdrop sân khấu, banner dọc/ngang, áo đồng phục BTC.",
+  "p2n":"Event Brand Kit Vol.2","p2d":"Nhận diện sự kiện cộng đồng — hệ thống truyền thông đầy đủ với bộ ấn phẩm xúc tiến.",
+  "p3n":"Event Brand Kit Vol.3","p3d":"Brand kit sự kiện phong cách năng động — backdrop, standee và ấn phẩm đồng bộ.",
+  "p4n":"Mascot Design Vol.1","p4d":"Thiết kế nhân vật linh vật thương hiệu — nhiều biểu cảm và tư thế ứng dụng đa dạng.",
+  "p5n":"Mascot Design Vol.2","p5d":"Bộ linh vật thương hiệu với nhiều biến thể — phong phú cảm xúc, nhất quán nhận diện.",
+  "p6n":"Banner & Panel System","p6d":"Hệ thống banner và panel thông tin cho sự kiện — rõ ràng, dễ đọc, chuyên nghiệp.",
+  "p7n":"AGIE Brand Identity","p7d":"Xây dựng hệ thống nhận diện thương hiệu AGIE — logo, màu sắc và ứng dụng đồng bộ.",
+  "p8n":"Promotion Campaign","p8d":"Ấn phẩm truyền thông khuyến mãi hành động — thiết kế kích thích tương tác và chuyển đổi.",
+  "p9n":"Ifinix Packaging","p9d":"Thiết kế bao bì và nhận diện thương hiệu Ifinix — hiện đại, tối giản, ấn tượng.",
+  "ct.cta":"Bạn có dự án cần một designer sáng tạo? Hãy liên hệ — tôi thường phản hồi trong vòng 24 giờ.",
+  "v2.touch":"Liên hệ","v2.role":"NHÀ THIẾT KẾ ĐỒ HỌA","v2.scroll":"CUỘN XUỐNG","v2.country":"Việt Nam",
+  "v2.holoDesc":"Xây dựng bộ nhận diện thương hiệu và ấn phẩm sự kiện — tươi sáng, ấn tượng và đầy cá tính.",
+  "v2.selected":"Tuyển chọn","v2.workTitle":"Cùng hợp tác nhé!"},
+ en:{"nav.about":"About","nav.projects":"Projects","nav.contact":"Contact",
+  "hero.greeting":"Hello, I'm","hero.tagline":"Creative Design — Brands That Tell Stories.",
+  "hero.cta1":"View Projects","hero.cta2":"Contact Me",
+  "about.tag":"About Me","skills.title":"Skills",
+  "sk1n":"Event Branding","sk2n":"Mascot Design","sk4n":"Packaging","sk5n":"Brand Identity","sk6n":"Promotion",
+  "proj.title":"Projects",
+  "ft.all":"All","ft.event":"Event Branding","ft.mascot":"Mascot","ft.pack":"Packaging","ft.brand":"Brand Identity","ft.promo":"Promotion",
+  "p1n":"Event Brand Kit Vol.1","p1d":"Synchronized event identity: stage backdrop, vertical/horizontal banners, organizer uniforms.",
+  "p2n":"Event Brand Kit Vol.2","p2d":"Community event branding — complete communication system with full promotional materials.",
+  "p3n":"Event Brand Kit Vol.3","p3d":"Dynamic event brand kit — backdrop, standees, and synchronized print materials.",
+  "p4n":"Mascot Design Vol.1","p4d":"Brand mascot character design — multiple expressions and poses for diverse applications.",
+  "p5n":"Mascot Design Vol.2","p5d":"Brand mascot set with multiple variants — rich emotions, consistent identity.",
+  "p6n":"Banner & Panel System","p6d":"Event banner and information panel system — clear, readable, professional design.",
+  "p7n":"AGIE Brand Identity","p7d":"Building the AGIE brand identity system — logo, colors, and synchronized applications.",
+  "p8n":"Promotion Campaign","p8d":"Action marketing promotional materials — designs that stimulate interaction and conversion.",
+  "p9n":"Ifinix Packaging","p9d":"Ifinix brand packaging and identity design — modern, minimal, and impactful.",
+  "ct.cta":"Do you have a project that needs a creative designer? Get in touch — I usually respond within 24 hours.",
+  "v2.touch":"Get in touch","v2.role":"GRAPHIC DESIGNER","v2.scroll":"SCROLL","v2.country":"Vietnam",
+  "v2.holoDesc":"Builds bold brand identities and event visuals that are vibrant, memorable, and full of personality.",
+  "v2.selected":"Selected","v2.workTitle":"Let's work together!"},
+ zh:{"nav.about":"关于我","nav.projects":"作品","nav.contact":"联系",
+  "hero.greeting":"你好，我是","hero.tagline":"创意设计 — 会讲故事的品牌。",
+  "hero.cta1":"查看作品","hero.cta2":"立即联系",
+  "about.tag":"关于我","skills.title":"技能",
+  "sk1n":"活动品牌","sk2n":"吉祥物设计","sk4n":"包装","sk5n":"品牌识别","sk6n":"推广",
+  "proj.title":"作品",
+  "ft.all":"全部","ft.event":"活动品牌","ft.mascot":"吉祥物","ft.pack":"包装","ft.brand":"品牌识别","ft.promo":"推广",
+  "p1n":"活动品牌套装 Vol.1","p1d":"同步活动视觉：舞台背景、竖/横横幅、组委会工作服。",
+  "p2n":"活动品牌套装 Vol.2","p2d":"社区活动品牌——完整传播体系，含全套推广材料。",
+  "p3n":"活动品牌套装 Vol.3","p3d":"动感活动品牌套装——背景板、易拉宝及同步印刷材料。",
+  "p4n":"吉祥物设计 Vol.1","p4d":"品牌吉祥物角色设计——多种表情与姿势，应用多样。",
+  "p5n":"吉祥物设计 Vol.2","p5d":"多款变体品牌吉祥物套装——情感丰富，识别统一。",
+  "p6n":"横幅与展板系统","p6d":"活动横幅与信息展板系统——清晰、易读、专业设计。",
+  "p7n":"AGIE 品牌识别","p7d":"构建 AGIE 品牌视觉识别系统——标志、色彩及同步应用。",
+  "p8n":"推广活动","p8d":"行动营销推广材料——激励互动与转化的设计。",
+  "p9n":"Ifinix 包装设计","p9d":"Ifinix 品牌包装与视觉识别设计——现代、简约、印象深刻。",
+  "ct.cta":"您有需要创意设计师的项目吗？立即联系我——我通常在24小时内回复。",
+  "v2.touch":"联系我","v2.role":"平面设计师","v2.scroll":"向下滚动","v2.country":"越南",
+  "v2.holoDesc":"打造鲜明的品牌识别与活动视觉——明亮、难忘、充满个性。",
+  "v2.selected":"精选","v2.workTitle":"一起合作吧！"}
+};
+let lang='vi';
+function applyLang(l){
+  lang=l;const t=T[l];
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(t[k])el.textContent=t[k];});
+  document.querySelectorAll('.langs button').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
   document.documentElement.lang = l==='zh'?'zh-CN':l;
 }
-document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click',()=>applyLang(b.dataset.lang)));
+document.querySelectorAll('.langs button').forEach(b=>b.onclick=()=>applyLang(b.dataset.lang));
 
-// DARK MODE
+/* ---------- theme ---------- */
 let dark=false;
-const themeBtn=document.getElementById('themeBtn');
-themeBtn.addEventListener('click',()=>{ dark=!dark; document.documentElement.setAttribute('data-theme',dark?'dark':'light'); themeBtn.textContent=dark?'☀️':'🌙'; });
+document.getElementById('theme').onclick=function(){
+  dark=!dark;document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  this.textContent=dark?'☀️':'🌙';
+  document.body.style.background=dark?'#0a0a12':'';
+};
 
-// MOBILE MENU
-const mm=document.getElementById('mobileMenu');
-document.getElementById('hamburger').addEventListener('click',()=>mm.classList.add('open'));
-document.getElementById('menuClose').addEventListener('click',()=>mm.classList.remove('open'));
-function closeMM(){ mm.classList.remove('open'); }
+/* ---------- mobile menu ---------- */
+const mnav=document.getElementById('mnav');
+document.getElementById('hamb').onclick=()=>mnav.classList.add('open');
+document.getElementById('mclose').onclick=()=>mnav.classList.remove('open');
+mnav.querySelectorAll('a').forEach(a=>a.onclick=()=>mnav.classList.remove('open'));
 
-// PROJECT FILTER
-document.querySelectorAll('.filter-tab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    const f=tab.dataset.filter;
-    document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    document.querySelectorAll('.project-card').forEach(c=>{ c.style.display=(f==='all'||c.dataset.category===f)?'':'none'; });
-  });
+/* ---------- project filter ---------- */
+document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');const f=b.dataset.f;
+  document.querySelectorAll('.card').forEach(c=>{c.style.display=(f==='all'||c.dataset.c===f)?'':'none';});
 });
 
-// SCROLL ANIMATIONS
-const obs=new IntersectionObserver(entries=>entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); }),{threshold:0.1});
-document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+/* ---------- scroll-reveal cards ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.15});
+document.querySelectorAll('.card').forEach(c=>io.observe(c));
 
-// SCROLL TO TOP
-window.addEventListener('scroll',()=>{ document.getElementById('scrollTop').classList.toggle('show', window.scrollY>400); });
+/* ---------- hologram scroll engine ---------- */
+const about=document.getElementById('about');
+const cyan=document.getElementById('holoCyan');
+const scan=document.getElementById('scanline');
+const num=document.getElementById('holoNum');
+const hudName=document.getElementById('hudName');
+const hudDesc=document.getElementById('hudDesc');
+const skillLis=document.querySelectorAll('.hud-skills li');
+const nav=document.getElementById('nav');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+let ticking=false;
+function update(){
+  ticking=false;
+  const r=about.getBoundingClientRect();
+  const total=about.offsetHeight-window.innerHeight;
+  const p=clamp(-r.top/total,0,1);
+  // nav theme: dark while about fills viewport behind nav
+  nav.classList.toggle('on-dark', r.top<80 && r.bottom>160);
+  if(r.bottom<0||r.top>window.innerHeight) return; // off-screen, skip heavy work
+  cyan.style.clipPath='inset('+(100-p*100).toFixed(1)+'% 0 0 0)';
+  scan.style.bottom=(p*100).toFixed(1)+'%';
+  scan.style.opacity=(p>0&&p<1)?1:0;
+  num.textContent=String(Math.round(p*100)).padStart(3,'0');
+  hudName.classList.toggle('show',p>.12);
+  hudDesc.classList.toggle('show',p>.30);
+  skillLis.forEach((li,i)=>li.classList.toggle('show',p>.50+i*.08));
+}
+function onScroll(){if(!ticking){ticking=true;requestAnimationFrame(update);}}
+window.addEventListener('scroll',onScroll,{passive:true});
+window.addEventListener('resize',onScroll);
+
+/* ---------- back to top ---------- */
+const bt=document.getElementById('backTop');
+window.addEventListener('scroll',()=>bt.classList.toggle('show',scrollY>500),{passive:true});
+bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+
+applyLang('vi');update();
 </script>
-
-<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top" style="position:fixed;bottom:32px;right:32px;z-index:9999;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#FF6B2B,#1E6EFF);color:#fff;font-size:1.3rem;font-weight:700;box-shadow:0 4px 20px rgba(255,107,43,.45);display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(16px);transition:opacity .3s,transform .3s;pointer-events:none;">↑</button>
-<style>#scrollTop.show{opacity:1!important;transform:translateY(0)!important;pointer-events:auto!important;}#scrollTop:hover{transform:translateY(-4px)!important;}</style>
-
 </body>
 </html>
