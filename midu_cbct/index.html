@@ -161,7 +161,8 @@ const state={
   content:'CHIẾN BINH SÁNG TẠO NỘI DUNG XUẤT SẮC NHẤT THÁNG 06',
   chapter:'Chapter 3: CHIẾN BINH',
   date:'Hà Nội, Ngày 30 tháng 06 năm 2026',
-  photo:null
+  photo:null,
+  photoCrop:{nx:0,ny:0,scale:1}
 };
 
 /* ---------- canvas drawing ---------- */
@@ -193,18 +194,19 @@ function gradSegments(ctx,segs,cx,y,size,solid){
   }
   ctx.textAlign='center';
 }
-function drawCircle(ctx,img,cx,cy,r){
+function drawCircle(ctx,img,cx,cy,r,crop){
   ctx.save();ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.closePath();ctx.clip();
-  const ar=img.width/img.height;const d=r*2;let dw,dh;
-  if(ar>1){dh=d;dw=d*ar}else{dw=d;dh=d/ar}
-  ctx.drawImage(img,cx-dw/2,cy-dh/2,dw,dh);ctx.restore();
+  const nx=crop?.nx||0,ny=crop?.ny||0,sc=crop?.scale||1;
+  const base=(r*2)/Math.min(img.width,img.height);
+  const dw=img.width*base*sc,dh=img.height*base*sc;
+  ctx.drawImage(img,cx-dw/2+nx*r,cy-dh/2+ny*r,dw,dh);ctx.restore();
 }
 function drawCert(ctx,W,H,data){
   ctx.clearRect(0,0,W,H);
   if(tplImg)ctx.drawImage(tplImg,0,0,W,H);
   else{ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.strokeStyle='#E2D8CC';ctx.lineWidth=4;ctx.strokeRect(20,20,W-40,H-40);}
   // photo
-  if(data.photo)drawCircle(ctx,data.photo,W*POS.photoX,H*POS.photoY,W*POS.photoR);
+  if(data.photo)drawCircle(ctx,data.photo,W*POS.photoX,H*POS.photoY,W*POS.photoR,data.photoCrop);
   // name — MTD Brand Pro
   if(data.name)gradText(ctx,data.name,W*POS.photoX,H*POS.nameY,W*POS.nameSize,'"MTD Brand Pro"','400');
   // divider
@@ -241,6 +243,61 @@ function redraw(){
   const cv=$('#preview');if(!cv)return;
   cv.width=CW;cv.height=CH;
   drawCert(cv.getContext('2d'),CW,CH,state);
+}
+
+/* ---------- crop canvas ---------- */
+const CR=95,CCX=110,CCY=110;
+function drawCropCanvas(){
+  const cv=$('#cropCanvas');if(!cv||!state.photo)return;
+  const ctx=cv.getContext('2d');
+  ctx.clearRect(0,0,220,220);
+  ctx.save();
+  ctx.beginPath();ctx.arc(CCX,CCY,CR,0,Math.PI*2);ctx.closePath();ctx.clip();
+  const c=state.photoCrop;
+  const base=(CR*2)/Math.min(state.photo.width,state.photo.height);
+  const dw=state.photo.width*base*c.scale,dh=state.photo.height*base*c.scale;
+  ctx.drawImage(state.photo,CCX-dw/2+c.nx*CR,CCY-dh/2+c.ny*CR,dw,dh);
+  ctx.restore();
+  ctx.strokeStyle='#FF7A1A';ctx.lineWidth=3;
+  ctx.beginPath();ctx.arc(CCX,CCY,CR,0,Math.PI*2);ctx.stroke();
+}
+function bindCropCanvas(){
+  const cv=$('#cropCanvas');if(!cv)return;
+  let drag=false,lx=0,ly=0;
+  cv.addEventListener('mousedown',e=>{drag=true;lx=e.clientX;ly=e.clientY;cv.style.cursor='grabbing';e.preventDefault()});
+  window.addEventListener('mouseup',()=>{if(drag){drag=false;cv.style.cursor='grab'}});
+  window.addEventListener('mousemove',e=>{
+    if(!drag)return;
+    const c=state.photoCrop;
+    c.nx=Math.max(-2,Math.min(2,c.nx+(e.clientX-lx)/CR));
+    c.ny=Math.max(-2,Math.min(2,c.ny+(e.clientY-ly)/CR));
+    lx=e.clientX;ly=e.clientY;
+    drawCropCanvas();redraw();
+  });
+  cv.addEventListener('wheel',e=>{
+    e.preventDefault();
+    state.photoCrop.scale=Math.max(0.5,Math.min(5,state.photoCrop.scale*(1-e.deltaY*0.001)));
+    drawCropCanvas();redraw();
+  },{passive:false});
+  let td=null,tx=null,ty=null;
+  cv.addEventListener('touchstart',e=>{
+    if(e.touches.length===1){tx=e.touches[0].clientX;ty=e.touches[0].clientY;td=null}
+    else if(e.touches.length===2){td=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);tx=ty=null}
+    e.preventDefault();
+  },{passive:false});
+  cv.addEventListener('touchmove',e=>{
+    const c=state.photoCrop;
+    if(e.touches.length===1&&tx!=null){
+      c.nx=Math.max(-2,Math.min(2,c.nx+(e.touches[0].clientX-tx)/CR));
+      c.ny=Math.max(-2,Math.min(2,c.ny+(e.touches[0].clientY-ty)/CR));
+      tx=e.touches[0].clientX;ty=e.touches[0].clientY;
+    }else if(e.touches.length===2&&td!=null){
+      const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      c.scale=Math.max(0.5,Math.min(5,c.scale*(d/td)));td=d;
+    }
+    drawCropCanvas();redraw();e.preventDefault();
+  },{passive:false});
+  cv.addEventListener('touchend',()=>{td=null;tx=null;ty=null});
 }
 
 /* ---------- photo helpers ---------- */
@@ -331,7 +388,11 @@ function renderTool(prof){
             <div class="emo">🖼️</div>
             <div class="t">Kéo ảnh vào đây / dán (Ctrl+V) / bấm chọn</div>
             <div class="s">PNG, JPG — ảnh chân dung</div>
-            <div id="dropPrev"></div>
+          </div>
+          <div id="cropUI" style="display:none;text-align:center;padding:8px 0">
+            <canvas id="cropCanvas" width="220" height="220" style="display:block;margin:0 auto;border-radius:50%;cursor:grab;touch-action:none;box-shadow:0 4px 16px rgba(0,0,0,.14)"></canvas>
+            <div style="margin-top:8px;font-size:.74rem;color:var(--ink2)">🖱 Kéo để di chuyển &nbsp;·&nbsp; Cuộn chuột để thu phóng</div>
+            <button class="btn btn-g btn-sm" id="changePhoto" style="margin-top:10px">🔄 Đổi ảnh</button>
           </div>
           <input type="file" id="fileIn" accept="image/*" hidden>
         </div>
@@ -406,6 +467,14 @@ function bindTool(){
     const it=[...(e.clipboardData?.items||[])].find(i=>i.type.startsWith('image/'));
     if(it){const f=it.getAsFile();if(f)await setPhoto(f)}
   });
+  // change photo button
+  $('#changePhoto').onclick=()=>{
+    state.photo=null;state.photoCrop={nx:0,ny:0,scale:1};
+    $('#cropUI').style.display='none';
+    $('#drop').style.display='';
+    redraw();
+  };
+  bindCropCanvas();
 
   // template upload
   $('#tplIn').onchange=async e=>{
@@ -441,8 +510,12 @@ function bindTool(){
 }
 
 async function setPhoto(file){
-  try{state.photo=await fileToImage(file);
-    $('#dropPrev').innerHTML=`<img src="${state.photo.src}" alt="">`;
+  try{
+    state.photo=await fileToImage(file);
+    state.photoCrop={nx:0,ny:0,scale:1};
+    $('#drop').style.display='none';
+    $('#cropUI').style.display='block';
+    drawCropCanvas();
     redraw();
   }catch(err){toast(err,true)}
 }
