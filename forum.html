@@ -642,7 +642,9 @@ CREATE POLICY "auth_all" ON shopee_vouchers FOR ALL TO authenticated USING (true
     const desc=e.target.vdesc.value.trim()||null;
     const max=parseInt(e.target.vmax.value)||100;
     const exp=e.target.vexp.value||null;
-    const{error}=await sb.from('shopee_vouchers').insert({code,label,description:desc,max_uses:max,expires_at:exp?new Date(exp).toISOString():null});
+    const payload={code,label,description:desc,max_uses:max};
+    if(exp)payload.expires_at=new Date(exp).toISOString();
+    const{error}=await sb.from('shopee_vouchers').insert(payload);
     if(error){toast(error.message,true);btn.disabled=false;btn.textContent='Thêm';}
     else{toast('✅ Đã thêm mã '+code+'!');renderAVouchers();}
   };
