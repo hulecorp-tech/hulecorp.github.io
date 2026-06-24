@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đổi Link Shopee — Nhận Mã Giảm Giá</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{--red:#EE4D2D;--red2:#FF7337;--bg:#F5F5F5;--card:#fff;--tx:#212121;--tx2:#757575;--bd:#E8E8E8;--rad:14px;--sh:0 2px 12px rgba(0,0,0,.08)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+
+.top{background:var(--red);color:#fff;padding:0 16px}
+.top-in{max-width:700px;margin:0 auto;display:flex;align-items:center;gap:12px;height:54px}
+.top-logo{display:flex;align-items:center;gap:8px;font-size:1.1rem;font-weight:800;letter-spacing:-.3px}
+.top-logo svg{width:28px;height:28px}
+
+.voucher-bar{background:var(--red);padding:0 16px 12px}
+.voucher-bar-in{max-width:700px;margin:0 auto;display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.voucher-bar-in::-webkit-scrollbar{height:3px}.voucher-bar-in::-webkit-scrollbar-thumb{background:rgba(255,255,255,.4);border-radius:4px}
+.vchip{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.3);border-radius:20px;padding:5px 14px;white-space:nowrap;color:#fff;font-size:.78rem;font-weight:700;cursor:pointer;transition:.15s;flex-shrink:0;display:flex;align-items:center;gap:7px}
+.vchip:hover{background:rgba(255,255,255,.25)}
+.vchip.sel{background:#fff;color:var(--red);border-color:#fff}
+.vchip.none-chip{background:rgba(255,255,255,.08)}
+.vchip .pct-bar{width:48px;height:5px;background:rgba(255,255,255,.3);border-radius:3px;overflow:hidden}
+.vchip .pct-bar .fill{height:100%;background:#fff;border-radius:3px;transition:.3s}
+.vchip.sel .pct-bar{background:rgba(238,77,45,.2)}
+.vchip.sel .pct-bar .fill{background:var(--red)}
+.vchip.empty{opacity:.5;pointer-events:none}
+.vchip .tag{font-size:.65rem;font-weight:800;text-transform:uppercase}
+
+.wrap{max-width:700px;margin:0 auto;padding:24px 16px 60px}
+
+.card{background:var(--card);border-radius:var(--rad);box-shadow:var(--sh);padding:24px;margin-bottom:16px}
+.card-title{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--red);margin-bottom:6px}
+.card h2{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.card .sub{color:var(--tx2);font-size:.85rem;line-height:1.55;margin-bottom:20px}
+
+.inp-row{display:flex;gap:8px;align-items:stretch}
+.inp-row input{flex:1;padding:13px 16px;border:1.5px solid var(--bd);border-radius:10px;font-size:.92rem;outline:none;transition:.15s;color:var(--tx);background:#fff}
+.inp-row input:focus{border-color:var(--red)}
+.inp-row input::placeholder{color:#bbb}
+.paste-btn{padding:0 16px;background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;color:var(--tx2);font-size:.82rem;font-weight:600;white-space:nowrap;transition:.15s}
+.paste-btn:hover{border-color:var(--red);color:var(--red)}
+
+.arrow{text-align:center;padding:10px 0;color:var(--bd);font-size:1.3rem}
+
+.out-box{background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:12px 16px;min-height:52px;position:relative;display:flex;align-items:center;gap:10px}
+.out-box .out-link{flex:1;font-size:.85rem;color:var(--tx2);word-break:break-all;line-height:1.5}
+.out-box .out-link.ready{color:#1a73e8;font-weight:500}
+.out-box .out-link.err{color:#ef4444}
+.copy-btn{flex-shrink:0;padding:8px 18px;background:var(--red);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:.82rem;transition:.15s}
+.copy-btn:hover{background:var(--red2)}
+.copy-btn:disabled{background:var(--bd);cursor:default}
+.copy-btn.ok{background:#22c55e}
+
+.voucher-applied{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:.82rem;color:var(--tx2)}
+.voucher-applied .badge{background:#fff3f0;color:var(--red);border:1px solid #ffc5b2;border-radius:6px;padding:3px 10px;font-weight:700;font-size:.78rem}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.step{background:var(--card);border-radius:var(--rad);box-shadow:var(--sh);padding:16px;text-align:center}
+.step .num{width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.step .t{font-size:.8rem;font-weight:700;margin-bottom:4px}
+.step .d{font-size:.74rem;color:var(--tx2);line-height:1.5}
+
+.note{background:#fff8f6;border:1px solid #ffc5b2;border-radius:10px;padding:14px 16px;font-size:.8rem;color:#c0392b;line-height:1.6;margin-bottom:16px}
+.note strong{display:block;margin-bottom:4px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:#222;color:#fff;padding:11px 22px;border-radius:30px;font-size:.84rem;font-weight:600;z-index:999;opacity:0;transition:.25s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:#22c55e}
+
+@media(max-width:520px){
+  .steps{grid-template-columns:1fr}
+  .inp-row{flex-direction:column}
+  .paste-btn{padding:12px}
+}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-in">
+    <div class="top-logo">
+      <svg viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#fff"/><text x="14" y="20" text-anchor="middle" font-size="16" fill="#EE4D2D">🛒</text></svg>
+      ĐỔI LINK SHOPEE
+    </div>
+    <span style="font-size:.78rem;opacity:.8;margin-left:auto">Nhận mã giảm giá tự động</span>
+  </div>
+</div>
+
+<div class="voucher-bar">
+  <div class="voucher-bar-in" id="voucherBar">
+    <div class="vchip none-chip sel" data-code="" data-id="0">
+      Không áp mã
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="wrap">
+
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div class="t">Dán link</div><div class="d">Copy link sản phẩm Shopee bất kỳ</div></div>
+    <div class="step"><div class="num">2</div><div class="t">Chọn mã</div><div class="d">Chọn mã giảm giá phù hợp đơn hàng</div></div>
+    <div class="step"><div class="num">3</div><div class="t">Chia sẻ</div><div class="d">Copy link đã đổi và chia sẻ</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Bước 1 · Dán link</div>
+    <h2>Link sản phẩm Shopee</h2>
+    <div class="sub">Dán link Shopee — hệ thống tự chuyển đổi, không cần bấm nút.</div>
+    <div class="inp-row">
+      <input id="linkIn" type="url" placeholder="https://shopee.vn/... hoặc https://s.shopee.vn/..." autocomplete="off" spellcheck="false">
+      <button class="paste-btn" id="pasteBtn">📋 Dán</button>
+    </div>
+    <div class="arrow">↓</div>
+    <div class="out-box">
+      <div class="out-link" id="outLink">Link đã chuyển đổi sẽ hiển thị ở đây…</div>
+      <button class="copy-btn" id="copyBtn" disabled>Sao chép</button>
+    </div>
+    <div class="voucher-applied" id="voucherApplied" style="display:none">
+      Đã áp mã: <span class="badge" id="voucherBadge"></span>
+      <span id="voucherDesc" style="color:var(--tx2)"></span>
+    </div>
+  </div>
+
+  <div class="note" id="shortLinkNote" style="display:none">
+    <strong>⚠️ Đây là link rút gọn (s.shopee.vn)</strong>
+    Vui lòng mở link này trong trình duyệt, sau đó copy link đầy đủ trên thanh địa chỉ (shopee.vn/...) và dán vào đây.
+  </div>
+
+</div>
+
+<script>
+const SB_URL='https://dmvomgmhsivifionnkiu.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtdm9tZ21oc2l2aWZpb25ua2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODcyMzAsImV4cCI6MjA5NzY2MzIzMH0.9HQDKLrzjaRwf1z44cWc3Wb-LMx6a4Ec-QN0QAOGZ00';
+const AFFILIATE_ID='an_17368470477';
+const CAMPAIGN_ID='id_VETAndUZpl';
+
+const sb=window.supabase.createClient(SB_URL,SB_KEY);
+let vouchers=[],selectedVoucher=null;
+let _t;
+
+function toast(msg,ok=false){
+  const t=document.getElementById('toast');t.textContent=msg;
+  t.className='toast'+(ok?' ok':'');
+  clearTimeout(_t);
+  setTimeout(()=>t.classList.add('show'),10);
+  _t=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ---------- vouchers ---------- */
+async function loadVouchers(){
+  const{data}=await sb.from('shopee_vouchers').select('*').eq('active',true).order('sort_order').order('id');
+  vouchers=data||[];
+  renderVouchers();
+}
+
+function renderVouchers(){
+  const bar=document.getElementById('voucherBar');
+  const noneChip=bar.querySelector('.none-chip');
+  // remove old voucher chips
+  bar.querySelectorAll('.vchip:not(.none-chip)').forEach(c=>c.remove());
+
+  vouchers.forEach(v=>{
+    const used=v.used_count||0,max=v.max_uses||100;
+    const pct=Math.min(100,Math.round(used/max*100));
+    const left=max-used;
+    const empty=left<=0;
+    const chip=document.createElement('div');
+    chip.className='vchip'+(empty?' empty':'');
+    chip.dataset.code=v.code;
+    chip.dataset.id=v.id;
+    chip.innerHTML=`
+      <span>${v.discount_pct?v.discount_pct+'%':v.label}</span>
+      <div style="display:flex;flex-direction:column;gap:3px;min-width:60px">
+        <span class="tag" style="font-size:.6rem;opacity:.85">${empty?'Hết lượt':'Còn '+left+' lượt'}</span>
+        <div class="pct-bar"><div class="fill" style="width:${pct}%"></div></div>
+      </div>`;
+    chip.onclick=()=>selectVoucher(v,chip);
+    bar.appendChild(chip);
+  });
+
+  // auto-select best voucher (most remaining)
+  if(vouchers.length){
+    const best=vouchers.filter(v=>(v.used_count||0)<(v.max_uses||100))
+      .sort((a,b)=>((b.max_uses||100)-(b.used_count||0))-((a.max_uses||100)-(a.used_count||0)))[0];
+    if(best){
+      const chip=bar.querySelector(`[data-id="${best.id}"]`);
+      if(chip)selectVoucher(best,chip,true);
+    }
+  }
+}
+
+function selectVoucher(v,chip,silent=false){
+  document.querySelectorAll('.vchip').forEach(c=>c.classList.remove('sel'));
+  chip.classList.add('sel');
+  selectedVoucher=v||null;
+  if(!silent)toast(v?`Đã chọn mã ${v.code}`:'Không áp mã');
+  convert();
+}
+
+/* ---------- noneChip ---------- */
+document.querySelector('.none-chip').onclick=function(){
+  document.querySelectorAll('.vchip').forEach(c=>c.classList.remove('sel'));
+  this.classList.add('sel');
+  selectedVoucher=null;
+  convert();
+};
+
+/* ---------- link conversion ---------- */
+function convert(){
+  const raw=document.getElementById('linkIn').value.trim();
+  const outLink=document.getElementById('outLink');
+  const copyBtn=document.getElementById('copyBtn');
+  const applied=document.getElementById('voucherApplied');
+  const shortNote=document.getElementById('shortLinkNote');
+
+  shortNote.style.display='none';
+  applied.style.display='none';
+  copyBtn.disabled=true;
+  copyBtn.textContent='Sao chép';
+  copyBtn.className='copy-btn';
+
+  if(!raw){outLink.className='out-link';outLink.textContent='Link đã chuyển đổi sẽ hiển thị ở đây…';return}
+
+  let url;
+  try{url=new URL(raw)}catch{
+    outLink.className='out-link err';
+    outLink.textContent='⚠️ Link không hợp lệ';return;
+  }
+
+  if(url.hostname==='s.shopee.vn'||url.hostname==='shope.ee'){
+    shortNote.style.display='block';
+    outLink.className='out-link err';
+    outLink.textContent='⚠️ Đây là link rút gọn — xem hướng dẫn bên dưới';return;
+  }
+
+  if(!url.hostname.includes('shopee.vn')&&!url.hostname.includes('shopee.com')){
+    outLink.className='out-link err';
+    outLink.textContent='⚠️ Không phải link Shopee';return;
+  }
+
+  // Build clean affiliate URL
+  const base=url.origin+url.pathname;
+  const p=new URLSearchParams();
+  p.set('mmp_pid',AFFILIATE_ID);
+  p.set('utm_source',AFFILIATE_ID);
+  p.set('utm_medium','affiliates');
+  p.set('utm_campaign',CAMPAIGN_ID);
+  if(selectedVoucher?.code)p.set('voucher',selectedVoucher.code);
+
+  const result=base+'?'+p.toString();
+  outLink.className='out-link ready';
+  outLink.textContent=result;
+  copyBtn.disabled=false;
+
+  if(selectedVoucher){
+    applied.style.display='flex';
+    document.getElementById('voucherBadge').textContent=selectedVoucher.code;
+    const desc=selectedVoucher.description||
+      (selectedVoucher.discount_pct&&selectedVoucher.min_order_k?
+        `Giảm ${selectedVoucher.discount_pct}% — Đơn từ ${selectedVoucher.min_order_k}K`:'');
+    document.getElementById('voucherDesc').textContent=desc;
+  }
+
+  // track link gen in background (don't await)
+  if(selectedVoucher){
+    sb.from('shopee_vouchers')
+      .update({used_count:(selectedVoucher.used_count||0)+1})
+      .eq('id',selectedVoucher.id)
+      .then(()=>{selectedVoucher.used_count=(selectedVoucher.used_count||0)+1});
+  }
+}
+
+/* ---------- copy ---------- */
+document.getElementById('copyBtn').onclick=async()=>{
+  const text=document.getElementById('outLink').textContent;
+  if(!text||document.getElementById('copyBtn').disabled)return;
+  try{
+    await navigator.clipboard.writeText(text);
+    const btn=document.getElementById('copyBtn');
+    btn.textContent='✓ Đã copy';btn.className='copy-btn ok';
+    toast('Đã sao chép link!',true);
+    setTimeout(()=>{btn.textContent='Sao chép';btn.className='copy-btn'},2000);
+  }catch{
+    const r=document.createRange();r.selectNode(document.getElementById('outLink'));
+    window.getSelection().removeAllRanges();window.getSelection().addRange(r);
+    toast('Chọn và copy thủ công nhé!');
+  }
+};
+
+/* ---------- input events ---------- */
+document.getElementById('linkIn').addEventListener('input',convert);
+document.getElementById('linkIn').addEventListener('paste',()=>setTimeout(convert,30));
+
+document.getElementById('pasteBtn').onclick=async()=>{
+  try{
+    const text=await navigator.clipboard.readText();
+    document.getElementById('linkIn').value=text;
+    convert();
+  }catch{document.getElementById('linkIn').focus();toast('Nhấn Ctrl+V để dán')}
+};
+
+/* ---------- init ---------- */
+loadVouchers();
+</script>
+</body>
+</html>
