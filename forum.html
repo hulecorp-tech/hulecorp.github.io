@@ -436,6 +436,7 @@ async function renderAdmin(){
   if(atab==='users') await renderAUsers();
   else if(atab==='perms') await renderAPerms();
   else if(atab==='cats') await renderACats();
+  else if(atab==='vouchers') await renderAVouchers();
 }
 window.renderAdmin=renderAdmin;
 
@@ -445,6 +446,7 @@ function adminTabs(cur){
       <button class="tab${cur==='users'?' on':''}" onclick="atab='users';renderAdmin()">Người dùng</button>
       <button class="tab${cur==='perms'?' on':''}" onclick="atab='perms';renderAdmin()">Quyền Tool</button>
       <button class="tab${cur==='cats'?' on':''}" onclick="atab='cats';renderAdmin()">Danh mục</button>
+      <button class="tab${cur==='vouchers'?' on':''}" onclick="atab='vouchers';renderAdmin()">🛒 Voucher</button>
     </div>`;
 }
 
@@ -529,6 +531,140 @@ window.delCat=async id=>{
   if(!confirm('Xóa danh mục?'))return;
   await sb.from('categories').delete().eq('id',id);
   toast('Đã xóa.');renderACats();
+};
+
+/* VOUCHERS */
+async function renderAVouchers(){
+  atab='vouchers';view('<div class="spin"></div>');
+  const{data:vs,error}=await sb.from('shopee_vouchers').select('*').order('sort_order').order('id');
+  if(error&&(error.code==='42P01'||error.message?.includes('does not exist'))){
+    view(`${adminTabs('vouchers')}<div class="card">
+      <b style="font-size:.88rem;display:block;margin-bottom:10px">⚠️ Chưa tạo bảng shopee_vouchers</b>
+      <p style="font-size:.8rem;color:var(--tx2);margin-bottom:10px">Chạy SQL sau trong <b>Supabase → SQL Editor</b>:</p>
+      <pre class="sql-pre">CREATE TABLE IF NOT EXISTS shopee_vouchers (
+  id SERIAL PRIMARY KEY,
+  code TEXT NOT NULL,
+  label TEXT NOT NULL,
+  description TEXT,
+  max_uses INT DEFAULT 100,
+  used_count INT DEFAULT 0,
+  active BOOLEAN DEFAULT true,
+  sort_order INT DEFAULT 0,
+  expires_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+ALTER TABLE shopee_vouchers ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "pub_read" ON shopee_vouchers FOR SELECT TO anon USING (active=true);
+CREATE POLICY "auth_all" ON shopee_vouchers FOR ALL TO authenticated USING (true);</pre>
+      <button class="btn btn-g btn-sm" onclick="renderAVouchers()" style="margin-top:8px">↺ Thử lại sau khi chạy SQL</button>
+    </div>`);
+    return;
+  }
+  const vouchers=vs||[];
+  const now=new Date();
+  view(`${adminTabs('vouchers')}
+  <div class="card" style="margin-bottom:16px">
+    <b style="font-size:.85rem;display:block;margin-bottom:14px">➕ Thêm mã giảm giá</b>
+    <form id="vf" style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:110px;flex:1">
+        <label style="font-size:.72rem;font-weight:700">Mã voucher *</label>
+        <input name="vcode" required placeholder="VD: GIAM25" style="padding:9px 11px;border:1.5px solid var(--bd);border-radius:9px;font-family:inherit;font-size:.88rem;text-transform:uppercase;letter-spacing:.5px">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:120px;flex:1">
+        <label style="font-size:.72rem;font-weight:700">Nhãn hiển thị *</label>
+        <input name="vlabel" required placeholder="VD: Giảm 25%" style="padding:9px 11px;border:1.5px solid var(--bd);border-radius:9px;font-family:inherit;font-size:.88rem">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:160px;flex:2">
+        <label style="font-size:.72rem;font-weight:700">Mô tả</label>
+        <input name="vdesc" placeholder="VD: Đơn 500K giảm 50K" style="padding:9px 11px;border:1.5px solid var(--bd);border-radius:9px;font-family:inherit;font-size:.88rem">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;width:90px;flex-shrink:0">
+        <label style="font-size:.72rem;font-weight:700">Tổng lượt</label>
+        <input name="vmax" type="number" value="100" min="1" style="padding:9px 11px;border:1.5px solid var(--bd);border-radius:9px;font-family:inherit;font-size:.88rem">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+        <label style="font-size:.72rem;font-weight:700">Hết hạn</label>
+        <input name="vexp" type="date" style="padding:9px 11px;border:1.5px solid var(--bd);border-radius:9px;font-family:inherit;font-size:.85rem">
+      </div>
+      <button class="btn btn-o" type="submit" style="padding:9px 20px;height:40px;align-self:flex-end">Thêm</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+      <b style="font-size:.85rem">Danh sách mã (${vouchers.length})</b>
+      <a href="/shopee" target="_blank" class="btn btn-g btn-sm" style="font-size:.75rem">🔗 Xem trang Shopee</a>
+    </div>
+    ${vouchers.length?`<div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Nhãn / Mô tả</th><th>Lượt dùng</th><th>Còn lại</th><th>Hết hạn</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+      <tbody>${vouchers.map(v=>{
+        const used=v.used_count||0,max=v.max_uses||100;
+        const pct=Math.min(100,Math.round(used/max*100));
+        const left=max-used;
+        const expired=v.expires_at&&new Date(v.expires_at)<now;
+        const barColor=pct>=90?'#ef4444':pct>=60?'#f59e0b':'#22c55e';
+        return`<tr style="${!v.active||expired?'opacity:.55':''}">
+          <td><code style="font-weight:700;color:#EE4D2D;font-size:.85rem;letter-spacing:.3px">${esc(v.code)}</code></td>
+          <td>
+            <div style="font-weight:600;font-size:.85rem">${esc(v.label)}</div>
+            ${v.description?`<div style="color:var(--tx2);font-size:.75rem;margin-top:2px">${esc(v.description)}</div>`:''}
+          </td>
+          <td>
+            <div style="font-size:.82rem;font-weight:600;margin-bottom:4px">${used} / ${max}</div>
+            <div style="width:72px;height:5px;background:var(--bg2);border-radius:3px;overflow:hidden">
+              <div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px;transition:.3s"></div>
+            </div>
+          </td>
+          <td style="font-size:.82rem;font-weight:700;color:${left<=0?'#ef4444':'#22c55e'}">${left<=0?'Hết lượt':left+' lượt'}</td>
+          <td style="font-size:.76rem;color:${expired?'#ef4444':'var(--tx2)'}">${v.expires_at?new Date(v.expires_at).toLocaleDateString('vi')+(expired?' ⚠️':''):'—'}</td>
+          <td>
+            <select class="rsel" onchange="vToggle(${v.id},this.value)">
+              <option value="1"${v.active?' selected':''}>✅ Bật</option>
+              <option value="0"${!v.active?' selected':''}>⏸ Tắt</option>
+            </select>
+          </td>
+          <td style="white-space:nowrap">
+            <input type="number" value="${max}" min="1" title="Tổng lượt tối đa"
+              style="width:62px;padding:4px 6px;border:1.5px solid var(--bd);border-radius:7px;font-size:.78rem;font-family:inherit;margin-right:4px"
+              onblur="vSetMax(${v.id},this.value,${used})">
+            <button class="btn btn-g btn-sm" onclick="vReset(${v.id})" title="Reset về 0 lượt đã dùng" style="margin-right:4px">↺</button>
+            <button class="btn btn-red btn-sm" onclick="vDel(${v.id})">Xóa</button>
+          </td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`:`<div class="empty" style="padding:24px 0">Chưa có mã nào. Thêm mã ở trên.</div>`}
+  </div>`);
+
+  document.getElementById('vf').onsubmit=async e=>{
+    e.preventDefault();const btn=e.target.querySelector('[type=submit]');btn.disabled=true;btn.textContent='Đang thêm...';
+    const code=e.target.vcode.value.trim().toUpperCase();
+    const label=e.target.vlabel.value.trim();
+    const desc=e.target.vdesc.value.trim()||null;
+    const max=parseInt(e.target.vmax.value)||100;
+    const exp=e.target.vexp.value||null;
+    const{error}=await sb.from('shopee_vouchers').insert({code,label,description:desc,max_uses:max,expires_at:exp?new Date(exp).toISOString():null});
+    if(error){toast(error.message,true);btn.disabled=false;btn.textContent='Thêm';}
+    else{toast('✅ Đã thêm mã '+code+'!');renderAVouchers();}
+  };
+}
+window.vToggle=async(id,val)=>{
+  await sb.from('shopee_vouchers').update({active:val==='1'}).eq('id',id);
+  toast(val==='1'?'Đã bật mã!':'Đã tắt mã!');renderAVouchers();
+};
+window.vSetMax=async(id,val,used)=>{
+  const n=parseInt(val);if(isNaN(n)||n<1)return;
+  await sb.from('shopee_vouchers').update({max_uses:n}).eq('id',id);
+  toast('Đã cập nhật tổng lượt!');
+};
+window.vReset=async id=>{
+  if(!confirm('Reset số lượt đã dùng về 0?'))return;
+  await sb.from('shopee_vouchers').update({used_count:0}).eq('id',id);
+  toast('Đã reset!');renderAVouchers();
+};
+window.vDel=async id=>{
+  if(!confirm('Xóa mã voucher này?'))return;
+  await sb.from('shopee_vouchers').delete().eq('id',id);
+  toast('Đã xóa.');renderAVouchers();
 };
 
 /* INIT */
