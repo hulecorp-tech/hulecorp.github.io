@@ -138,8 +138,8 @@ button{cursor:pointer;font-family:inherit}
   </div>
 
   <div class="note" id="shortLinkNote" style="display:none">
-    <strong>⚠️ Đây là link rút gọn (s.shopee.vn)</strong>
-    Vui lòng mở link này trong trình duyệt, sau đó copy link đầy đủ trên thanh địa chỉ (shopee.vn/...) và dán vào đây.
+    <strong>⚠️ Không thể tự động giải mã link rút gọn</strong>
+    Mở link <strong>s.shopee.vn/...</strong> trong trình duyệt → chờ trang tải → copy link đầy đủ trên thanh địa chỉ (<strong>shopee.vn/...</strong>) → dán vào đây.
   </div>
 
 </div>
@@ -221,6 +221,46 @@ document.querySelector('.none-chip').onclick=function(){
   convert();
 };
 
+/* ---------- short URL expander ---------- */
+let _expanding=false;
+
+async function expandShortUrl(shortUrl){
+  const ctrl=new AbortController();
+  const t=setTimeout(()=>ctrl.abort(),9000);
+  try{
+    const resp=await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(shortUrl)}`,{signal:ctrl.signal});
+    clearTimeout(t);
+    if(!resp.ok)return null;
+    const data=await resp.json();
+    // Check status.url (final URL after redirect)
+    const su=data?.status?.url;
+    if(su&&su.includes('shopee.vn')&&!su.includes('s.shopee.vn'))return su;
+    // Parse canonical / og:url from returned HTML
+    const html=data?.contents||'';
+    const m=html.match(/rel="canonical"[^>]*href="([^"]*shopee\.vn[^"]*)"/i)
+      ||html.match(/property="og:url"[^>]*content="([^"]*shopee\.vn[^"]*)"/i)
+      ||html.match(/content="([^"]*shopee\.vn[^"]*)"[^>]*property="og:url"/i);
+    if(m&&m[1])return m[1];
+    return null;
+  }catch{clearTimeout(t);return null;}
+}
+
+async function tryExpand(shortUrl){
+  if(_expanding)return;
+  _expanding=true;
+  const expanded=await expandShortUrl(shortUrl);
+  _expanding=false;
+  if(expanded){
+    document.getElementById('linkIn').value=expanded;
+    convert();
+  }else{
+    document.getElementById('shortLinkNote').style.display='block';
+    const ol=document.getElementById('outLink');
+    ol.className='out-link err';ol.href='#';
+    ol.textContent='⚠️ Không thể tự động giải mã — xem hướng dẫn bên dưới';
+  }
+}
+
 /* ---------- link conversion ---------- */
 function convert(){
   const raw=document.getElementById('linkIn').value.trim();
@@ -246,9 +286,9 @@ function convert(){
   }
 
   if(url.hostname==='s.shopee.vn'||url.hostname==='shope.ee'){
-    shortNote.style.display='block';
-    outLink.className='out-link err';
-    outLink.textContent='⚠️ Đây là link rút gọn — xem hướng dẫn bên dưới';return;
+    outLink.className='out-link';outLink.href='#';
+    outLink.textContent='⏳ Đang giải mã link rút gọn…';
+    tryExpand(raw);return;
   }
 
   if(!url.hostname.includes('shopee.vn')&&!url.hostname.includes('shopee.com')){
