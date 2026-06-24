@@ -57,6 +57,10 @@ button{cursor:pointer;font-family:inherit}
 .copy-btn:hover{background:var(--red2)}
 .copy-btn:disabled{background:var(--bd);cursor:default}
 .copy-btn.ok{background:#22c55e}
+.open-btn{flex-shrink:0;padding:8px 18px;background:#fff;color:var(--red);border:1.5px solid var(--red);border-radius:8px;font-weight:700;font-size:.82rem;transition:.15s;white-space:nowrap}
+.open-btn:hover{background:#fff3f0}
+.open-btn:disabled{border-color:var(--bd);color:var(--tx2);cursor:default;background:#fff}
+.out-box .out-link.ready{text-decoration:underline;text-underline-offset:3px}
 
 .voucher-applied{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:.82rem;color:var(--tx2)}
 .voucher-applied .badge{background:#fff3f0;color:var(--red);border:1px solid #ffc5b2;border-radius:6px;padding:3px 10px;font-weight:700;font-size:.78rem}
@@ -121,8 +125,11 @@ button{cursor:pointer;font-family:inherit}
     </div>
     <div class="arrow">↓</div>
     <div class="out-box">
-      <div class="out-link" id="outLink">Link đã chuyển đổi sẽ hiển thị ở đây…</div>
-      <button class="copy-btn" id="copyBtn" disabled>Sao chép</button>
+      <a class="out-link" id="outLink" href="#" target="_blank" rel="noopener">Link đã chuyển đổi sẽ hiển thị ở đây…</a>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="copy-btn" id="copyBtn" disabled>Sao chép</button>
+        <button class="open-btn" id="openBtn" disabled>📱 Mở App</button>
+      </div>
     </div>
     <div class="voucher-applied" id="voucherApplied" style="display:none">
       Đã áp mã: <span class="badge" id="voucherBadge"></span>
@@ -222,11 +229,13 @@ function convert(){
   const applied=document.getElementById('voucherApplied');
   const shortNote=document.getElementById('shortLinkNote');
 
+  const openBtn=document.getElementById('openBtn');
   shortNote.style.display='none';
   applied.style.display='none';
-  copyBtn.disabled=true;
+  copyBtn.disabled=true;openBtn.disabled=true;
   copyBtn.textContent='Sao chép';
   copyBtn.className='copy-btn';
+  outLink.href='#';
 
   if(!raw){outLink.className='out-link';outLink.textContent='Link đã chuyển đổi sẽ hiển thị ở đây…';return}
 
@@ -247,8 +256,11 @@ function convert(){
     outLink.textContent='⚠️ Không phải link Shopee';return;
   }
 
-  // Build clean affiliate URL
-  const base=url.origin+url.pathname;
+  // Extract shopId & itemId for short URL (format: product-name-i.SHOPID.ITEMID)
+  const idMatch=url.pathname.match(/\.i\.(\d{5,})\.(\d{5,})$/);
+  const base=idMatch
+    ?`${url.origin}/product/${idMatch[1]}/${idMatch[2]}`
+    :url.origin+url.pathname;
   const p=new URLSearchParams();
   p.set('mmp_pid',AFFILIATE_ID);
   p.set('utm_source',AFFILIATE_ID);
@@ -259,7 +271,8 @@ function convert(){
   const result=base+'?'+p.toString();
   outLink.className='out-link ready';
   outLink.textContent=result;
-  copyBtn.disabled=false;
+  outLink.href=result;
+  copyBtn.disabled=false;openBtn.disabled=false;
 
   if(selectedVoucher){
     applied.style.display='flex';
@@ -294,6 +307,13 @@ document.getElementById('copyBtn').onclick=async()=>{
     window.getSelection().removeAllRanges();window.getSelection().addRange(r);
     toast('Chọn và copy thủ công nhé!');
   }
+};
+
+/* ---------- open in app ---------- */
+document.getElementById('openBtn').onclick=()=>{
+  const href=document.getElementById('outLink').href;
+  if(!href||href==='#')return;
+  window.open(href,'_blank','noopener');
 };
 
 /* ---------- input events ---------- */
