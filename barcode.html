@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Mã Vạch EAN-13 — Huy Le Creative</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#eef2f3;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;box-sizing:border-box}
+        .back{font-size:.85rem;color:#7f8c8d;text-decoration:none;margin-bottom:18px;display:inline-flex;align-items:center;gap:6px;transition:.15s}
+        .back:hover{color:#2c3e50}
+        .container{background:#fff;padding:40px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,.1);text-align:center;max-width:450px;width:100%}
+        h2{color:#2c3e50;margin-top:0}
+        .input-group{margin-bottom:20px}
+        input{width:250px;padding:12px;font-size:18px;border:2px solid #ddd;border-radius:8px;text-align:center;letter-spacing:3px;outline:none;transition:border-color .3s}
+        input:focus{border-color:#3498db}
+        .button-group{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
+        button{padding:12px 20px;font-size:15px;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:.2s}
+        .btn-generate{background:#27ae60;color:#fff}
+        .btn-generate:hover{background:#219150}
+        .btn-download{background:#3498db;color:#fff;display:none}
+        .btn-download:hover{background:#2980b9}
+        .barcode-box{background:#fff;padding:20px;border:1px dashed #ccc;border-radius:8px;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        #barcode{max-width:100%;height:auto}
+        .info{font-size:13px;color:#7f8c8d;margin-top:10px}
+        .error{color:#e74c3c;font-weight:700;margin-top:10px}
+    </style>
+</head>
+<body>
+    <a href="/forum.html" class="back">← Quay lại Forum</a>
+    <div class="container">
+        <h2>EAN-13 Vector Generator</h2>
+        <p class="info">Nhập 12 số đầu, hệ thống tự thêm số thứ 13</p>
+        <div class="input-group">
+            <input type="text" id="barcodeInput" maxlength="12" placeholder="893604062682" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+        </div>
+        <div class="button-group">
+            <button class="btn-generate" onclick="generateBarcode()">Tạo Mã</button>
+            <button id="downloadBtn" class="btn-download" onclick="downloadSVG()">Tải file Vector (.svg)</button>
+        </div>
+        <div class="barcode-box">
+            <svg id="barcode"></svg>
+            <div id="errorMessage" class="error"></div>
+        </div>
+        <p class="info">Định dạng SVG dùng cho thiết kế in ấn (Illustrator/Corel)</p>
+    </div>
+    <script>
+        function calculateCheckDigit(ean12){
+            let s=0;
+            for(let i=0;i<12;i++) s+=(i%2===0)?parseInt(ean12[i]):parseInt(ean12[i])*3;
+            return(10-(s%10))%10;
+        }
+        function generateBarcode(){
+            const v=document.getElementById('barcodeInput').value;
+            const err=document.getElementById('errorMessage');
+            const dl=document.getElementById('downloadBtn');
+            if(v.length!==12){err.innerText='Lỗi: Hãy nhập đủ 12 chữ số!';document.getElementById('barcode').style.display='none';dl.style.display='none';return;}
+            err.innerText='';document.getElementById('barcode').style.display='block';dl.style.display='inline-block';
+            JsBarcode('#barcode',v+calculateCheckDigit(v),{format:'EAN13',width:2,height:100,displayValue:true,fontSize:20,background:'#ffffff'});
+        }
+        function downloadSVG(){
+            const svg=document.getElementById('barcode');
+            const blob=new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml;charset=utf-8'});
+            const a=document.createElement('a');
+            a.href=URL.createObjectURL(blob);
+            a.download='MaVach_'+document.getElementById('barcodeInput').value+calculateCheckDigit(document.getElementById('barcodeInput').value)+'.svg';
+            document.body.appendChild(a);a.click();document.body.removeChild(a);
+        }
+        document.getElementById('barcodeInput').value='893604062682';
+        generateBarcode();
+    </script>
+</body>
+</html>

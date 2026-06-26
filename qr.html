@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo QR Code có Logo — Huy Le Creative</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📷</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen p-4 md:p-10">
+
+    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col lg:flex-row">
+
+        <!-- Cột điều khiển bên trái -->
+        <div class="w-full lg:w-3/5 p-6 md:p-10 border-r border-slate-100">
+            <a href="/forum.html" class="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-700 mb-6 transition-colors">← Quay lại Forum</a>
+            <h1 class="text-3xl font-extrabold text-indigo-600 mb-2">QR Gen Pro</h1>
+            <p class="text-slate-500 mb-8 text-sm">Tạo mã QR chất lượng cao kèm logo cho in ấn chuyên nghiệp.</p>
+
+            <!-- Nhập Nội dung -->
+            <div class="mb-6">
+                <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">1. Nội dung hoặc URL</label>
+                <input type="text" id="dataInput" value="https://google.com"
+                    class="w-full px-5 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 outline-none transition-all">
+            </div>
+
+            <!-- Tùy chọn Kiểu dáng QR -->
+            <div class="mb-6">
+                <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">2. Kiểu dáng QR</label>
+                <select id="styleSelect" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option value="rounded">Bo tròn (Hiện đại)</option>
+                    <option value="square">Vuông (Cổ điển)</option>
+                </select>
+            </div>
+
+            <!-- Tải Logo -->
+            <div class="mb-6">
+                <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">3. Chèn Logo (Trung tâm)</label>
+                <div class="p-4 bg-amber-50 border border-amber-100 rounded-lg mb-3">
+                    <p class="text-xs text-amber-700 leading-relaxed">
+                        <strong>Lưu ý:</strong> Nên sử dụng ảnh <strong>hình vuông</strong> (ví dụ: 500x500px) để logo hiển thị cân đối nhất ở giữa mã QR.
+                    </p>
+                </div>
+                <input type="file" id="logoInput" accept="image/*"
+                    class="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-6 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                <button id="removeLogoBtn" class="mt-3 text-xs font-bold text-red-500 uppercase tracking-tight hidden">× Gỡ bỏ logo hiện tại</button>
+            </div>
+
+            <div class="mb-8">
+                <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">Tỷ lệ Logo: <span id="logoSizeLabel">35%</span></label>
+                <input type="range" id="logoSizeInput" min="0.1" max="0.5" step="0.05" value="0.35" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+            </div>
+
+            <!-- Tùy chọn In ấn & Kích thước -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-2">
+                <div>
+                    <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">4. Kích thước xuất ảnh</label>
+                    <select id="sizeSelect" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="900">Tiêu chuẩn (900 x 900 px)</option>
+                        <option value="2048">Siêu sắc nét (2048 x 2048 px)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold uppercase tracking-wider text-slate-700 mb-2">5. Độ phân giải (PPI)</label>
+                    <select id="ppiSelect" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="72">72 PPI (Dùng cho Web)</option>
+                        <option value="300">300 PPI (Dùng cho In ấn)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột Xem trước bên phải -->
+        <div class="w-full lg:w-2/5 p-6 md:p-10 bg-slate-100 flex flex-col items-center justify-center">
+            <div id="qrPreviewWrapper" class="bg-white p-6 rounded-2xl shadow-lg border border-white mb-8">
+                <div id="qrCodeContainer"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 w-full max-w-[320px]">
+                <button id="downloadPngBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-200 transition-transform active:scale-95">
+                    Tải .PNG
+                </button>
+                <button id="downloadSvgBtn" class="bg-slate-800 hover:bg-black text-white font-bold py-4 rounded-2xl shadow-lg shadow-slate-300 transition-transform active:scale-95">
+                    Tải .SVG
+                </button>
+            </div>
+            <p class="mt-6 text-[11px] text-slate-400 text-center uppercase tracking-widest">Preview hiển thị ở 300x300</p>
+        </div>
+    </div>
+
+    <script>
+        const qrCode = new QRCodeStyling({
+            width: 300, height: 300,
+            data: "https://google.com",
+            margin: 10,
+            qrOptions: { typeNumber: 0, mode: "Byte", errorCorrectionLevel: "H" },
+            imageOptions: { hideBackgroundDots: true, imageSize: 0.35, margin: 5, crossOrigin: "anonymous" },
+            dotsOptions: { color: "#1e293b", type: "rounded" },
+            cornersSquareOptions: { color: "#1e293b", type: "extra-rounded" },
+            backgroundOptions: { color: "#ffffff" }
+        });
+        qrCode.append(document.getElementById("qrCodeContainer"));
+
+        const dataInput = document.getElementById("dataInput");
+        const styleSelect = document.getElementById("styleSelect");
+        const logoInput = document.getElementById("logoInput");
+        const logoSizeInput = document.getElementById("logoSizeInput");
+        const logoSizeLabel = document.getElementById("logoSizeLabel");
+        const removeLogoBtn = document.getElementById("removeLogoBtn");
+        const sizeSelect = document.getElementById("sizeSelect");
+
+        let currentLogoBase64 = "";
+
+        dataInput.addEventListener("input", (e) => { qrCode.update({ data: e.target.value || " " }); });
+
+        styleSelect.addEventListener("change", (e) => {
+            const r = e.target.value === "rounded";
+            qrCode.update({
+                dotsOptions: { type: r ? "rounded" : "square" },
+                cornersSquareOptions: { type: r ? "extra-rounded" : "square" }
+            });
+        });
+
+        logoInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                currentLogoBase64 = ev.target.result;
+                qrCode.update({ image: currentLogoBase64 });
+                removeLogoBtn.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+        });
+
+        removeLogoBtn.addEventListener("click", () => {
+            currentLogoBase64 = ""; logoInput.value = "";
+            qrCode.update({ image: "" });
+            removeLogoBtn.classList.add("hidden");
+        });
+
+        logoSizeInput.addEventListener("input", (e) => {
+            const size = parseFloat(e.target.value);
+            logoSizeLabel.textContent = Math.round(size * 100) + "%";
+            qrCode.update({ imageOptions: { imageSize: size } });
+        });
+
+        document.getElementById("downloadPngBtn").addEventListener("click", () => {
+            const s = parseInt(sizeSelect.value);
+            qrCode.update({ width: s, height: s });
+            qrCode.download({ name: "qrcode-pro-" + s, extension: "png" })
+                .then(() => qrCode.update({ width: 300, height: 300 }));
+        });
+
+        document.getElementById("downloadSvgBtn").addEventListener("click", () => {
+            const s = parseInt(sizeSelect.value);
+            qrCode.update({ width: s, height: s });
+            qrCode.download({ name: "qrcode-pro-vector", extension: "svg" })
+                .then(() => qrCode.update({ width: 300, height: 300 }));
+        });
+    </script>
+</body>
+</html>
