@@ -179,6 +179,23 @@
         
         body.spinning .wheel-wrapper { cursor: wait !important; }
         body.spinning button { cursor: wait !important; }
+
+        /* ===== RESPONSIVE: tablet & mobile ===== */
+        @media (max-width: 1024px) {
+            body { height: auto; overflow-x: hidden; overflow-y: auto; }
+            .main-layout { flex-direction: column; height: auto; }
+            .left-col { overflow: visible; }
+            .right-sidebar { width: 100%; border-left: none; border-top: 1px solid var(--border-color); box-shadow: none; }
+            .tab-pane.active { min-height: 320px; }
+            .wheel-title { font-size: 30px; margin-bottom: 24px; }
+        }
+        @media (max-width: 520px) {
+            .header { padding: 0 12px; }
+            .nav-links { gap: 8px; font-size: 12px; }
+            .top-actions { position: static; justify-content: center; margin-bottom: 12px; }
+            .external-spin-btn { padding: 16px 50px; font-size: 22px; }
+            .wheel-title { font-size: 24px; }
+        }
     </style>
 </head>
 <body>
@@ -341,6 +358,26 @@
         let resultsHistory = [];
         let currentAngle = 0; let isSpinning = false; let winningIndex = -1;
 
+        // --- LƯU / KHÔI PHỤC DANH SÁCH (localStorage) ---
+        function saveState() {
+            try {
+                localStorage.setItem('wheelState', JSON.stringify({
+                    items: items,
+                    title: document.getElementById('displayTitle').innerText,
+                    mode: mode
+                }));
+            } catch (e) {}
+        }
+        function loadState() {
+            try {
+                const s = JSON.parse(localStorage.getItem('wheelState'));
+                if (s && Array.isArray(s.items) && s.items.length) {
+                    items = s.items;
+                    if (s.mode) mode = s.mode;
+                }
+            } catch (e) {}
+        }
+
         // --- ĐÈN NHÁY SCALE 900px ---
         const lightsContainer = document.getElementById('lightsContainer');
         const NUM_LIGHTS = 24; let lightInterval;
@@ -376,8 +413,9 @@
             else if (themeName === 'vn') currentEffect = 'vn';
             else if (themeName === 'hal') currentEffect = 'hal';
             else currentEffect = 'none';
-            
+
             document.getElementById('effectCanvas').style.display = (currentEffect !== 'none') ? 'block' : 'none';
+            if (currentEffect !== 'none') startEffects();
         }
         
         const efCanvas = document.getElementById('effectCanvas'); const efCtx = efCanvas.getContext('2d');
@@ -401,8 +439,12 @@
         }
 
         let effectAngle = 0;
+        let effectRunning = false;
+        function startEffects() {
+            if (!effectRunning) { effectRunning = true; requestAnimationFrame(drawEffects); }
+        }
         function drawEffects() {
-            if(currentEffect === 'none') { requestAnimationFrame(drawEffects); return; }
+            if(currentEffect === 'none') { effectRunning = false; efCtx.clearRect(0, 0, window.innerWidth, window.innerHeight); return; }
             efCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
             effectAngle += 0.01;
             
@@ -512,12 +554,13 @@
             });
 
             if(updateBulkTextarea) bulkInput.value = items.map(i => i.text).join('\n');
+            saveState();
 
             document.querySelectorAll('.input-text').forEach(input => {
                 input.addEventListener('input', (e) => { items[e.target.dataset.index].text = e.target.value; renderLists(true); drawWheel(); });
             });
             document.querySelectorAll('.input-weight').forEach(input => {
-                input.addEventListener('change', (e) => { items[e.target.dataset.index].weight = e.target.value; if(mode === 'reward') drawWheel(); });
+                input.addEventListener('change', (e) => { items[e.target.dataset.index].weight = e.target.value; if(mode === 'reward') drawWheel(); saveState(); });
             });
             document.querySelectorAll('.del-icon').forEach(btn => {
                 btn.addEventListener('click', (e) => { if(isSpinning) return; items.splice(e.target.dataset.index, 1); renderLists(); drawWheel(); });
@@ -643,18 +686,36 @@
 
         // NÚT XEM RÚT GỌN / ĐẦY ĐỦ TỰ ĐỔI TEXT
         const btnCompact = document.getElementById('btnCompact');
-        btnCompact.addEventListener('click', () => { 
+        btnCompact.addEventListener('click', () => {
             const layout = document.getElementById('mainLayout');
-            layout.classList.toggle('compact'); 
+            layout.classList.toggle('compact');
             if (layout.classList.contains('compact')) {
                 btnCompact.innerText = "↙ Xem đầy đủ";
             } else {
                 btnCompact.innerText = "↗ Xem rút gọn";
             }
+            fitWheel();
         });
 
+        // --- TỰ ĐỘNG CO GIÃN VÒNG QUAY THEO MÀN HÌNH ---
+        const leftCol = document.querySelector('.left-col');
+        function fitWheel() {
+            const cs = getComputedStyle(leftCol);
+            const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+            const avail = leftCol.clientWidth - padX;
+            const need = 1010; // 920 (mâm) + ~90 (kim chỉ + lề)
+            const scale = Math.min(1, avail / need);
+            wheelWrapper.style.transformOrigin = 'top center';
+            wheelWrapper.style.transform = 'scale(' + scale + ')';
+            const my = 920 * (1 - scale);
+            wheelWrapper.style.marginBottom = (20 - my) + 'px';
+            wheelWrapper.style.marginLeft = (-my / 2) + 'px';
+            wheelWrapper.style.marginRight = (-my / 2) + 'px';
+        }
+        window.addEventListener('resize', fitWheel);
+
         document.getElementById('btnFullscreen').addEventListener('click', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else if (document.exitFullscreen) document.exitFullscreen(); });
-        document.getElementById('btnEditTitle').addEventListener('click', () => { let t = prompt("Nhập tiêu đề mới:", document.getElementById('displayTitle').innerText); if (t) document.getElementById('displayTitle').innerText = t.toUpperCase(); });
+        document.getElementById('btnEditTitle').addEventListener('click', () => { let t = prompt("Nhập tiêu đề mới:", document.getElementById('displayTitle').innerText); if (t) { document.getElementById('displayTitle').innerText = t.toUpperCase(); saveState(); } });
         document.getElementById('btnRefresh').addEventListener('click', () => { if(isSpinning || !confirm("Làm mới hoàn toàn?")) return; items = []; resultsHistory = []; renderLists(); renderResults(); drawWheel(); });
         document.getElementById('addBtn').addEventListener('click', () => { if(isSpinning) return; items.unshift({ text: 'Mục mới', weight: 10 }); renderLists(); drawWheel(); });
         
@@ -672,7 +733,11 @@
         });
 
         // Khởi chạy vòng quay lần đầu
-        setGameMode('normal');
+        loadState();
+        setGameMode(mode);
+        // Khôi phục tiêu đề tùy chỉnh (setGameMode đã ghi đè tiêu đề mặc định)
+        try { const _s = JSON.parse(localStorage.getItem('wheelState')); if (_s && _s.title) document.getElementById('displayTitle').innerText = _s.title; } catch (e) {}
+        fitWheel();
     </script>
 </body>
 </html>
