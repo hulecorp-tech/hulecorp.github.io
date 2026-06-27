@@ -6,54 +6,54 @@
 <title>Tạo Mẫu Giấy In — Huy Le Creative</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
-:root{--cream:#F5EFE6;--card:#fff;--ink:#2D2A24;--ink2:#5F5646;--bd:#E5DDCE;--ac:#2563EB;--ac2:#3B82F6;--rad:14px}
+:root{--cream:#F5EFE6;--card:#fff;--ink:#2D2A24;--ink2:#5F5646;--bd:#E5DDCE;--ac:#2563EB;--rad:12px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased}
-.mono{font-family:'Space Mono',monospace}
+body{font-family:'Rubik',-apple-system,'Segoe UI',sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button,select,input{font-family:inherit}
 .top{background:var(--card);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50}
 .top .back{font-size:.85rem;color:var(--ink2);transition:.15s}
 .top .back:hover{color:var(--ink)}
-.top h1{font-size:1.05rem;font-weight:900;letter-spacing:-.3px}
-.layout{display:grid;grid-template-columns:340px 1fr;gap:0;height:calc(100vh - 53px)}
-/* CONTROL PANEL */
-.panel{background:var(--card);border-right:1px solid var(--bd);overflow-y:auto;padding:20px}
-.grp{margin-bottom:22px}
-.grp>label{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--ink2);margin-bottom:10px}
-select,input[type=number]{width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:.9rem;background:#fff;color:var(--ink);outline:none;transition:.15s}
+.top h1{font-size:1.05rem;font-weight:800;letter-spacing:-.3px}
+.layout{display:grid;grid-template-columns:360px 1fr;height:calc(100vh - 53px)}
+.panel{background:var(--card);border-right:1px solid var(--bd);overflow-y:auto;padding:18px}
+.panel::-webkit-scrollbar{width:8px}.panel::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px}
+.grp{margin-bottom:20px}
+.grp>label{display:block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--ink2);margin-bottom:9px}
+select,input[type=number],input[type=text]{width:100%;padding:9px 11px;border:1.5px solid var(--bd);border-radius:10px;font-size:.88rem;background:#fff;color:var(--ink);outline:none;transition:.15s}
 select:focus,input:focus{border-color:var(--ac)}
-.types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.type-btn{padding:10px 4px;border:1.5px solid var(--bd);border-radius:10px;background:#fff;cursor:pointer;font-size:.72rem;font-weight:700;text-align:center;color:var(--ink2);transition:.15s;display:flex;flex-direction:column;align-items:center;gap:5px}
-.type-btn .ic{font-size:1.3rem}
+.tplsearch{margin-bottom:10px}
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-height:230px;overflow-y:auto;padding-right:4px}
+.types::-webkit-scrollbar{width:6px}.types::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px}
+.type-btn{padding:9px 3px;border:1.5px solid var(--bd);border-radius:9px;background:#fff;cursor:pointer;font-size:.68rem;font-weight:600;text-align:center;color:var(--ink2);transition:.12s;display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.2}
+.type-btn .ic{font-size:1.15rem}
 .type-btn:hover{border-color:var(--ac);color:var(--ink)}
 .type-btn.on{background:var(--ac);color:#fff;border-color:var(--ac)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.field label{display:block;font-size:.72rem;color:var(--ink2);font-weight:600;margin-bottom:5px}
-.swatches{display:flex;flex-wrap:wrap;gap:8px}
-.sw{width:30px;height:30px;border-radius:8px;border:2px solid var(--bd);cursor:pointer;transition:.15s}
+.field label{display:block;font-size:.7rem;color:var(--ink2);font-weight:600;margin-bottom:4px}
+.swatches{display:flex;flex-wrap:wrap;gap:7px}
+.sw{width:30px;height:30px;border-radius:8px;border:2px solid var(--bd);cursor:pointer;transition:.12s}
 .sw.on{border-color:var(--ink);transform:scale(1.08)}
-.chk{display:flex;align-items:center;gap:8px;font-size:.85rem;font-weight:600;cursor:pointer;margin-top:6px}
+.chk{display:flex;align-items:center;gap:8px;font-size:.84rem;font-weight:500;cursor:pointer;margin-top:8px}
 .chk input{width:auto}
-.range-val{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--ink2);float:right}
+.range-val{font-family:'Rubik';font-weight:700;font-size:.76rem;color:var(--ac);float:right}
 input[type=range]{width:100%;accent-color:var(--ac)}
-input[type=color]{width:100%;height:38px;border:1.5px solid var(--bd);border-radius:10px;background:#fff;cursor:pointer;padding:3px}
-.exports{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
-.ex{padding:12px 4px;border:none;border-radius:10px;font-weight:800;font-size:.82rem;cursor:pointer;color:#fff;transition:.15s}
+input[type=color]{width:100%;height:36px;border:1.5px solid var(--bd);border-radius:10px;background:#fff;cursor:pointer;padding:3px}
+input[type=file]{font-size:.78rem}
+.sub{border:1px solid var(--bd);border-radius:10px;padding:12px;margin-top:8px;background:#FAFAF7}
+.exports{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px}
+.ex{padding:12px 4px;border:none;border-radius:10px;font-weight:800;font-size:.82rem;cursor:pointer;color:#fff;transition:.12s}
 .ex.pdf{background:#DC2626}.ex.png{background:var(--ac)}.ex.svg{background:#7C3AED}
 .ex:hover{filter:brightness(1.08)}
-/* PREVIEW */
-.preview{display:flex;align-items:center;justify-content:center;padding:30px;overflow:auto;background:repeating-conic-gradient(#eee 0% 25%,#f7f7f7 0% 50%) 50%/22px 22px}
-.preview svg{box-shadow:0 8px 40px rgba(0,0,0,.18);max-width:100%;max-height:calc(100vh - 120px);height:auto;background:#fff}
-@media(max-width:820px){
-  .layout{grid-template-columns:1fr;height:auto}
-  .panel{border-right:none;border-bottom:1px solid var(--bd);max-height:none}
-  .preview{min-height:60vh}
-}
+.hint{font-size:.72rem;color:var(--ink2);line-height:1.5;margin-top:6px}
+.preview{display:flex;align-items:center;justify-content:center;padding:28px;overflow:auto;background:repeating-conic-gradient(#e8e8e8 0% 25%,#f5f5f5 0% 50%) 50%/22px 22px}
+.preview svg{box-shadow:0 8px 40px rgba(0,0,0,.18);max-width:100%;max-height:calc(100vh - 110px);height:auto}
+@media(max-width:820px){.layout{grid-template-columns:1fr;height:auto}.panel{border-right:none;border-bottom:1px solid var(--bd)}.types{max-height:200px}.preview{min-height:60vh}}
 </style>
 </head>
 <body>
@@ -63,10 +63,10 @@ input[type=color]{width:100%;height:38px;border:1.5px solid var(--bd);border-rad
 </div>
 
 <div class="layout">
-  <!-- CONTROLS -->
   <div class="panel">
     <div class="grp">
-      <label>Loại giấy</label>
+      <label>Loại giấy <span class="range-val" id="tplName"></span></label>
+      <input type="text" class="tplsearch" id="tplSearch" placeholder="🔎 Tìm mẫu giấy…">
       <div class="types" id="types"></div>
     </div>
 
@@ -77,13 +77,11 @@ input[type=color]{width:100%;height:38px;border:1.5px solid var(--bd);border-rad
           <option value="A4">A4 (210×297)</option>
           <option value="A3">A3 (297×420)</option>
           <option value="A5">A5 (148×210)</option>
+          <option value="B5">B5 (176×250)</option>
           <option value="Letter">Letter (216×279)</option>
           <option value="Legal">Legal (216×356)</option>
         </select>
-        <select id="orient">
-          <option value="portrait">Dọc</option>
-          <option value="landscape">Ngang</option>
-        </select>
+        <select id="orient"><option value="portrait">Dọc</option><option value="landscape">Ngang</option></select>
       </div>
     </div>
 
@@ -93,13 +91,27 @@ input[type=color]{width:100%;height:38px;border:1.5px solid var(--bd);border-rad
     </div>
 
     <div class="grp">
-      <label>Khoảng cách dòng/ô <span class="range-val" id="spacingVal">8 mm</span></label>
-      <input type="range" id="spacing" min="3" max="20" step="0.5" value="8">
+      <label>Kiểu đường kẻ</label>
+      <select id="lineStyle">
+        <option value="solid">Nét liền</option>
+        <option value="dashed">Nét đứt</option>
+        <option value="dotted">Chấm</option>
+      </select>
     </div>
 
     <div class="grp">
-      <label>Lề <span class="range-val" id="marginVal">12 mm</span></label>
-      <input type="range" id="margin" min="0" max="30" step="1" value="12">
+      <label>Khoảng cách dòng/ô <span class="range-val" id="spacingVal">8 mm</span></label>
+      <input type="range" id="spacing" min="3" max="25" step="0.5" value="8">
+    </div>
+
+    <div class="grp">
+      <label>Căn lề 4 chiều (mm)</label>
+      <div class="row">
+        <div class="field"><label>Trên</label><input type="number" id="mt" value="12" min="0" max="60"></div>
+        <div class="field"><label>Phải</label><input type="number" id="mr" value="12" min="0" max="60"></div>
+        <div class="field"><label>Dưới</label><input type="number" id="mb" value="12" min="0" max="60"></div>
+        <div class="field"><label>Trái</label><input type="number" id="ml" value="12" min="0" max="60"></div>
+      </div>
     </div>
 
     <div class="grp">
@@ -114,6 +126,37 @@ input[type=color]{width:100%;height:38px;border:1.5px solid var(--bd);border-rad
     </div>
 
     <div class="grp">
+      <label>Watermark (chữ mờ / logo)</label>
+      <select id="wmType">
+        <option value="none">Không dùng</option>
+        <option value="text">Chữ mờ</option>
+        <option value="logo">Logo từ máy</option>
+      </select>
+      <div class="sub" id="wmText" style="display:none">
+        <input type="text" id="wmTextVal" placeholder="Nội dung watermark…" value="HUY LE">
+        <div style="margin-top:8px"><label class="field">Màu chữ</label><input type="color" id="wmColor" value="#9aa0a6"></div>
+        <div style="margin-top:8px"><label class="field">Độ mờ <span class="range-val" id="wmOpVal">12%</span></label><input type="range" id="wmOp" min="3" max="60" step="1" value="12"></div>
+        <div style="margin-top:8px"><label class="field">Góc chéo <span class="range-val" id="wmAngVal">-30°</span></label><input type="range" id="wmAng" min="-90" max="90" step="5" value="-30"></div>
+        <div style="margin-top:8px"><label class="field">Cỡ chữ <span class="range-val" id="wmSizeVal">60</span></label><input type="range" id="wmSize" min="10" max="140" step="2" value="60"></div>
+      </div>
+      <div class="sub" id="wmLogo" style="display:none">
+        <input type="file" id="wmLogoFile" accept="image/*">
+        <div style="margin-top:8px"><label class="field">Độ mờ <span class="range-val" id="wmLOpVal">12%</span></label><input type="range" id="wmLOp" min="3" max="80" step="1" value="12"></div>
+        <div style="margin-top:8px"><label class="field">Góc chéo <span class="range-val" id="wmLAngVal">0°</span></label><input type="range" id="wmLAng" min="-90" max="90" step="5" value="0"></div>
+        <div style="margin-top:8px"><label class="field">Kích thước <span class="range-val" id="wmLSizeVal">120 mm</span></label><input type="range" id="wmLSize" min="20" max="280" step="5" value="120"></div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <label>Đóng quyển (số trang)</label>
+      <div class="row">
+        <div class="field"><label>Số trang</label><input type="number" id="pages" value="1" min="1" max="200"></div>
+        <div class="field"><label>&nbsp;</label><label class="chk" style="margin-top:0"><input type="checkbox" id="showPage"> Hiện số trang</label></div>
+      </div>
+      <div class="hint">Khi số trang &gt; 1, nút PDF sẽ xuất cả quyển. PNG/SVG xuất 1 trang.</div>
+    </div>
+
+    <div class="grp">
       <label>Xuất file</label>
       <div class="exports">
         <button class="ex pdf" id="btnPdf">PDF</button>
@@ -123,220 +166,327 @@ input[type=color]{width:100%;height:38px;border:1.5px solid var(--bd);border-rad
     </div>
   </div>
 
-  <!-- PREVIEW -->
   <div class="preview" id="preview"></div>
 </div>
 
 <script>
-/* ---------------- DATA ---------------- */
-const SIZES={A4:[210,297],A3:[297,420],A5:[148,210],Letter:[216,279],Legal:[216,356]};
-const TYPES=[
-  {id:'lined',   ic:'📝', name:'Kẻ ngang'},
-  {id:'grid',    ic:'▦',  name:'Ô vuông'},
-  {id:'dots',    ic:'⠿',  name:'Chấm bi'},
-  {id:'graph',   ic:'📐', name:'Kẻ ô kỹ thuật'},
-  {id:'cornell', ic:'🗒️', name:'Cornell'},
-  {id:'music',   ic:'🎼', name:'Khuông nhạc'},
-  {id:'hand',    ic:'✍️', name:'Tập viết 4 ô'},
-  {id:'iso',     ic:'◳',  name:'Isometric'},
-  {id:'blank',   ic:'⬜', name:'Trắng'},
-];
+/* ================= SIZES & THEMES ================= */
+const SIZES={A4:[210,297],A3:[297,420],A5:[148,210],B5:[176,250],Letter:[216,279],Legal:[216,356]};
 const THEMES=[
-  {id:'white',   bg:'#FFFFFF', line:'#9DB4D0', label:'Trắng'},
-  {id:'sepia',   bg:'#F4ECD8', line:'#C8B48A', label:'Sepia'},
-  {id:'vintage', bg:'#EFE6D0', line:'#B8A07A', label:'Cổ điển'},
-  {id:'pastel',  bg:'#FEF6FB', line:'#F0B6D2', label:'Pastel'},
-  {id:'mint',    bg:'#EFFAF4', line:'#9AD9BE', label:'Mint'},
-  {id:'night',   bg:'#1A1A22', line:'#454560', label:'Tối'},
+  {id:'white',bg:'#FFFFFF',line:'#9DB4D0',label:'Trắng'},
+  {id:'sepia',bg:'#F4ECD8',line:'#C8B48A',label:'Sepia'},
+  {id:'vintage',bg:'#EFE6D0',line:'#B8A07A',label:'Cổ điển'},
+  {id:'pastel',bg:'#FEF6FB',line:'#F0B6D2',label:'Pastel'},
+  {id:'mint',bg:'#EFFAF4',line:'#9AD9BE',label:'Mint'},
+  {id:'sky',bg:'#EEF6FF',line:'#9DC0E8',label:'Sky'},
+  {id:'gray',bg:'#F3F3F3',line:'#BBBBBB',label:'Xám'},
+  {id:'night',bg:'#1A1A22',line:'#454560',label:'Tối'},
 ];
 
-/* ---------------- STATE ---------------- */
-const state={type:'lined',size:'A4',orient:'portrait',theme:'white',
-  spacing:8,margin:12,lw:0.25,lineColor:'#9DB4D0',marginLine:false};
+/* ================= TEMPLATES (39) =================
+   gen = generator key, sp/style/marginLine = defaults applied on select,
+   opts = intrinsic options for the generator */
+const TEMPLATES=[
+  {id:'lined',ic:'📝',name:'Kẻ ngang',gen:'lined',sp:8},
+  {id:'lined-wide',ic:'📝',name:'Kẻ ngang rộng',gen:'lined',sp:11},
+  {id:'lined-narrow',ic:'📝',name:'Kẻ ngang hẹp',gen:'lined',sp:6},
+  {id:'college',ic:'🎓',name:'College ruled',gen:'lined',sp:7,marginLine:true},
+  {id:'wide-ruled',ic:'📄',name:'Wide ruled',gen:'lined',sp:8.7,marginLine:true},
+  {id:'double',ic:'🟰',name:'Kẻ đôi',gen:'doubleline',sp:9},
+  {id:'seyes',ic:'🇫🇷',name:'Kẻ Pháp (Séyès)',gen:'seyes',sp:8},
+  {id:'grid',ic:'▦',name:'Ô vuông',gen:'grid',sp:7},
+  {id:'grid-5',ic:'▦',name:'Ô vuông 5mm',gen:'grid',sp:5},
+  {id:'grid-large',ic:'⬛',name:'Ô vuông lớn',gen:'grid',sp:12},
+  {id:'oly',ic:'📐',name:'Giấy ô ly',gen:'grid',sp:5,marginLine:true},
+  {id:'dots',ic:'⠿',name:'Chấm bi',gen:'dots',sp:7},
+  {id:'dots-5',ic:'⠿',name:'Chấm bi 5mm',gen:'dots',sp:5},
+  {id:'dots-large',ic:'⠿',name:'Chấm bi lớn',gen:'dots',sp:11},
+  {id:'graph',ic:'📊',name:'Kẻ ô kỹ thuật',gen:'graph',sp:10},
+  {id:'graph-5',ic:'📊',name:'Graph 5mm',gen:'graph',sp:5},
+  {id:'cornell',ic:'🗒️',name:'Cornell',gen:'cornell',sp:8},
+  {id:'cornell-wide',ic:'🗒️',name:'Cornell rộng',gen:'cornell',sp:10},
+  {id:'music',ic:'🎼',name:'Khuông nhạc',gen:'music',sp:9,opts:{lines:5}},
+  {id:'music-wide',ic:'🎵',name:'Khuông nhạc rộng',gen:'music',sp:12,opts:{lines:5}},
+  {id:'tab',ic:'🎸',name:'Guitar TAB',gen:'music',sp:11,opts:{lines:6}},
+  {id:'hand4',ic:'✍️',name:'Tập viết 4 ô',gen:'hand',sp:9,opts:{sub:4}},
+  {id:'hand3',ic:'✍️',name:'Tập viết 3 ô',gen:'hand',sp:9,opts:{sub:3}},
+  {id:'slant',ic:'🖋️',name:'Luyện chữ nghiêng',gen:'slant',sp:10},
+  {id:'tian',ic:'田',name:'Ô 田 (TViệt/Trung)',gen:'genko',sp:16,opts:{cross:'tian'}},
+  {id:'mi',ic:'米',name:'Ô 米 luyện chữ',gen:'genko',sp:16,opts:{cross:'mi'}},
+  {id:'genko',ic:'🈳',name:'Ô vuông Genkō',gen:'genko',sp:14,opts:{cross:'none'}},
+  {id:'iso',ic:'◳',name:'Isometric',gen:'iso',sp:8},
+  {id:'iso-dots',ic:'⬨',name:'Isometric chấm',gen:'isodots',sp:9},
+  {id:'hex',ic:'⬡',name:'Lục giác',gen:'hex',sp:9},
+  {id:'polar',ic:'🎯',name:'Lưới cực',gen:'polar',sp:10},
+  {id:'cal',ic:'📅',name:'Lịch tháng',gen:'calendar',sp:8},
+  {id:'week',ic:'🗓️',name:'Kế hoạch tuần',gen:'planner',sp:8,opts:{mode:'week'}},
+  {id:'day',ic:'⏰',name:'Kế hoạch ngày',gen:'planner',sp:8,opts:{mode:'day'}},
+  {id:'todo',ic:'☑️',name:'To-do checklist',gen:'checklist',sp:10},
+  {id:'ledger',ic:'💰',name:'Sổ kế toán',gen:'ledger',sp:8,opts:{cols:5}},
+  {id:'story',ic:'🎬',name:'Storyboard',gen:'storyboard',sp:8,opts:{cols:2,rows:3}},
+  {id:'comic',ic:'💥',name:'Ô truyện tranh',gen:'comic',sp:6,opts:{cols:2,rows:3}},
+  {id:'blank-border',ic:'🔲',name:'Trắng có khung',gen:'blank',opts:{border:true}},
+  {id:'blank',ic:'⬜',name:'Trắng',gen:'blank',opts:{border:false}},
+];
 
-/* ---------------- UI BUILD ---------------- */
+/* ================= STATE ================= */
+const state={type:'lined',opts:{},size:'A4',orient:'portrait',theme:'white',
+  spacing:8,mt:12,mr:12,mb:12,ml:12,lw:0.25,lineColor:'#9DB4D0',lineStyle:'solid',marginLine:false,
+  wmMode:'none',wmText:'HUY LE',wmColor:'#9aa0a6',wmOp:0.12,wmAng:-30,wmSize:60,
+  wmLogo:null,wmLogoRatio:1,wmLOp:0.12,wmLAng:0,wmLSize:120,
+  pages:1,showPage:false};
+
+/* ================= UI BUILD ================= */
 const typesEl=document.getElementById('types');
-TYPES.forEach(t=>{
-  const b=document.createElement('button');
-  b.className='type-btn'+(t.id===state.type?' on':'');
-  b.innerHTML=`<span class="ic">${t.ic}</span>${t.name}`;
-  b.onclick=()=>{state.type=t.id;document.querySelectorAll('.type-btn').forEach(x=>x.classList.remove('on'));b.classList.add('on');render();};
-  typesEl.appendChild(b);
-});
+function buildTypeButtons(filter=''){
+  typesEl.innerHTML='';
+  TEMPLATES.filter(t=>t.name.toLowerCase().includes(filter.toLowerCase())).forEach(t=>{
+    const b=document.createElement('button');
+    b.className='type-btn'+(t.id===activeTplId?' on':'');
+    b.innerHTML=`<span class="ic">${t.ic}</span>${t.name}`;
+    b.onclick=()=>selectTpl(t,b);
+    typesEl.appendChild(b);
+  });
+}
+let activeTplId='lined';
+function selectTpl(t,btn){
+  activeTplId=t.id;
+  state.type=t.gen; state.opts=t.opts||{};
+  if(t.sp!=null){state.spacing=t.sp; document.getElementById('spacing').value=t.sp; document.getElementById('spacingVal').textContent=t.sp+' mm';}
+  state.marginLine=!!t.marginLine; document.getElementById('marginLine').checked=state.marginLine;
+  document.getElementById('tplName').textContent=t.name;
+  document.querySelectorAll('.type-btn').forEach(x=>x.classList.remove('on'));
+  if(btn)btn.classList.add('on'); else buildTypeButtons(document.getElementById('tplSearch').value);
+  render();
+}
+document.getElementById('tplSearch').addEventListener('input',e=>buildTypeButtons(e.target.value));
+
 const themesEl=document.getElementById('themes');
 THEMES.forEach(th=>{
   const s=document.createElement('div');
   s.className='sw'+(th.id===state.theme?' on':'');
   s.style.background=th.bg;s.title=th.label;
-  s.onclick=()=>{
-    state.theme=th.id;state.lineColor=th.line;
-    document.getElementById('lineColor').value=th.line;
-    document.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));s.classList.add('on');
-    render();
-  };
+  s.onclick=()=>{state.theme=th.id;state.lineColor=th.line;document.getElementById('lineColor').value=th.line;
+    document.querySelectorAll('.sw').forEach(x=>x.classList.remove('on'));s.classList.add('on');render();};
   themesEl.appendChild(s);
 });
 
-const bind=(id,key,fmt)=>{
-  const el=document.getElementById(id);
-  el.addEventListener('input',()=>{
-    state[key]=el.type==='checkbox'?el.checked:(el.type==='range'||el.type==='number'?parseFloat(el.value):el.value);
-    if(fmt)document.getElementById(fmt.el).textContent=fmt.f(state[key]);
-    render();
-  });
-};
-bind('size','size');bind('orient','orient');
+const bind=(id,key,fmt,parse)=>{const el=document.getElementById(id);el.addEventListener('input',()=>{
+  let v=el.type==='checkbox'?el.checked:el.value;
+  if(parse)v=parse(v); else if(el.type==='range'||el.type==='number')v=parseFloat(v);
+  state[key]=v; if(fmt)document.getElementById(fmt.el).textContent=fmt.f(state[key]); render();});};
+bind('size','size');bind('orient','orient');bind('lineStyle','lineStyle');
 bind('spacing','spacing',{el:'spacingVal',f:v=>v+' mm'});
-bind('margin','margin',{el:'marginVal',f:v=>v+' mm'});
+bind('mt','mt');bind('mr','mr');bind('mb','mb');bind('ml','ml');
 bind('lw','lw',{el:'lwVal',f:v=>v+' mm'});
 bind('lineColor','lineColor');bind('marginLine','marginLine');
+bind('pages','pages');bind('showPage','showPage');
 
-/* ---------------- SVG GENERATORS ---------------- */
-function dims(){
-  let [w,h]=SIZES[state.size];
-  if(state.orient==='landscape')[w,h]=[h,w];
-  return [w,h];
-}
+/* watermark controls */
+const wmTextBox=document.getElementById('wmText'),wmLogoBox=document.getElementById('wmLogo');
+document.getElementById('wmType').addEventListener('change',e=>{
+  state.wmMode=e.target.value;
+  wmTextBox.style.display=state.wmMode==='text'?'block':'none';
+  wmLogoBox.style.display=state.wmMode==='logo'?'block':'none';
+  render();
+});
+bind('wmTextVal','wmText');bind('wmColor','wmColor');
+bind('wmOp','wmOp',{el:'wmOpVal',f:v=>v+'%'},v=>parseFloat(v)/100);
+bind('wmAng','wmAng',{el:'wmAngVal',f:v=>v+'°'});
+bind('wmSize','wmSize',{el:'wmSizeVal',f:v=>v});
+bind('wmLOp','wmLOp',{el:'wmLOpVal',f:v=>v+'%'},v=>parseFloat(v)/100);
+bind('wmLAng','wmLAng',{el:'wmLAngVal',f:v=>v+'°'});
+bind('wmLSize','wmLSize',{el:'wmLSizeVal',f:v=>v+' mm'});
+document.getElementById('wmLogoFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{const img=new Image();img.onload=()=>{
+    state.wmLogo=ev.target.result;state.wmLogoRatio=img.naturalWidth/img.naturalHeight;render();};img.src=ev.target.result;};
+  r.readAsDataURL(f);
+});
+
+/* ================= HELPERS ================= */
+function dims(){let[w,h]=SIZES[state.size];if(state.orient==='landscape')[w,h]=[h,w];return[w,h];}
 function bgColor(){return THEMES.find(t=>t.id===state.theme).bg;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fade(hex,a){const h=hex.replace('#','');const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return`rgba(${r},${g},${b},${a})`;}
+function dash(style,wd){
+  if(style==='dashed')return` stroke-dasharray="${(wd*6).toFixed(2)} ${(wd*4).toFixed(2)}"`;
+  if(style==='dotted')return` stroke-dasharray="${(wd*0.9).toFixed(2)} ${(wd*2.6).toFixed(2)}" stroke-linecap="round"`;
+  return'';
+}
+// line with global style by default
+function L(x1,y1,x2,y2,col,wd,style){
+  col=col||state.lineColor;wd=wd==null?state.lw:wd;style=style||state.lineStyle;
+  return`<line x1="${(+x1).toFixed(2)}" y1="${(+y1).toFixed(2)}" x2="${(+x2).toFixed(2)}" y2="${(+y2).toFixed(2)}" stroke="${col}" stroke-width="${wd}"${dash(style,wd)}/>`;
+}
+// solid line (for structural dividers/frames)
+function LS(x1,y1,x2,y2,col,wd){return L(x1,y1,x2,y2,col||state.lineColor,wd==null?state.lw:wd,'solid');}
+function rect(x,y,w,h,col,wd){return`<rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${w.toFixed(2)}" height="${h.toFixed(2)}" fill="none" stroke="${col||state.lineColor}" stroke-width="${wd==null?state.lw:wd}"/>`;}
+function area(){const[w,h]=dims();return{w,h,x0:state.ml,y0:state.mt,x1:w-state.mr,y1:h-state.mb};}
 
-function buildInner(){
-  const [w,h]=dims();
-  const m=state.margin, sp=state.spacing, lw=state.lw, c=state.lineColor;
-  const L=[];
-  const hline=(y,col=c,wd=lw,dash='')=>L.push(`<line x1="${m}" y1="${y.toFixed(2)}" x2="${(w-m).toFixed(2)}" y2="${y.toFixed(2)}" stroke="${col}" stroke-width="${wd}"${dash?` stroke-dasharray="${dash}"`:''}/>`);
-  const vline=(x,col=c,wd=lw,dash='')=>L.push(`<line x1="${x.toFixed(2)}" y1="${m}" x2="${x.toFixed(2)}" y2="${(h-m).toFixed(2)}" stroke="${col}" stroke-width="${wd}"${dash?` stroke-dasharray="${dash}"`:''}/>`);
-
-  if(state.type==='lined'){
-    for(let y=m+sp;y<=h-m;y+=sp)hline(y);
-    if(state.marginLine)L.push(`<line x1="${m+18}" y1="${m}" x2="${m+18}" y2="${h-m}" stroke="#E57373" stroke-width="${lw}"/>`);
-  }
-  else if(state.type==='grid'){
-    for(let y=m;y<=h-m+0.01;y+=sp)hline(y);
-    for(let x=m;x<=w-m+0.01;x+=sp)vline(x);
-  }
-  else if(state.type==='dots'){
-    for(let y=m;y<=h-m+0.01;y+=sp)for(let x=m;x<=w-m+0.01;x+=sp)
-      L.push(`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${(lw*1.6).toFixed(2)}" fill="${c}"/>`);
-  }
-  else if(state.type==='graph'){
-    const minor=sp/5;
-    const faint=hexFade(c,.45);
-    for(let y=m;y<=h-m+0.01;y+=minor)hline(y,faint,lw*0.6);
-    for(let x=m;x<=w-m+0.01;x+=minor)vline(x,faint,lw*0.6);
-    for(let y=m;y<=h-m+0.01;y+=sp)hline(y,c,lw);
-    for(let x=m;x<=w-m+0.01;x+=sp)vline(x,c,lw);
-  }
-  else if(state.type==='cornell'){
-    const noteTop=m+22; // header area
-    const summaryY=h-m-0.18*(h-2*m);
-    const cueX=m+0.3*(w-2*m);
-    L.push(`<line x1="${m}" y1="${noteTop}" x2="${w-m}" y2="${noteTop}" stroke="${c}" stroke-width="${lw*1.4}"/>`);
-    L.push(`<line x1="${cueX.toFixed(2)}" y1="${noteTop}" x2="${cueX.toFixed(2)}" y2="${summaryY.toFixed(2)}" stroke="${c}" stroke-width="${lw*1.4}"/>`);
-    L.push(`<line x1="${m}" y1="${summaryY.toFixed(2)}" x2="${w-m}" y2="${summaryY.toFixed(2)}" stroke="${c}" stroke-width="${lw*1.4}"/>`);
-    for(let y=noteTop+sp;y<summaryY-0.5;y+=sp)
-      L.push(`<line x1="${cueX.toFixed(2)}" y1="${y.toFixed(2)}" x2="${w-m}" y2="${y.toFixed(2)}" stroke="${hexFade(c,.6)}" stroke-width="${lw}"/>`);
-  }
-  else if(state.type==='music'){
-    const g=sp/2;            // gap between staff lines
-    const staff=g*4;         // height of one 5-line staff
-    let y=m+staff;
-    while(y<=h-m){
-      for(let i=0;i<5;i++)hline(y-staff+i*g,c,lw);
-      y+=staff+sp*1.3;       // gap between staves
+/* ================= GENERATORS ================= */
+const GEN={
+  blank(a,o){return o.border?rect(a.x0,a.y0,a.x1-a.x0,a.y1-a.y0):'';},
+  lined(a){let s='';for(let y=a.y0+state.spacing;y<=a.y1+.01;y+=state.spacing)s+=L(a.x0,y,a.x1,y);
+    if(state.marginLine)s+=LS(a.x0+18,a.y0,a.x0+18,a.y1,'#E57373');return s;},
+  doubleline(a){let s='';for(let y=a.y0+state.spacing;y<=a.y1+.01;y+=state.spacing){s+=L(a.x0,y,a.x1,y);s+=L(a.x0,y+state.spacing*0.32,a.x1,y+state.spacing*0.32,fade(state.lineColor,.5));}return s;},
+  seyes(a){let s='';const g=state.spacing/4;
+    for(let y=a.y0;y<=a.y1+.01;y+=g){const major=Math.round((y-a.y0)/g)%4===0;s+=L(a.x0,y,a.x1,y,major?state.lineColor:fade(state.lineColor,.5),major?state.lw:state.lw*0.7);}
+    for(let x=a.x0;x<=a.x1+.01;x+=state.spacing)s+=LS(x,a.y0,x,a.y1,fade(state.lineColor,.7),state.lw*0.8);
+    s+=LS(a.x0+24,a.y0,a.x0+24,a.y1,'#E57373');return s;},
+  grid(a){let s='';for(let y=a.y0;y<=a.y1+.01;y+=state.spacing)s+=L(a.x0,y,a.x1,y);
+    for(let x=a.x0;x<=a.x1+.01;x+=state.spacing)s+=L(x,a.y0,x,a.y1);
+    if(state.marginLine)s+=LS(a.x0+18,a.y0,a.x0+18,a.y1,'#E57373');return s;},
+  dots(a){let s='';for(let y=a.y0;y<=a.y1+.01;y+=state.spacing)for(let x=a.x0;x<=a.x1+.01;x+=state.spacing)
+    s+=`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${(state.lw*1.7).toFixed(2)}" fill="${state.lineColor}"/>`;return s;},
+  graph(a){let s='';const m=state.spacing/5,f=fade(state.lineColor,.4);
+    for(let y=a.y0;y<=a.y1+.01;y+=m)s+=L(a.x0,y,a.x1,y,f,state.lw*0.6,'solid');
+    for(let x=a.x0;x<=a.x1+.01;x+=m)s+=L(x,a.y0,x,a.y1,f,state.lw*0.6,'solid');
+    for(let y=a.y0;y<=a.y1+.01;y+=state.spacing)s+=L(a.x0,y,a.x1,y,state.lineColor,state.lw,'solid');
+    for(let x=a.x0;x<=a.x1+.01;x+=state.spacing)s+=L(x,a.y0,x,a.y1,state.lineColor,state.lw,'solid');return s;},
+  cornell(a){const top=a.y0+22,sum=a.y1-0.18*(a.y1-a.y0),cue=a.x0+0.3*(a.x1-a.x0);let s='';
+    s+=LS(a.x0,top,a.x1,top,state.lineColor,state.lw*1.4);
+    s+=LS(cue,top,cue,sum,state.lineColor,state.lw*1.4);
+    s+=LS(a.x0,sum,a.x1,sum,state.lineColor,state.lw*1.4);
+    for(let y=top+state.spacing;y<sum-.5;y+=state.spacing)s+=L(cue,y,a.x1,y,fade(state.lineColor,.6));return s;},
+  music(a,o){const lines=o.lines||5,g=state.spacing/2,staff=g*(lines-1);let s='',y=a.y0+staff;
+    while(y<=a.y1){for(let i=0;i<lines;i++)s+=L(a.x0,y-staff+i*g,a.x1,y-staff+i*g,state.lineColor,state.lw,'solid');y+=staff+state.spacing*1.3;}return s;},
+  hand(a,o){const sub=o.sub||4;let s='',base=a.y0+state.spacing;
+    while(base<=a.y1){s+=L(a.x0,base-state.spacing,a.x1,base-state.spacing,fade(state.lineColor,.5),state.lw,'solid');
+      s+=L(a.x0,base-state.spacing/2,a.x1,base-state.spacing/2,state.lineColor,state.lw,'dashed');
+      s+=L(a.x0,base,a.x1,base,state.lineColor,state.lw*1.5,'solid');
+      if(sub>=4)s+=L(a.x0,base+state.spacing/2,a.x1,base+state.spacing/2,fade(state.lineColor,.5),state.lw,'solid');
+      base+=state.spacing*1.8;}return s;},
+  slant(a){let s='';for(let y=a.y0+state.spacing;y<=a.y1+.01;y+=state.spacing)s+=L(a.x0,y,a.x1,y,state.lineColor,state.lw,'solid');
+    const t=Math.tan(Math.PI*15/180);// 75° slant guides
+    for(let x=a.x0-(a.y1-a.y0)*t;x<=a.x1+.01;x+=state.spacing*1.4){
+      const x2=x+(a.y1-a.y0)*t;s+=clipDiag(a,x,a.y1,x2,a.y0,fade(state.lineColor,.55),state.lw*0.7);}return s;},
+  genko(a,o){const c=state.spacing;let s='';
+    const cols=Math.floor((a.x1-a.x0)/c),rows=Math.floor((a.y1-a.y0)/c);
+    for(let r=0;r<rows;r++)for(let col=0;col<cols;col++){const x=a.x0+col*c,y=a.y0+r*c;
+      s+=rect(x,y,c,c,state.lineColor,state.lw);
+      const fc=fade(state.lineColor,.45);
+      if(o.cross==='tian'||o.cross==='mi'){s+=L(x+c/2,y,x+c/2,y+c,fc,state.lw*0.7,'dashed');s+=L(x,y+c/2,x+c,y+c/2,fc,state.lw*0.7,'dashed');}
+      if(o.cross==='mi'){s+=L(x,y,x+c,y+c,fc,state.lw*0.6,'dashed');s+=L(x+c,y,x,y+c,fc,state.lw*0.6,'dashed');}}
+    return s;},
+  iso(a){let s='';const t=Math.tan(Math.PI/6),step=state.spacing;
+    for(let x=a.x0;x<=a.x1+.01;x+=step)s+=L(x,a.y0,x,a.y1,state.lineColor,state.lw,'solid');
+    for(let off=-(a.y1-a.y0);off<=(a.x1-a.x0)+(a.y1-a.y0)+.01;off+=step){
+      s+=clip2(a, t,a.x0+off,state.lineColor,state.lw);
+      s+=clip2(a,-t,a.x0+off,state.lineColor,state.lw);
     }
+    return s;},
+  isodots(a){let s='';const dy=state.spacing*Math.sin(Math.PI/3),dx=state.spacing;let row=0;
+    for(let y=a.y0;y<=a.y1+.01;y+=dy){const off=(row%2)?dx/2:0;
+      for(let x=a.x0+off;x<=a.x1+.01;x+=dx)s+=`<circle cx="${x.toFixed(2)}" cy="${y.toFixed(2)}" r="${(state.lw*1.7).toFixed(2)}" fill="${state.lineColor}"/>`;row++;}return s;},
+  hex(a){let s='';const r=state.spacing,wHex=Math.sqrt(3)*r,vSpace=1.5*r;let row=0;
+    for(let cy=a.y0+r;cy<=a.y1+r;cy+=vSpace){const off=(row%2)?wHex/2:0;
+      for(let cx=a.x0+wHex/2+off;cx<=a.x1+wHex/2;cx+=wHex){
+        let pts='';for(let i=0;i<6;i++){const ang=Math.PI/180*(60*i-90);const px=cx+r*Math.cos(ang),py=cy+r*Math.sin(ang);
+          if(px<a.x0-2||px>a.x1+2||py<a.y0-2||py>a.y1+2){pts='';break;}pts+=`${px.toFixed(2)},${py.toFixed(2)} `;}
+        if(pts)s+=`<polygon points="${pts.trim()}" fill="none" stroke="${state.lineColor}" stroke-width="${state.lw}"/>`;}row++;}return s;},
+  polar(a){const cx=(a.x0+a.x1)/2,cy=(a.y0+a.y1)/2,maxR=Math.min(a.x1-a.x0,a.y1-a.y0)/2;let s='';
+    for(let rr=state.spacing;rr<=maxR+.01;rr+=state.spacing)s+=`<circle cx="${cx.toFixed(2)}" cy="${cy.toFixed(2)}" r="${rr.toFixed(2)}" fill="none" stroke="${state.lineColor}" stroke-width="${state.lw}"${dash(state.lineStyle,state.lw)}/>`;
+    for(let ang=0;ang<360;ang+=15){const rad=Math.PI/180*ang;s+=L(cx,cy,cx+maxR*Math.cos(rad),cy+maxR*Math.sin(rad),fade(state.lineColor,.7),state.lw*0.8,'solid');}return s;},
+  calendar(a){let s='';const cols=7,rows=6,headH=10;const cw=(a.x1-a.x0)/cols,ch=(a.y1-a.y0-headH)/rows;
+    const days=['CN','T2','T3','T4','T5','T6','T7'];
+    for(let i=0;i<=cols;i++)s+=LS(a.x0+i*cw,a.y0+headH,a.x0+i*cw,a.y1,state.lineColor,state.lw);
+    s+=LS(a.x0,a.y0+headH,a.x1,a.y0+headH,state.lineColor,state.lw*1.3);
+    for(let j=0;j<=rows;j++)s+=LS(a.x0,a.y0+headH+j*ch,a.x1,a.y0+headH+j*ch,state.lineColor,state.lw);
+    for(let i=0;i<cols;i++)s+=`<text x="${(a.x0+i*cw+cw/2).toFixed(2)}" y="${(a.y0+headH/2+2).toFixed(2)}" font-family="Arial,sans-serif" font-size="4" text-anchor="middle" fill="${state.lineColor}">${days[i]}</text>`;
+    return s;},
+  planner(a,o){let s='';
+    if(o.mode==='week'){const days=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','CN'];const rh=(a.y1-a.y0)/7;
+      for(let i=0;i<7;i++){const y=a.y0+i*rh;s+=LS(a.x0,y,a.x1,y,state.lineColor,state.lw*1.2);
+        s+=`<text x="${(a.x0+2).toFixed(2)}" y="${(y+5).toFixed(2)}" font-family="Arial,sans-serif" font-size="4.5" font-weight="bold" fill="${state.lineColor}">${days[i]}</text>`;
+        for(let yy=y+state.spacing;yy<y+rh-1;yy+=state.spacing)s+=L(a.x0,yy,a.x1,yy,fade(state.lineColor,.55));}
+      s+=LS(a.x0,a.y1,a.x1,a.y1,state.lineColor,state.lw*1.2);
+    }else{const gut=a.x0+16;s+=LS(gut,a.y0,gut,a.y1,state.lineColor,state.lw);let h=6;
+      for(let y=a.y0+state.spacing;y<=a.y1+.01;y+=state.spacing){s+=L(gut,y,a.x1,y,state.lineColor);
+        if(h<=22){s+=`<text x="${(a.x0+2).toFixed(2)}" y="${(y-1).toFixed(2)}" font-family="Arial,sans-serif" font-size="3.6" fill="${state.lineColor}">${h}:00</text>`;h++;}}}
+    return s;},
+  checklist(a){let s='';const box=state.spacing*0.55;
+    for(let y=a.y0+state.spacing;y<=a.y1+.01;y+=state.spacing){
+      s+=rect(a.x0,y-box,box,box,state.lineColor,state.lw);
+      s+=L(a.x0+box+3,y,a.x1,y,fade(state.lineColor,.6));}return s;},
+  ledger(a,o){const cols=o.cols||5;let s='';const cw=(a.x1-a.x0)/cols;
+    for(let i=0;i<=cols;i++)s+=LS(a.x0+i*cw,a.y0,a.x0+i*cw,a.y1,state.lineColor,state.lw);
+    for(let y=a.y0;y<=a.y1+.01;y+=state.spacing)s+=L(a.x0,y,a.x1,y,fade(state.lineColor,.7));
+    s+=LS(a.x0,a.y0+state.spacing,a.x1,a.y0+state.spacing,state.lineColor,state.lw*1.4);return s;},
+  storyboard(a,o){const cols=o.cols||2,rows=o.rows||3;let s='';const gap=6;
+    const cw=(a.x1-a.x0-gap*(cols-1))/cols,fh=(a.y1-a.y0-gap*(rows-1))/rows;
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const x=a.x0+c*(cw+gap),y=a.y0+r*(fh+gap);
+      const imgH=fh*0.66;s+=rect(x,y,cw,imgH,state.lineColor,state.lw);
+      for(let ly=y+imgH+state.spacing*0.7;ly<y+fh-1;ly+=state.spacing*0.7)s+=L(x,ly,x+cw,ly,fade(state.lineColor,.55));}return s;},
+  comic(a,o){const cols=o.cols||2,rows=o.rows||3;let s='';const gap=5;
+    const cw=(a.x1-a.x0-gap*(cols-1))/cols,fh=(a.y1-a.y0-gap*(rows-1))/rows;
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)s+=rect(a.x0+c*(cw+gap),a.y0+r*(fh+gap),cw,fh,state.lineColor,state.lw*1.3);return s;},
+};
+// clip a line y=slope*(x-?) ... we use parametric: line through (px,a.y) ; use clip2 for iso
+function clip2(a,slope,intAtX0,col,lw){ // line: y - a.y0 = slope*(x - intAtX0)
+  const f=x=>a.y0+slope*(x-intAtX0);
+  let pts=[];const add=(x,y)=>{if(x>=a.x0-.01&&x<=a.x1+.01&&y>=a.y0-.01&&y<=a.y1+.01)pts.push([x,y]);};
+  add(a.x0,f(a.x0));add(a.x1,f(a.x1));
+  if(slope!==0){add(intAtX0+(a.y0-a.y0)/slope,a.y0);add(intAtX0+(a.y1-a.y0)/slope,a.y1);}
+  if(pts.length<2)return'';pts.sort((p,q)=>p[0]-q[0]||p[1]-q[1]);const p=pts[0],q=pts[pts.length-1];
+  if(Math.hypot(p[0]-q[0],p[1]-q[1])<.05)return'';
+  return L(p[0],p[1],q[0],q[1],col,lw,'solid');}
+function clipDiag(a,x1,y1,x2,y2,col,lw){ // already endpoints, clamp roughly to area
+  return L(Math.max(a.x0,Math.min(a.x1,x1)),y1,Math.max(a.x0,Math.min(a.x1,x2)),y2,col,lw,'solid');}
+
+/* ================= WATERMARK & PAGE ================= */
+function watermark(){
+  const[w,h]=dims();const cx=w/2,cy=h/2;
+  if(state.wmMode==='text'&&state.wmText){
+    return`<text x="${cx}" y="${cy}" transform="rotate(${state.wmAng} ${cx} ${cy})" font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="${state.wmSize}" fill="${state.wmColor}" fill-opacity="${state.wmOp}" text-anchor="middle" dominant-baseline="middle">${esc(state.wmText)}</text>`;
   }
-  else if(state.type==='hand'){
-    // 4-line penmanship: top(faint) - mid(dashed) - baseline(bold) - descender(faint)
-    let base=m+sp;
-    while(base<=h-m){
-      hline(base-sp, hexFade(c,.5), lw);          // top
-      hline(base-sp/2, c, lw, `${(lw*4).toFixed(2)},${(lw*4).toFixed(2)}`); // mid dashed
-      hline(base, c, lw*1.5);                      // baseline
-      hline(base+sp/2, hexFade(c,.5), lw);         // descender
-      base+=sp*1.8;
-    }
+  if(state.wmMode==='logo'&&state.wmLogo){
+    const lw=state.wmLSize,lh=lw/(state.wmLogoRatio||1);
+    return`<image href="${state.wmLogo}" x="${(cx-lw/2).toFixed(2)}" y="${(cy-lh/2).toFixed(2)}" width="${lw.toFixed(2)}" height="${lh.toFixed(2)}" opacity="${state.wmLOp}" transform="rotate(${state.wmLAng} ${cx} ${cy})"/>`;
   }
-  else if(state.type==='iso'){
-    const faint=c;
-    const tan30=Math.tan(Math.PI/6);
-    // verticals
-    for(let x=m;x<=w-m+0.01;x+=sp)vline(x,faint,lw);
-    // diagonals +30 and -30 across the page
-    const x0=m,x1=w-m,y0=m,y1=h-m;
-    const step=sp;
-    // lines going down-right (slope +tan30): y = tan30*(x-bx)+y0 ... iterate intercepts
-    for(let b=-(h);b<=(w+h);b+=step){
-      // +30°
-      L.push(diagClip(x0,x1,y0,y1, tan30, b, faint, lw));
-      // -30°
-      L.push(diagClip(x0,x1,y0,y1,-tan30, b, faint, lw));
-    }
-  }
-  // blank => nothing
-  return L.join('');
+  return'';
 }
-// draw a clipped diagonal line y = slope*x + c, clamped to box; returns line or ''
-function diagClip(x0,x1,y0,y1,slope,c,col,lw){
-  let pts=[];
-  const add=(x,y)=>{if(x>=x0-0.01&&x<=x1+0.01&&y>=y0-0.01&&y<=y1+0.01)pts.push([x,y]);};
-  // intersect with left/right edges
-  add(x0,slope*x0+c);add(x1,slope*x1+c);
-  // intersect with top/bottom edges
-  if(slope!==0){add((y0-c)/slope,y0);add((y1-c)/slope,y1);}
-  if(pts.length<2)return '';
-  // pick two extreme points
-  pts.sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
-  const p=pts[0],q=pts[pts.length-1];
-  if(Math.abs(p[0]-q[0])<0.01&&Math.abs(p[1]-q[1])<0.01)return '';
-  return `<line x1="${p[0].toFixed(2)}" y1="${p[1].toFixed(2)}" x2="${q[0].toFixed(2)}" y2="${q[1].toFixed(2)}" stroke="${col}" stroke-width="${lw}"/>`;
-}
-function hexFade(hex,a){
-  const h=hex.replace('#','');
-  const r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);
-  return `rgba(${r},${g},${b},${a})`;
+function pageNumberSVG(n){
+  if(!state.showPage)return'';
+  const[w,h]=dims();
+  return`<text x="${(w/2).toFixed(2)}" y="${(h-state.mb*0.45).toFixed(2)}" font-family="Arial,sans-serif" font-size="4" text-anchor="middle" fill="${fade(state.lineColor,.9)}">${n}</text>`;
 }
 
-function svgString(forScreen){
-  const [w,h]=dims();
-  const inner=buildInner();
-  const sizeAttr=forScreen?`viewBox="0 0 ${w} ${h}"`:`width="${w}mm" height="${h}mm" viewBox="0 0 ${w} ${h}"`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" ${sizeAttr}><rect x="0" y="0" width="${w}" height="${h}" fill="${bgColor()}"/>${inner}</svg>`;
+/* ================= COMPOSE ================= */
+function paperInner(){const a=area();return (GEN[state.type]||GEN.blank)(a,state.opts||{});}
+function pageInner(n){return watermark()+paperInner()+pageNumberSVG(n);}
+function svgString(forExport,n){
+  const[w,h]=dims();
+  const sz=forExport?`width="${w}mm" height="${h}mm" viewBox="0 0 ${w} ${h}"`:`viewBox="0 0 ${w} ${h}"`;
+  return`<svg xmlns="http://www.w3.org/2000/svg" ${sz}><rect width="${w}" height="${h}" fill="${bgColor()}"/>${pageInner(n||1)}</svg>`;
 }
+function render(){document.getElementById('preview').innerHTML=svgString(false,1);}
 
-function render(){document.getElementById('preview').innerHTML=svgString(true);}
-
-/* ---------------- EXPORT ---------------- */
-function download(blob,name){
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
-  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
-}
-async function renderCanvas(dpi){
-  const [w,h]=dims();
-  const scale=dpi/25.4;
-  const W=Math.round(w*scale),H=Math.round(h*scale);
-  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="${bgColor()}"/>${buildInner()}</svg>`;
-  const img=new Image();
-  const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
+/* ================= EXPORT ================= */
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);}
+async function pageCanvas(dpi,n){
+  const[w,h]=dims();const scale=dpi/25.4,W=Math.round(w*scale),H=Math.round(h*scale);
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="${bgColor()}"/>${pageInner(n)}</svg>`;
+  const img=new Image();const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml'}));
   await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url;});
-  const c=document.createElement('canvas');c.width=W;c.height=H;
-  c.getContext('2d').drawImage(img,0,0,W,H);
-  URL.revokeObjectURL(url);
-  return {canvas:c,w,h};
+  const c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(img,0,0,W,H);
+  URL.revokeObjectURL(url);return{canvas:c,w,h};
 }
-document.getElementById('btnSvg').onclick=()=>download(new Blob([svgString(false)],{type:'image/svg+xml'}),`giay-${state.type}.svg`);
-document.getElementById('btnPng').onclick=async()=>{
-  const {canvas}=await renderCanvas(300);
-  canvas.toBlob(b=>download(b,`giay-${state.type}.png`),'image/png');
-};
+document.getElementById('btnSvg').onclick=()=>download(new Blob([svgString(true,1)],{type:'image/svg+xml'}),`giay-${activeTplId}.svg`);
+document.getElementById('btnPng').onclick=async()=>{const{canvas}=await pageCanvas(300,1);canvas.toBlob(b=>download(b,`giay-${activeTplId}.png`),'image/png');};
 document.getElementById('btnPdf').onclick=async()=>{
-  const {canvas,w,h}=await renderCanvas(300);
-  const {jsPDF}=window.jspdf;
-  const pdf=new jsPDF({unit:'mm',format:[w,h],orientation:w>h?'landscape':'portrait'});
-  pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,w,h);
-  pdf.save(`giay-${state.type}.pdf`);
+  const pages=Math.max(1,Math.min(200,Math.round(state.pages)));
+  if(pages>60&&!confirm(`Xuất ${pages} trang? Có thể mất một lúc.`))return;
+  const{jsPDF}=window.jspdf;let pdf;
+  for(let n=1;n<=pages;n++){const{canvas,w,h}=await pageCanvas(200,n);
+    if(n===1)pdf=new jsPDF({unit:'mm',format:[w,h],orientation:w>h?'landscape':'portrait'});
+    else pdf.addPage([w,h],w>h?'landscape':'portrait');
+    pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,w,h);}
+  pdf.save(`giay-${activeTplId}${pages>1?'-'+pages+'trang':''}.pdf`);
 };
 
-render();
+/* init */
+buildTypeButtons();document.getElementById('tplName').textContent=TEMPLATES[0].name;render();
 </script>
 </body>
 </html>
