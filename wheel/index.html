@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vòng Quay May Mắn 3D Max Size</title>
+    <style>
+        :root {
+            --bg-dark: #12131c;
+            --bg-panel: #1b1c28;
+            --bg-hover: #2a2b38;
+            --text-main: #f1f1f1;
+            --text-dim: #8b8d9b;
+            --accent-orange: #ff9f43;
+            --border-color: #2c2d3a;
+        }
+
+        body.light-theme {
+            --bg-dark: #f0f2f5; --bg-panel: #ffffff; --bg-hover: #e4e6eb;
+            --text-main: #1c1e21; --text-dim: #606770; --border-color: #ccd0d5;
+        }
+
+        /* --- THEMES --- */
+        body.theme-vn {
+            background: linear-gradient(135deg, #c01b15 0%, #da251d 50%, #c01b15 100%);
+            background-size: 200% 200%;
+            animation: waveFlag 3s ease-in-out infinite alternate;
+        }
+        body.theme-vn::after {
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon fill='%23ff0' points='50,15 61,49 98,49 68,71 79,105 50,84 21,105 32,71 2,49 39,49'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: center; background-size: 400px; opacity: 0.8;
+            animation: pulseStar 4s infinite alternate;
+        }
+        @keyframes waveFlag { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+        @keyframes pulseStar { 0% { transform: scale(0.98); } 100% { transform: scale(1.02); } }
+
+        body.theme-val { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%); }
+        body.theme-hal { background: linear-gradient(to bottom, #111111 0%, #2c3e50 100%); }
+        body.theme-xmas { background: linear-gradient(to bottom, #0b2e13 0%, #145a32 100%); }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+        body {
+            background-color: var(--bg-dark); color: var(--text-main);
+            display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+            transition: background 0.3s;
+        }
+
+        #effectCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; display: none; }
+
+        /* HEADER */
+        .header {
+            height: 60px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; 
+            padding: 0 20px; justify-content: space-between; background-color: rgba(18, 19, 28, 0.8); backdrop-filter: blur(5px); z-index: 100;
+        }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .logo { font-size: 18px; font-weight: bold; color: #f1c40f; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .nav-links { display: flex; gap: 15px; font-size: 14px; color: var(--text-dim); }
+        .dropdown { position: relative; display: inline-block; cursor: pointer; padding: 10px 0; }
+        .dropdown span { display: flex; align-items: center; gap: 5px; }
+        .dropdown span:hover { color: var(--text-main); }
+        .dropdown-content {
+            display: none; position: absolute; top: 100%; left: 0; background-color: var(--bg-panel);
+            min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.5); z-index: 1; border-radius: 6px; border: 1px solid var(--border-color);
+        }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown-content a { color: var(--text-main); padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px solid var(--border-color); }
+        .dropdown-content a:hover { background-color: var(--bg-hover); }
+
+        /* MAIN LAYOUT */
+        .main-layout { display: flex; flex: 1; height: calc(100vh - 60px); transition: 0.3s; }
+        .main-layout.compact .right-sidebar { display: none; }
+
+        /* LEFT COLUMN */
+        .left-col { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; overflow-y: auto; justify-content: flex-start; }
+        .top-actions { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 10; }
+        .btn-action { padding: 8px 15px; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-panel); color: var(--text-main); cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .btn-action:hover { background: var(--bg-hover); }
+
+        /* TIÊU ĐỀ */
+        .wheel-title {
+            font-family: 'Arial Black', Impact, 'Segoe UI Black', sans-serif;
+            text-transform: uppercase; text-align: center; margin-bottom: 40px;
+            font-size: 45px; font-weight: 900;
+            background: linear-gradient(to right, #9b59b6, #3498db, #8e44ad);
+            background-size: 200% auto; color: transparent;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-stroke: 1.5px #ffffff;
+            filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.6));
+            z-index: 10; animation: titleShine 3s linear infinite;
+        }
+        @keyframes titleShine { to { background-position: 200% center; } }
+
+        /* WHEEL SIZE 900PX */
+        .wheel-wrapper { position: relative; width: 920px; height: 920px; display: flex; justify-content: center; align-items: center; cursor: grab; transform: scale(1); margin-bottom: 20px; }
+        .wheel-wrapper:active { cursor: grabbing; }
+        .lights-container {
+            position: absolute; width: 950px; height: 950px; border-radius: 50%; background: #1a252f; border: 8px solid #f39c12;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,0,0,0.8); z-index: 1;
+        }
+        .light-bulb { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #fff; top: 50%; left: 50%; margin: -9px; box-shadow: inset 0 -2px 5px rgba(0,0,0,0.3); }
+        .light-bulb.on { background: #f1c40f; box-shadow: 0 0 20px #f1c40f, 0 0 40px #f1c40f; }
+        
+        canvas { position: relative; z-index: 2; border-radius: 50%; width: 900px; height: 900px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+        
+        /* KIM CHỈ NAM CỠ LỚN */
+        .pointer { position: absolute; right: -50px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: 40px solid transparent; border-bottom: 40px solid transparent; border-right: 75px solid #ff4757; z-index: 4; filter: drop-shadow(-5px 5px 8px rgba(0,0,0,0.6)); }
+
+        /* NÚT QUAY SỐ 3D */
+        .external-spin-btn {
+            margin-top: 20px; padding: 20px 80px; font-size: 28px; font-weight: 900; color: white; border: none; border-radius: 50px; text-transform: uppercase;
+            background: linear-gradient(to bottom, #3498db, #2980b9); box-shadow: 0 10px 0 #1f618d, 0 20px 30px rgba(0,0,0,0.4);
+            transition: all 0.15s ease; cursor: pointer; z-index: 10;
+        }
+        .external-spin-btn:hover { transform: translateY(-4px); background: linear-gradient(to bottom, #4aa3df, #2c88c5); box-shadow: 0 14px 0 #1f618d, 0 25px 35px rgba(0,0,0,0.5); }
+        .external-spin-btn:active { transform: translateY(10px); box-shadow: 0 0 0 #1f618d, 0 5px 10px rgba(0,0,0,0.4); }
+        .external-spin-btn:disabled { background: #7f8c8d; box-shadow: 0 5px 0 #555; cursor: not-allowed; transform: translateY(5px); }
+
+        /* BOTTOM TOOLBAR */
+        .bottom-toolbar { display: flex; gap: 10px; margin-top: 30px; margin-bottom: 50px; flex-wrap: wrap; justify-content: center; z-index: 10; }
+        .bottom-toolbar button { background: var(--bg-panel); border: 1px solid var(--border-color); color: var(--text-main); padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: bold; transition: 0.2s; }
+        .bottom-toolbar button:hover { background: var(--bg-hover); transform: translateY(-2px); }
+
+        /* RIGHT SIDEBAR */
+        .right-sidebar { width: 400px; background: var(--bg-panel); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; z-index: 10; box-shadow: -5px 0 20px rgba(0,0,0,0.2); }
+        .tabs { display: flex; border-bottom: 1px solid var(--border-color); background: var(--bg-dark); }
+        .tab { flex: 1; padding: 15px 0; text-align: center; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-dim); border-bottom: 3px solid transparent;}
+        .tab.active { color: var(--accent-orange); border-bottom: 3px solid var(--accent-orange); font-weight: bold; background: var(--bg-panel); }
+
+        .tab-pane { display: none; padding: 25px; flex: 1; flex-direction: column; overflow: hidden; }
+        .tab-pane.active { display: flex; }
+
+        .sb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .sb-title { font-weight: bold; font-size: 18px; }
+        .sb-count { background: #333; padding: 3px 10px; border-radius: 12px; font-size: 13px; color: white;}
+        
+        .add-actions { display: flex; gap: 10px; margin-bottom: 15px; }
+        .add-actions button { flex: 1; background: var(--bg-hover); border: 1px solid var(--border-color); color: var(--text-main); padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold;}
+        .add-actions button.btn-bulk { background: #3498db; color: white; border-color: #2980b9;}
+
+        #bulkInput { 
+            display: none; width: 100%; height: 150px; margin-bottom: 15px; 
+            background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border-color); 
+            padding: 12px; border-radius: 6px; resize: vertical; outline: none; line-height: 1.5; font-size: 14px;
+        }
+        #bulkInput:focus { border-color: var(--accent-orange); }
+
+        .item-list { flex: 1; overflow-y: auto; list-style: none; padding-right: 5px; }
+        .item-list::-webkit-scrollbar { width: 6px; }
+        .item-list::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        
+        .item-row { display: flex; align-items: center; background: var(--bg-hover); margin-bottom: 8px; border-radius: 8px; padding: 8px 12px; border: 1px solid transparent; }
+        .item-row input[type="text"] { flex: 1; background: transparent; border: none; color: var(--text-main); padding: 5px 10px; outline: none; font-size: 15px; font-weight: 500;}
+        .item-row input[type="number"] { width: 70px; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px; border-radius: 4px; outline: none; text-align: center; font-weight: bold;}
+        .del-icon { color: var(--text-dim); cursor: pointer; font-size: 16px; padding: 5px; font-weight: bold;}
+        .del-icon:hover { color: #e74c3c; }
+
+        /* SETTINGS OPTIONS */
+        .setting-group { background: var(--bg-hover); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .setting-group label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 15px; }
+        .setting-group select { width: 100%; padding: 10px; background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 6px; outline: none; font-size: 14px;}
+
+        .result-list { list-style: none; overflow-y: auto; flex: 1; }
+        .result-item { padding: 12px; border-bottom: 1px solid var(--border-color); display: flex; gap: 15px; align-items: center; font-size: 15px;}
+        .result-index { background: var(--accent-orange); color: #000; padding: 3px 10px; border-radius: 12px; font-size: 13px; font-weight: bold;}
+        .theme-toggle-btn { padding: 15px; background: linear-gradient(45deg, var(--accent-orange), #e67e22); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 16px;}
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-box { background: var(--bg-panel); border: 1px solid var(--border-color); border-radius: 20px; width: 500px; padding: 40px; text-align: center; color: var(--text-main); box-shadow: 0 15px 50px rgba(0,0,0,0.6);}
+        .modal-winner { font-size: 55px; font-weight: 900; color: #f1c40f; margin: 30px 0; text-shadow: 0 0 30px rgba(241, 196, 15, 0.6); }
+        .modal-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 18px; margin-bottom: 15px; transition: 0.2s;}
+        .btn-modal-primary { background: linear-gradient(90deg, #f1c40f, #e67e22); color: #000; box-shadow: 0 5px 20px rgba(241, 196, 15, 0.4);}
+        .btn-modal-primary:hover { transform: translateY(-3px); }
+        .row-btns { display: flex; gap: 15px; }
+        .row-btns button { flex: 1; background: var(--bg-hover); color: var(--text-main); border: 1px solid var(--border-color); }
+        .row-btns button:hover { background: #333445; }
+        
+        body.spinning .wheel-wrapper { cursor: wait !important; }
+        body.spinning button { cursor: wait !important; }
+    </style>
+</head>
+<body>
+    <canvas id="effectCanvas"></canvas>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-left">
+            <a href="/forum.html#tools" style="color:var(--text-dim);text-decoration:none;font-size:14px">← Công cụ</a>
+            <div class="logo" onclick="window.location.reload()">🎡 Vòng Quay May Mắn Pro</div>
+            <div class="nav-links">
+                <div class="dropdown">
+                    <span>📚 Chủ đề mẫu ⌄</span>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="setTheme('vn')">🇻🇳 Việt Nam</a>
+                        <a href="#" onclick="setTheme('val')">💖 Valentine</a>
+                        <a href="#" onclick="setTheme('hal')">🎃 Halloween</a>
+                        <a href="#" onclick="setTheme('xmas')">🎄 Giáng sinh</a>
+                        <a href="#" onclick="setTheme('none')">Mặc định</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <span>🎮 Mini game ⌄</span>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="setGameMode('normal')">🎡 Vòng quay may mắn</a>
+                        <a href="#" onclick="setGameMode('reward')">🎁 Vòng quay phần thưởng (%)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-layout" id="mainLayout">
+        <!-- LEFT COLUMN -->
+        <div class="left-col">
+            <div class="top-actions">
+                <button class="btn-action" id="btnCompact">↗ Xem rút gọn</button>
+                <button class="btn-action" id="btnFullscreen">⛶ Trình chiếu</button>
+            </div>
+
+            <div class="wheel-title" id="displayTitle">VÒNG QUAY MAY MẮN</div>
+
+            <div class="wheel-wrapper" id="wheelWrapper">
+                <div class="lights-container" id="lightsContainer"></div>
+                <canvas id="canvas" width="900" height="900"></canvas>
+                <div class="pointer"></div>
+            </div>
+
+            <button class="external-spin-btn" id="spinBtn">QUAY SỐ</button>
+
+            <div class="bottom-toolbar">
+                <button id="btnRefresh">🔀 Làm mới</button>
+                <button id="toggleSoundBtn">🎵 Âm thanh: Bật</button>
+                <button id="btnEditTitle">✏ Chỉnh Tiêu đề</button>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR -->
+        <div class="right-sidebar">
+            <div class="tabs">
+                <div class="tab active" data-target="danh-sach">🔠 Danh sách</div>
+                <div class="tab" data-target="cai-dat">⚙ Cài đặt</div>
+                <div class="tab" data-target="giao-dien">🎨 Giao diện</div>
+                <div class="tab" data-target="ket-qua">🏆 Kết quả <span class="sb-count" id="resultCount" style="background:#e74c3c">0</span></div>
+            </div>
+            
+            <div class="tab-pane active" id="pane-danh-sach">
+                <div class="sb-header"><span class="sb-title">Danh sách mục</span><span class="sb-count" id="itemCount">0 mục</span></div>
+                
+                <div class="add-actions">
+                    <button id="addBtn">+ Thêm mục</button>
+                    <button id="btnToggleBulk" class="btn-bulk">📋 Thêm hàng loạt</button>
+                </div>
+                
+                <textarea id="bulkInput" placeholder="Nhập tên phần thưởng...&#10;Mỗi dòng sẽ tính là 1 ô.&#10;Ví dụ:&#10;Xe máy&#10;Iphone 15&#10;Chúc may mắn"></textarea>
+                
+                <ul class="item-list" id="itemList"></ul>
+            </div>
+
+            <div class="tab-pane" id="pane-cai-dat">
+                <div class="setting-group">
+                    <label>⏱ Thời gian quay số:</label>
+                    <select id="spinDurationSelect">
+                        <option value="2000">Nhanh (2 Giây ra kết quả)</option>
+                        <option value="5000" selected>Bình thường (5 Giây)</option>
+                        <option value="15000">Lâu, hồi hộp (15 Giây)</option>
+                    </select>
+                </div>
+
+                <div class="sb-header"><span class="sb-title">Tỉ lệ phần thưởng</span></div>
+                <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 10px;">*Chỉ áp dụng khi chọn Mini game Vòng quay phần thưởng.</p>
+                <ul class="item-list" id="settingsList"></ul>
+            </div>
+
+            <div class="tab-pane" id="pane-giao-dien">
+                <div class="sb-header"><span class="sb-title">Chế độ hiển thị</span></div>
+                <p style="font-size: 14px;">Chuyển đổi giao diện sáng/tối cho toàn bộ website.</p>
+                <button class="theme-toggle-btn" id="btnToggleLightMode">BẬT GIAO DIỆN SÁNG</button>
+            </div>
+
+            <div class="tab-pane" id="pane-ket-qua">
+                <div class="sb-header"><span class="sb-title">Lịch sử quay</span></div>
+                <ul class="result-list" id="resultList"></ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="resultModal">
+        <div class="modal-box">
+            <div style="color:var(--text-dim); letter-spacing: 3px; font-size: 14px; font-weight:bold">🎯 KẾT QUẢ VÒNG QUAY</div>
+            <div class="modal-winner" id="winnerText">Mai</div>
+            <button class="modal-btn btn-modal-primary" id="modalSpinAgainBtn">🎡 Quay tiếp</button>
+            <div class="row-btns">
+                <button class="modal-btn" id="modalDeleteBtn">✕ Xóa</button>
+                <button class="modal-btn" id="modalCloseBtn">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CÀI ĐẶT NHẠC MP3 (KHÔNG BỊ LỖI MUTE NỮA)
+        // ==========================================
+        const myAudioSpin = new Audio('nhac-xo-so.mp3'); 
+        const myAudioWin = new Audio('wowcongratulation.mp3');
+        myAudioSpin.loop = true; // Nhạc quay lặp lại vô tận
+
+        let soundEnabled = true;
+        document.getElementById('toggleSoundBtn').addEventListener('click', function() {
+            soundEnabled = !soundEnabled; 
+            this.innerText = soundEnabled ? '🎵 Âm thanh: Bật' : '🔇 Âm thanh: Tắt';
+            
+            // Xử lý logic MUTE cho file MP3
+            if (!soundEnabled) {
+                myAudioSpin.pause();
+                myAudioWin.pause();
+            }
+        });
+
+        // Tắt Web Audio Synth cũ đi vì đã có file mp3 rồi
+
+        // ==========================================
+
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const spinBtn = document.getElementById('spinBtn');
+        const resultModal = document.getElementById('resultModal');
+        const wheelWrapper = document.getElementById('wheelWrapper');
+        
+        let mode = 'normal'; 
+        const colors = ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6', '#e67e22', '#1abc9c', '#fd79a8', '#00cec9', '#d35400'];
+        
+        let items = [
+            { text: 'Xe máy Honda', weight: 5 }, { text: 'Iphone 15 Pro', weight: 5 },
+            { text: 'Voucher 500k', weight: 10 }, { text: 'Chúc may mắn', weight: 50 },
+            { text: 'Sạc dự phòng', weight: 20 }, { text: 'Tai nghe', weight: 15 }
+        ];
+        
+        let resultsHistory = [];
+        let currentAngle = 0; let isSpinning = false; let winningIndex = -1;
+
+        // --- ĐÈN NHÁY SCALE 900px ---
+        const lightsContainer = document.getElementById('lightsContainer');
+        const NUM_LIGHTS = 24; let lightInterval;
+        for (let i = 0; i < NUM_LIGHTS; i++) {
+            const bulb = document.createElement('div'); bulb.className = 'light-bulb';
+            const angle = (i * 360) / NUM_LIGHTS;
+            // Bán kính vùng đặt đèn là 460px (920px container / 2 - padding)
+            const x = 460 * Math.cos((angle * Math.PI) / 180); 
+            const y = 460 * Math.sin((angle * Math.PI) / 180);
+            bulb.style.transform = `translate(${x}px, ${y}px)`; lightsContainer.appendChild(bulb);
+        }
+        const allBulbs = document.querySelectorAll('.light-bulb');
+        function toggleLights(spinning) {
+            clearInterval(lightInterval); let state = 0;
+            if (spinning) {
+                lightInterval = setInterval(() => { allBulbs.forEach((b, i) => b.classList.toggle('on', (i + state) % 2 === 0)); state++; }, 80);
+            } else {
+                allBulbs.forEach(b => b.classList.remove('on'));
+                allBulbs.forEach((b, i) => { if(i%2===0) b.classList.add('on'); });
+            }
+        }
+        toggleLights(false);
+
+        // --- THEMES & EFFECTS ---
+        let currentEffect = 'none'; 
+        
+        function setTheme(themeName) {
+            document.body.className = ''; document.body.classList.add('theme-' + themeName);
+            if (document.getElementById('btnToggleLightMode').innerText.includes("TỐI")) document.body.classList.add('light-theme');
+            
+            if (themeName === 'xmas') currentEffect = 'snow';
+            else if (themeName === 'val') currentEffect = 'hearts';
+            else if (themeName === 'vn') currentEffect = 'vn';
+            else if (themeName === 'hal') currentEffect = 'hal';
+            else currentEffect = 'none';
+            
+            document.getElementById('effectCanvas').style.display = (currentEffect !== 'none') ? 'block' : 'none';
+        }
+        
+        const efCanvas = document.getElementById('effectCanvas'); const efCtx = efCanvas.getContext('2d');
+        let particles = [];
+        const chars = {
+            snow: ['❄', '❅', '❆', '•', '⋆'],
+            hearts: ['❤', '💖', '💗', '💓', '💕'],
+            vn: ['🇻🇳', '⭐'],
+            hal: ['💀', '🎃', '🦇', '🕸️']
+        };
+
+        window.addEventListener('resize', () => { efCanvas.width = window.innerWidth; efCanvas.height = window.innerHeight; });
+        efCanvas.width = window.innerWidth; efCanvas.height = window.innerHeight;
+
+        for(let i=0; i<100; i++) {
+            particles.push({ 
+                x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight, 
+                r: Math.random() * 25 + 10, d: Math.random() * Math.PI * 2, 
+                charIdx: Math.floor(Math.random() * 5), s: Math.random() * 1.5 + 0.5, w: Math.random() * 0.05 
+            });
+        }
+
+        let effectAngle = 0;
+        function drawEffects() {
+            if(currentEffect === 'none') { requestAnimationFrame(drawEffects); return; }
+            efCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            effectAngle += 0.01;
+            
+            for(let i=0; i<100; i++) { 
+                let p = particles[i]; efCtx.font = p.r + "px Arial";
+                let efList = chars[currentEffect];
+                let textToDraw = efList[p.charIdx % efList.length];
+
+                if (currentEffect === 'snow') { efCtx.fillStyle = "rgba(255, 255, 255, 0.9)"; }
+                else if (currentEffect === 'hearts') { efCtx.fillStyle = "rgba(255, 20, 147, 0.8)"; }
+                else if (currentEffect === 'hal') { efCtx.fillStyle = "rgba(200, 200, 200, 0.8)"; }
+                else if (currentEffect === 'vn') { efCtx.fillStyle = "#fff"; }
+
+                efCtx.fillText(textToDraw, p.x, p.y);
+                
+                if (currentEffect === 'hearts') {
+                    p.y -= (Math.cos(effectAngle + p.d) + p.s + p.r/10) * 0.6; 
+                    p.x += Math.sin(effectAngle * p.w) * 1.5;
+                    if(p.y < -30) { particles[i].y = window.innerHeight + 30; particles[i].x = Math.random() * window.innerWidth; }
+                } else {
+                    p.y += Math.cos(effectAngle + p.d) + p.s + p.r/10; 
+                    p.x += Math.sin(effectAngle * p.w) * 2;
+                    if(p.y > window.innerHeight) { particles[i].y = -20; particles[i].x = Math.random() * window.innerWidth; }
+                }
+            }
+            requestAnimationFrame(drawEffects);
+        }
+        drawEffects();
+
+        // --- CÀI ĐẶT MODE VÀ NÚT XÓA Ở MODAL ---
+        function setGameMode(m) { 
+            mode = m; 
+            document.getElementById('displayTitle').innerText = (mode === 'reward') ? "VÒNG QUAY PHẦN THƯỞNG" : "VÒNG QUAY MAY MẮN"; 
+            
+            // Xử lý text Nút Xóa tùy mode
+            if (mode === 'reward') {
+                document.getElementById('modalDeleteBtn').innerText = "✕ Xóa phần thưởng";
+            } else {
+                document.getElementById('modalDeleteBtn').innerText = "✕ Xóa";
+            }
+
+            drawWheel(); renderLists(); 
+        }
+
+        // --- DRAW WHEEL 900PX 3D ---
+        function drawWheel() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2; // 450
+            const cy = canvas.height / 2; // 450
+            const radius = cx - 15; // 435 (Bán kính mâm)
+            if (items.length === 0) return;
+
+            let totalWeight = (mode === 'normal') ? items.length : items.reduce((sum, item) => sum + Number(item.weight), 0) || 1;
+            let startAngle = currentAngle;
+            
+            for (let i = 0; i < items.length; i++) {
+                let sliceWeight = (mode === 'normal') ? 1 : Number(items[i].weight);
+                let sliceAngle = (sliceWeight / totalWeight) * 2 * Math.PI;
+                
+                ctx.beginPath(); ctx.fillStyle = colors[i % colors.length]; ctx.moveTo(cx, cy); ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle); ctx.fill();
+                ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.stroke();
+
+                ctx.save(); 
+                // Di chuyển text ra gần mép hơn (radius - 100)
+                ctx.translate( cx + Math.cos(startAngle + sliceAngle / 2) * (radius - 100), cy + Math.sin(startAngle + sliceAngle / 2) * (radius - 100));
+                ctx.rotate(startAngle + sliceAngle / 2); ctx.textAlign = 'right'; ctx.fillStyle = '#fff'; 
+                // Phóng to Font chữ
+                ctx.font = 'bold 36px Segoe UI'; ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 3;
+                
+                let text = items[i].text; if(text.length > 18) text = text.substring(0, 16) + '...';
+                if (sliceAngle > 0.08) ctx.fillText(text, 0, 10); 
+                ctx.restore(); startAngle += sliceAngle;
+            }
+
+            let edgeGrad = ctx.createRadialGradient(cx, cy, radius - 40, cx, cy, radius);
+            edgeGrad.addColorStop(0, 'rgba(0,0,0,0)'); edgeGrad.addColorStop(1, 'rgba(0,0,0,0.6)');
+            ctx.beginPath(); ctx.arc(cx, cy, radius, 0, Math.PI * 2); ctx.fillStyle = edgeGrad; ctx.fill();
+
+            // Lớp mờ 3D Bóng loáng nửa trên
+            ctx.beginPath(); ctx.arc(cx, cy, radius * 0.95, Math.PI, 0); ctx.bezierCurveTo(cx + radius*0.5, cy - radius*0.5, cx - radius*0.5, cy - radius*0.5, cx - radius*0.95, cy); ctx.fillStyle = 'rgba(255, 255, 255, 0.15)'; ctx.fill();
+
+            // Trục tâm giữa
+            const centerGrad = ctx.createRadialGradient(cx - 15, cy - 15, 5, cx, cy, 70);
+            centerGrad.addColorStop(0, '#ecf0f1'); centerGrad.addColorStop(1, '#7f8c8d');
+            ctx.beginPath(); ctx.arc(cx, cy, 70, 0, Math.PI * 2); ctx.fillStyle = centerGrad;
+            ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 15; ctx.shadowOffsetY = 8; ctx.fill();
+            ctx.lineWidth = 5; ctx.strokeStyle = '#f1c40f'; ctx.shadowColor = 'transparent'; ctx.stroke();
+        }
+
+        // --- RENDER DANH SÁCH & HÀNG LOẠT ---
+        const bulkInput = document.getElementById('bulkInput');
+        
+        function renderLists(updateBulkTextarea = true) {
+            const itemListEl = document.getElementById('itemList'); itemListEl.innerHTML = '';
+            document.getElementById('itemCount').innerText = `${items.length} mục`;
+            const settingsListEl = document.getElementById('settingsList'); settingsListEl.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const li = document.createElement('li'); li.className = 'item-row';
+                li.innerHTML = `<input type="text" value="${item.text}" data-index="${index}" class="input-text"> <div class="del-icon" data-index="${index}">✕</div>`;
+                itemListEl.appendChild(li);
+
+                const setLi = document.createElement('li'); setLi.className = 'item-row';
+                setLi.innerHTML = `<span style="flex:1; font-size:15px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.text}</span>
+                                   <input type="number" value="${item.weight}" data-index="${index}" class="input-weight" min="0"><span style="font-size:15px; margin-left:8px">%</span>`;
+                settingsListEl.appendChild(setLi);
+            });
+
+            if(updateBulkTextarea) bulkInput.value = items.map(i => i.text).join('\n');
+
+            document.querySelectorAll('.input-text').forEach(input => {
+                input.addEventListener('input', (e) => { items[e.target.dataset.index].text = e.target.value; renderLists(true); drawWheel(); });
+            });
+            document.querySelectorAll('.input-weight').forEach(input => {
+                input.addEventListener('change', (e) => { items[e.target.dataset.index].weight = e.target.value; if(mode === 'reward') drawWheel(); });
+            });
+            document.querySelectorAll('.del-icon').forEach(btn => {
+                btn.addEventListener('click', (e) => { if(isSpinning) return; items.splice(e.target.dataset.index, 1); renderLists(); drawWheel(); });
+            });
+        }
+
+        document.getElementById('btnToggleBulk').addEventListener('click', () => {
+            let isHidden = bulkInput.style.display === 'none' || bulkInput.style.display === '';
+            bulkInput.style.display = isHidden ? 'block' : 'none';
+            if (isHidden) { bulkInput.focus(); renderLists(true); }
+        });
+
+        bulkInput.addEventListener('input', (e) => {
+            const lines = e.target.value.split('\n').filter(l => l.trim() !== '');
+            items = lines.map(text => ({ text: text.trim(), weight: 10 }));
+            renderLists(false); drawWheel();
+        });
+
+        function renderResults() {
+            const list = document.getElementById('resultList'); list.innerHTML = '';
+            document.getElementById('resultCount').innerText = resultsHistory.length;
+            resultsHistory.forEach((res, i) => {
+                const li = document.createElement('li'); li.className = 'result-item';
+                li.innerHTML = `<span class="result-index">#${i+1}</span> <span>${res}</span>`; list.appendChild(li);
+            });
+        }
+
+        // --- DRAG TO SPIN ---
+        let isDragging = false, lastMouseAngle = 0, dragVelocity = 0, lastDragTime = 0, dragAccumulator = 0;
+        function getAngle(e) {
+            let rect = canvas.getBoundingClientRect();
+            let x = (e.clientX || (e.touches && e.touches[0].clientX)) - (rect.left + rect.width/2);
+            let y = (e.clientY || (e.touches && e.touches[0].clientY)) - (rect.top + rect.height/2); return Math.atan2(y, x);
+        }
+        function dragStart(e) { if (isSpinning || items.length === 0) return; isDragging = true; lastMouseAngle = getAngle(e); dragVelocity = 0; lastDragTime = Date.now(); dragAccumulator = 0; if(e.type === 'touchstart') e.preventDefault(); }
+        function dragMove(e) {
+            if (!isDragging || isSpinning) return;
+            let curAng = getAngle(e), delta = curAng - lastMouseAngle;
+            if (delta > Math.PI) delta -= Math.PI * 2; if (delta < -Math.PI) delta += Math.PI * 2;
+            currentAngle += delta; dragAccumulator += Math.abs(delta);
+            let now = Date.now(), dt = now - lastDragTime; if (dt > 0) dragVelocity = delta / dt;
+            lastMouseAngle = curAng; lastDragTime = now; drawWheel(); if(e.type === 'touchmove') e.preventDefault();
+        }
+        function dragEnd(e) { if (!isDragging) return; isDragging = false; if (Math.abs(dragVelocity) > 0.003 || dragAccumulator > 0.5) spin(Math.abs(dragVelocity)); }
+        wheelWrapper.addEventListener('mousedown', dragStart); wheelWrapper.addEventListener('touchstart', dragStart, {passive: false});
+        window.addEventListener('mousemove', dragMove); window.addEventListener('touchmove', dragMove, {passive: false});
+        window.addEventListener('mouseup', dragEnd); window.addEventListener('touchend', dragEnd);
+
+        // --- LOGIC QUAY ---
+        function spin(velocityFromDrag = 0) {
+            if (isSpinning || items.length === 0) return;
+            isSpinning = true; document.body.classList.add('spinning');
+            spinBtn.disabled = true; spinBtn.innerText = "ĐANG QUAY...";
+            toggleLights(true); 
+            
+            // Xử lý Audio MP3 Quay số
+            if (soundEnabled) {
+                myAudioWin.pause();
+                myAudioSpin.currentTime = 0;
+                // catch lỗi phòng trường hợp trình duyệt block autoplay
+                myAudioSpin.play().catch(e => console.log("Lỗi autoplay Audio")); 
+            }
+
+            let userDuration = parseInt(document.getElementById('spinDurationSelect').value); 
+            let extraVelocity = typeof velocityFromDrag === 'number' ? Math.min(velocityFromDrag * 2000, 10) : 0;
+            
+            let spinTime = 0;
+            let spinTimeTotal = userDuration + (Math.random() * (userDuration/4)) + (extraVelocity * 100); 
+            let startAngle = currentAngle;
+            let multiplier = (userDuration === 15000) ? 30 : (userDuration === 2000 ? 5 : 10);
+            let spinAngleTotal = (Math.floor(Math.random() * multiplier) + multiplier) * 2 * Math.PI + (Math.random() * 2 * Math.PI);
+
+            let totalWeight = (mode === 'normal') ? items.length : items.reduce((s, i) => s + Number(i.weight), 0) || 1;
+            function easeOut(t, b, c, d) { t /= d; t--; return c * (t * t * t + 1) + b; }
+            let lastTime = null;
+
+            function rotateAnimation(currentTime) {
+                if (!lastTime) lastTime = currentTime;
+                let deltaTime = currentTime - lastTime; lastTime = currentTime;
+                spinTime += deltaTime;
+
+                if (spinTime >= spinTimeTotal) {
+                    currentAngle = startAngle + spinAngleTotal; drawWheel(); finishSpin(totalWeight); return;
+                }
+                currentAngle = easeOut(spinTime, startAngle, spinAngleTotal, spinTimeTotal);
+                drawWheel(); requestAnimationFrame(rotateAnimation);
+            }
+            requestAnimationFrame(rotateAnimation);
+        }
+
+        function finishSpin(totalWeight) {
+            isSpinning = false; document.body.classList.remove('spinning');
+            spinBtn.disabled = false; spinBtn.innerText = "QUAY SỐ";
+            toggleLights(false);
+
+            // Tắt MP3 Quay số và Bật Nhạc chúc mừng
+            myAudioSpin.pause();
+            if (soundEnabled) {
+                myAudioWin.currentTime = 0;
+                myAudioWin.play().catch(e => console.log("Lỗi autoplay Win Audio"));
+            }
+
+            let normalized = (2 * Math.PI) - (currentAngle % (2 * Math.PI));
+            let currSliceStart = 0;
+            for (let i = 0; i < items.length; i++) {
+                let w = (mode === 'normal') ? 1 : Number(items[i].weight); let sAngle = (w / totalWeight) * 2 * Math.PI;
+                if (normalized >= currSliceStart && normalized < currSliceStart + sAngle) { winningIndex = i; break; }
+                currSliceStart += sAngle;
+            }
+            
+            let winText = items[winningIndex].text; document.getElementById('winnerText').innerText = winText;
+            resultsHistory.push(winText); renderResults();
+            setTimeout(() => { resultModal.style.display = 'flex'; }, 500);
+        }
+
+        // --- GÁN SỰ KIỆN UI CHÍNH ---
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active'); document.getElementById('pane-' + tab.dataset.target).classList.add('active');
+            });
+        });
+
+        // NÚT XEM RÚT GỌN / ĐẦY ĐỦ TỰ ĐỔI TEXT
+        const btnCompact = document.getElementById('btnCompact');
+        btnCompact.addEventListener('click', () => { 
+            const layout = document.getElementById('mainLayout');
+            layout.classList.toggle('compact'); 
+            if (layout.classList.contains('compact')) {
+                btnCompact.innerText = "↙ Xem đầy đủ";
+            } else {
+                btnCompact.innerText = "↗ Xem rút gọn";
+            }
+        });
+
+        document.getElementById('btnFullscreen').addEventListener('click', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else if (document.exitFullscreen) document.exitFullscreen(); });
+        document.getElementById('btnEditTitle').addEventListener('click', () => { let t = prompt("Nhập tiêu đề mới:", document.getElementById('displayTitle').innerText); if (t) document.getElementById('displayTitle').innerText = t.toUpperCase(); });
+        document.getElementById('btnRefresh').addEventListener('click', () => { if(isSpinning || !confirm("Làm mới hoàn toàn?")) return; items = []; resultsHistory = []; renderLists(); renderResults(); drawWheel(); });
+        document.getElementById('addBtn').addEventListener('click', () => { if(isSpinning) return; items.unshift({ text: 'Mục mới', weight: 10 }); renderLists(); drawWheel(); });
+        
+        const toggleThemeBtn = document.getElementById('btnToggleLightMode');
+        toggleThemeBtn.addEventListener('click', () => { document.body.classList.toggle('light-theme'); toggleThemeBtn.innerText = document.body.classList.contains('light-theme') ? 'BẬT GIAO DIỆN TỐI' : 'BẬT GIAO DIỆN SÁNG'; });
+
+        spinBtn.addEventListener('click', () => spin());
+        document.getElementById('modalCloseBtn').addEventListener('click', () => { resultModal.style.display = 'none'; });
+        document.getElementById('modalSpinAgainBtn').addEventListener('click', () => { resultModal.style.display = 'none'; spin(); });
+        
+        // NÚT XÓA Ở BẢNG KẾT QUẢ
+        document.getElementById('modalDeleteBtn').addEventListener('click', () => {
+            if (winningIndex > -1 && winningIndex < items.length) { items.splice(winningIndex, 1); renderLists(); drawWheel(); }
+            resultModal.style.display = 'none';
+        });
+
+        // Khởi chạy vòng quay lần đầu
+        setGameMode('normal');
+    </script>
+</body>
+</html>
