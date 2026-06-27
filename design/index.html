@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Design — Tạo ảnh bằng Magnific</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#F5EFE6;--card:#fff;--ink:#2D2A24;--ink2:#5F5646;--bd:#E5DDCE;--ac:#7C3AED;--ac2:#9F67FF;--rad:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Urbanist',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+.mono{font-family:'Space Mono',monospace}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+.back{font-size:.85rem;color:var(--ink2);display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;transition:.15s}
+.back:hover{color:var(--ink)}
+h1{font-size:2rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
+.sub{color:var(--ink2);font-size:.92rem;margin-bottom:28px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:24px}
+label{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--ink2);margin-bottom:8px;margin-top:18px}
+label:first-of-type{margin-top:0}
+textarea,select{width:100%;padding:13px 15px;border:1.5px solid var(--bd);border-radius:11px;font-size:.92rem;font-family:inherit;outline:none;background:#fff;color:var(--ink);transition:.15s}
+textarea:focus,select:focus{border-color:var(--ac)}
+textarea{resize:vertical;min-height:96px;line-height:1.5}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gen-btn{width:100%;margin-top:24px;padding:15px;background:var(--ac);color:#fff;border:none;border-radius:12px;font-weight:800;font-size:.95rem;transition:.2s;box-shadow:0 8px 22px rgba(124,58,237,.32)}
+.gen-btn:hover{background:var(--ac2)}
+.gen-btn:disabled{background:var(--bd);color:var(--ink2);cursor:default;box-shadow:none}
+.result{min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+.result .ph{color:var(--ink2);font-size:.9rem;line-height:1.6}
+.result img{width:100%;border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.14)}
+.spin{width:42px;height:42px;border:4px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--ink2);letter-spacing:1px}
+.err{color:#dc2626;font-size:.88rem;line-height:1.6}
+.edit-bar{display:none;flex-wrap:wrap;gap:10px;margin-top:18px;width:100%;justify-content:center}
+.edit-bar.show{display:flex}
+.ebtn{padding:11px 16px;border:1.5px solid var(--bd);background:#fff;border-radius:10px;font-weight:700;font-size:.8rem;color:var(--ink);transition:.15s;display:inline-flex;align-items:center;gap:6px}
+.ebtn:hover{border-color:var(--ac);color:var(--ac)}
+.ebtn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ebtn.primary:hover{background:#000;color:#fff}
+.ebtn:disabled{opacity:.5;cursor:default}
+@media(max-width:760px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/forum.html#tools" class="back">← Quay lại Công cụ</a>
+  <h1>🎨 AI Design Studio</h1>
+  <p class="sub">Nhập mô tả → tạo ảnh bằng Magnific (Mystic). Có thể nâng cấp & tạo lại khi cần.</p>
+
+  <div class="layout">
+    <!-- INPUT PANEL -->
+    <div class="panel">
+      <label for="prompt">Mô tả ảnh (Prompt)</label>
+      <textarea id="prompt" placeholder="Ví dụ: A cute orange mascot fox holding a banner, flat vector style, vibrant colors, white background"></textarea>
+
+      <label for="model">Phong cách (Model)</label>
+      <select id="model">
+        <option value="realism">Realism — chân thực</option>
+        <option value="fluid">Fluid — sáng tạo, nghệ thuật</option>
+        <option value="zen">Zen — tối giản, sạch</option>
+        <option value="super_real">Super Real — siêu thực</option>
+        <option value="editorial_portraits">Editorial Portraits — chân dung</option>
+      </select>
+
+      <div class="row">
+        <div>
+          <label for="ratio">Tỷ lệ</label>
+          <select id="ratio">
+            <option value="square_1_1">Vuông 1:1</option>
+            <option value="widescreen_16_9">Ngang 16:9</option>
+            <option value="social_story_9_16">Dọc 9:16</option>
+            <option value="traditional_3_4">Đứng 3:4</option>
+            <option value="classic_4_3">Ngang 4:3</option>
+          </select>
+        </div>
+        <div>
+          <label for="res">Độ phân giải</label>
+          <select id="res">
+            <option value="1k">1K — nhanh</option>
+            <option value="2k" selected>2K — tiêu chuẩn</option>
+            <option value="4k">4K — in ấn</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="gen-btn" id="genBtn">✨ Tạo ảnh</button>
+    </div>
+
+    <!-- RESULT PANEL -->
+    <div class="panel">
+      <div class="result" id="result">
+        <div class="ph">Ảnh tạo ra sẽ hiển thị ở đây.<br>Nhập mô tả và bấm <b>Tạo ảnh</b>.</div>
+      </div>
+      <div class="edit-bar" id="editBar">
+        <button class="ebtn primary" id="upscaleBtn">⬆️ Nâng cấp chi tiết (Upscale)</button>
+        <button class="ebtn" id="regenBtn">🔄 Tạo lại</button>
+        <a class="ebtn" id="dlBtn" download="ai-design.png">⬇️ Tải về</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const FN_URL='https://dmvomgmhsivifionnkiu.supabase.co/functions/v1/magnific';
+const ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtdm9tZ21oc2l2aWZpb25ua2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODcyMzAsImV4cCI6MjA5NzY2MzIzMH0.9HQDKLrzjaRwf1z44cWc3Wb-LMx6a4Ec-QN0QAOGZ00';
+
+const result=document.getElementById('result');
+const editBar=document.getElementById('editBar');
+const genBtn=document.getElementById('genBtn');
+const upscaleBtn=document.getElementById('upscaleBtn');
+const regenBtn=document.getElementById('regenBtn');
+const dlBtn=document.getElementById('dlBtn');
+let currentImage='';
+
+async function call(payload){
+  const r=await fetch(FN_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+ANON,'apikey':ANON},
+    body:JSON.stringify(payload)
+  });
+  return r.json();
+}
+
+// Tìm task_id ở bất kỳ tầng nào của response
+function findTaskId(o){
+  if(!o||typeof o!=='object')return null;
+  if(o.task_id)return o.task_id;
+  for(const k in o){const v=findTaskId(o[k]);if(v)return v;}
+  return null;
+}
+// Tìm status
+function findStatus(o){
+  if(!o||typeof o!=='object')return null;
+  if(typeof o.status==='string')return o.status;
+  for(const k in o){const v=findStatus(o[k]);if(v)return v;}
+  return null;
+}
+// Thu thập mọi URL ảnh trong response
+function findImages(o,acc=[]){
+  if(!o)return acc;
+  if(typeof o==='string'){if(/^https?:\/\/.+/.test(o)&&/\.(png|jpe?g|webp)|generated|cdn/i.test(o))acc.push(o);return acc;}
+  if(Array.isArray(o)){o.forEach(x=>findImages(x,acc));return acc;}
+  if(typeof o==='object')for(const k in o)findImages(o[k],acc);
+  return acc;
+}
+
+function showSpinner(msg){
+  editBar.classList.remove('show');
+  result.innerHTML=`<div class="spin"></div><div class="status">${msg}</div>`;
+}
+function showError(msg){
+  result.innerHTML=`<div class="err">⚠️ ${msg}</div>`;
+}
+function showImage(url){
+  currentImage=url;
+  result.innerHTML=`<img src="${url}" alt="AI generated">`;
+  dlBtn.href=url;
+  editBar.classList.add('show');
+}
+
+// Poll cho tới khi COMPLETED / FAILED
+async function poll(statusAction,task_id,label){
+  for(let i=0;i<60;i++){
+    await new Promise(r=>setTimeout(r,2500));
+    const res=await call({action:statusAction,task_id});
+    const st=(findStatus(res)||'').toUpperCase();
+    showSpinner(`${label}… ${st||'ĐANG XỬ LÝ'}`);
+    if(st==='COMPLETED'){
+      const imgs=findImages(res);
+      if(imgs.length)return showImage(imgs[imgs.length-1]);
+      return showError('Hoàn tất nhưng không tìm thấy ảnh trong phản hồi.');
+    }
+    if(st==='FAILED')return showError('Tạo ảnh thất bại. Thử lại với mô tả khác.');
+  }
+  showError('Quá thời gian chờ. Thử lại nhé.');
+}
+
+async function generate(){
+  const prompt=document.getElementById('prompt').value.trim();
+  if(!prompt)return showError('Hãy nhập mô tả ảnh trước.');
+  genBtn.disabled=true;
+  showSpinner('Đang gửi yêu cầu…');
+  try{
+    const res=await call({
+      action:'generate',prompt,
+      model:document.getElementById('model').value,
+      aspect_ratio:document.getElementById('ratio').value,
+      resolution:document.getElementById('res').value
+    });
+    if(res.error)return showError(res.error);
+    const id=findTaskId(res);
+    if(!id)return showError('Không nhận được task_id. Kiểm tra API key / Edge Function.');
+    await poll('status',id,'Đang tạo ảnh');
+  }catch(e){showError('Lỗi kết nối: '+e.message);}
+  finally{genBtn.disabled=false;}
+}
+
+async function upscale(){
+  if(!currentImage)return;
+  upscaleBtn.disabled=true;
+  showSpinner('Đang gửi yêu cầu nâng cấp…');
+  try{
+    const res=await call({action:'upscale',image:currentImage});
+    if(res.error)return showError(res.error);
+    const id=findTaskId(res);
+    if(!id)return showError('Không nhận được task_id khi nâng cấp.');
+    await poll('upscale_status',id,'Đang nâng cấp');
+  }catch(e){showError('Lỗi kết nối: '+e.message);}
+  finally{upscaleBtn.disabled=false;}
+}
+
+genBtn.onclick=generate;
+regenBtn.onclick=generate;
+upscaleBtn.onclick=upscale;
+</script>
+</body>
+</html>
