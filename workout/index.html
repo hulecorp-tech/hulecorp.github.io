@@ -11,7 +11,9 @@
 <style>
 :root{
   --cream:#F5EFE6;--card:#fff;--ink:#2D2A24;--ink2:#5F5646;--bd:#E5DDCE;
-  --green:#16A34A;--green-bg:#DCFCE7;--red:#DC2626;--red-bg:#FEE2E2;
+  --green:#16A34A;--green-bg:#DCFCE7;--green-bd:#BBF7D0;
+  --red:#DC2626;--red-bg:#FEE2E2;--red-bd:#FECACA;
+  --purple:#7C3AED;--purple-bg:#EDE9FE;--purple-bd:#DDD6FE;
   --orange:#FF8400;--orange2:#FFA94D;--gold:#D69E00;--gold-bg:#FFF6DC;
   --rad:16px
 }
@@ -20,7 +22,7 @@ body{font-family:'Urbanist',-apple-system,sans-serif;background:var(--cream);col
 .mono{font-family:'Space Mono',monospace}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:inherit;border:0;background:none}
-.wrap{max-width:920px;margin:0 auto;padding:24px 20px 80px}
+.wrap{max-width:860px;margin:0 auto;padding:24px 20px 80px}
 .back{font-size:.85rem;color:var(--ink2);display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;transition:.15s}
 .back:hover{color:var(--ink)}
 h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
@@ -35,12 +37,13 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
 .reset-btn:hover{border-color:var(--red);color:var(--red)}
 
 /* stats */
-.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.stat-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:18px 20px}
-.stat-card .num{font-family:'Space Mono',monospace;font-weight:700;font-size:2rem;line-height:1}
-.stat-card .lbl{font-size:.78rem;color:var(--ink2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
-.stat-card.train .num{color:var(--green)}
-.stat-card.rest .num{color:var(--red)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.stat-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:16px 18px}
+.stat-card .num{font-family:'Space Mono',monospace;font-weight:700;font-size:1.9rem;line-height:1}
+.stat-card .lbl{font-size:.74rem;color:var(--ink2);font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:6px}
+.stat-card.train{border-color:var(--green-bd)}.stat-card.train .num{color:var(--green)}
+.stat-card.rest{border-color:var(--red-bd)}.stat-card.rest .num{color:var(--red)}
+.stat-card.custom{border-color:var(--purple-bd)}.stat-card.custom .num{color:var(--purple)}
 
 .congrats{display:none;align-items:center;gap:12px;background:var(--gold-bg);border:1.5px solid #F3D473;border-radius:var(--rad);padding:16px 20px;margin-bottom:14px;font-weight:800;color:var(--gold);font-size:1rem}
 .congrats.show{display:flex}
@@ -50,54 +53,61 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
 .goal-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
 .goal-head .pct{font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--orange)}
 .goal-head .txt{font-size:.82rem;color:var(--ink2);font-weight:700}
-.bar{height:12px;border-radius:8px;background:var(--cream2,#EDE3D3);overflow:hidden}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange2));border-radius:8px;transition:width .3s ease;width:0%}
+.bar{height:12px;border-radius:8px;background:#EDE3D3;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange2));border-radius:8px;transition:width .35s ease;width:0%}
 
 /* calendar */
 .sec-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);margin-bottom:10px}
-.cal{width:100%;border-collapse:separate;border-spacing:4px;margin-bottom:8px;table-layout:fixed}
-.cal th{font-size:.66rem;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.2px;padding-bottom:4px;text-align:center}
-.cal th.cn{color:#B8ac96}
-.cell{border-radius:9px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:.15s;user-select:none;min-width:0;padding:6px 2px;min-height:56px}
-.cell.empty{border-color:transparent;background:transparent}
-.cell.off{border-style:dashed;border-color:var(--bd);background:transparent;opacity:.55}
-.cell .d{font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;color:var(--ink2)}
-.cell .cn-tag{font-size:.58rem;font-weight:700;color:#B8AC96;text-transform:uppercase}
+.cal-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:16px 16px 12px;margin-bottom:26px;box-shadow:0 8px 26px rgba(45,42,36,.06)}
+.cal-title{display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:1rem;margin-bottom:14px;color:var(--ink)}
+.nav-btn{width:32px;height:32px;border-radius:9px;border:1.5px solid var(--bd);background:#fff;color:var(--ink2);font-size:1rem;font-weight:800;display:flex;align-items:center;justify-content:center;transition:.15s}
+.nav-btn:hover{border-color:var(--orange);color:var(--orange)}
+.cal-title .mlabel{min-width:150px;text-align:center}
+.dow-row{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid var(--bd)}
+.dow{text-align:center;font-size:.66rem;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px}
+.dow.we{color:var(--purple)}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{position:relative;border-radius:11px;border:1.5px solid var(--bd);background:#fff;min-height:64px;padding:7px 6px 7px;display:flex;flex-direction:column;justify-content:space-between;gap:6px;transition:.15s}
+.day.out{border-color:transparent;background:transparent}
+.day.out .dn{color:#D8CDB8}
+.day .dn{font-family:'Space Mono',monospace;font-size:.74rem;font-weight:700;color:var(--ink2);line-height:1;text-align:left}
+.day.today{box-shadow:0 0 0 2px var(--orange)}
+.day.today .dn{color:var(--orange)}
+.day.train{background:var(--green-bg);border-color:var(--green-bd)}.day.train .dn{color:var(--green)}
+.day.rest{background:var(--red-bg);border-color:var(--red-bd)}.day.rest .dn{color:var(--red)}
+.day.custom{background:var(--purple-bg);border-color:var(--purple-bd)}.day.custom .dn{color:var(--purple)}
 .ticks{display:flex;gap:4px}
-.tick{width:16px;height:16px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;line-height:1;cursor:pointer;border:1.5px solid;transition:.12s;background:#fff}
-.tick.g{border-color:var(--green);color:transparent}
-.tick.g:hover{background:var(--green-bg)}
-.tick.g.on{background:var(--green);color:#fff}
-.tick.r{border-color:var(--red);color:transparent}
-.tick.r:hover{background:var(--red-bg)}
-.tick.r.on{background:var(--red);color:#fff}
-.cell.train{background:var(--green-bg)}
-.cell.train .d{color:var(--green)}
-.cell.rest{background:var(--red-bg)}
-.cell.rest .d{color:var(--red)}
+.tk{flex:1;height:20px;border-radius:6px;border:1.5px solid;background:#fff;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;line-height:1;cursor:pointer;color:transparent;transition:.12s;padding:0;min-width:0}
+.tk.g{border-color:var(--green)}.tk.g:hover{background:var(--green-bg)}.tk.g.on{background:var(--green);color:#fff}
+.tk.r{border-color:var(--red)}.tk.r:hover{background:var(--red-bg)}.tk.r.on{background:var(--red);color:#fff}
+.tk.p{border-color:var(--purple)}.tk.p:hover{background:var(--purple-bg)}.tk.p.on{background:var(--purple);color:#fff}
 
 .free-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
-.free-cell{border-radius:12px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 6px;transition:.15s}
+.free-cell{border-radius:12px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:14px 8px;transition:.15s}
 .free-cell .lbl{font-size:.66rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;text-align:center}
-.free-cell.train{background:var(--green-bg)}
-.free-cell.train .lbl{color:var(--green)}
-.free-cell.rest{background:var(--red-bg)}
-.free-cell.rest .lbl{color:var(--red)}
+.free-cell.train{background:var(--green-bg);border-color:var(--green-bd)}.free-cell.train .lbl{color:var(--green)}
+.free-cell.rest{background:var(--red-bg);border-color:var(--red-bd)}.free-cell.rest .lbl{color:var(--red)}
+.free-cell.custom{background:var(--purple-bg);border-color:var(--purple-bd)}.free-cell.custom .lbl{color:var(--purple)}
+.free-cell .ticks{width:100%}
 
-.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:.8rem;color:var(--ink2);margin-bottom:8px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:.8rem;color:var(--ink2);margin-bottom:8px}
 .legend span{display:inline-flex;align-items:center;gap:7px}
-.legend i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1.5px solid}
+.legend i{width:14px;height:14px;border-radius:5px;display:inline-block;border:1.5px solid}
 .legend .lg-train{background:var(--green);border-color:var(--green)}
 .legend .lg-rest{background:var(--red);border-color:var(--red)}
-.legend .lg-none{background:#fff;border-color:var(--bd)}
+.legend .lg-custom{background:var(--purple);border-color:var(--purple)}
 .hint{font-size:.78rem;color:var(--ink2);margin-bottom:26px;line-height:1.6}
 
 @media(max-width:560px){
-  .cal{border-spacing:2px}
-  .cell{min-height:46px;padding:4px 1px;border-radius:7px}
-  .cell .d{font-size:.6rem}
-  .tick{width:13px;height:13px;font-size:.52rem;border-radius:4px}
-  .ticks{gap:3px}
+  .stat-row{gap:8px}
+  .stat-card{padding:12px 12px}
+  .stat-card .num{font-size:1.5rem}
+  .stat-card .lbl{font-size:.62rem}
+  .cal-card{padding:12px 10px 10px}
+  .grid,.dow-row{gap:4px}
+  .day{min-height:52px;padding:5px 4px;border-radius:9px;gap:4px}
+  .day .dn{font-size:.64rem}
+  .tk{height:17px;font-size:.54rem;border-radius:5px}
   .free-row{gap:6px}
   .free-cell{padding:10px 4px}
 }
@@ -107,7 +117,7 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
 <div class="wrap">
   <a href="/forum.html#tools" class="back">← Quay lại Công cụ</a>
   <h1>💪 Chấm Công Tập Thể Dục</h1>
-  <p class="sub">Tích vào ngày đã tập hoặc ngày nghỉ tập. Mục tiêu <b>20 buổi/tháng</b> theo quy định công ty.</p>
+  <p class="sub">Đánh dấu mỗi ngày đã tập, nghỉ tập hoặc buổi tùy chọn. Mục tiêu <b>20 buổi/tháng</b> theo quy định công ty.</p>
 
   <div class="toolbar">
     <div class="month-field">
@@ -118,8 +128,9 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
   </div>
 
   <div class="stat-row">
-    <div class="stat-card train"><div class="num" id="statTrain">0</div><div class="lbl">Ngày đã tập</div></div>
-    <div class="stat-card rest"><div class="num" id="statRest">0</div><div class="lbl">Ngày nghỉ tập</div></div>
+    <div class="stat-card train"><div class="num" id="statTrain">0</div><div class="lbl">Đã tập</div></div>
+    <div class="stat-card rest"><div class="num" id="statRest">0</div><div class="lbl">Nghỉ tập</div></div>
+    <div class="stat-card custom"><div class="num" id="statCustom">0</div><div class="lbl">Tùy chọn</div></div>
   </div>
 
   <div class="congrats" id="congrats"><span class="emoji">🎉</span><span>Chúc mừng! Bạn đã hoàn thành mục tiêu tập luyện tháng này!</span></div>
@@ -132,8 +143,15 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
     <div class="bar"><i id="goalBar"></i></div>
   </div>
 
-  <div class="sec-title">Lịch tập cố định (Thứ 2 — Thứ 7)</div>
-  <table class="cal" id="calTable"></table>
+  <div class="cal-card">
+    <div class="cal-title">
+      <button class="nav-btn" id="prevM" aria-label="Tháng trước">‹</button>
+      <span class="mlabel" id="mLabel"></span>
+      <button class="nav-btn" id="nextM" aria-label="Tháng sau">›</button>
+    </div>
+    <div class="dow-row" id="dowRow"></div>
+    <div class="grid" id="grid"></div>
+  </div>
 
   <div class="sec-title">4 buổi đăng ký</div>
   <div class="free-row" id="freeRow"></div>
@@ -141,57 +159,57 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
   <div class="legend">
     <span><i class="lg-train"></i> Đã tập</span>
     <span><i class="lg-rest"></i> Nghỉ tập</span>
-    <span><i class="lg-none"></i> Chưa tích</span>
+    <span><i class="lg-custom"></i> Tùy chọn</span>
   </div>
-  <p class="hint">Bấm ô ✓ xanh để đánh dấu đã tập, ô ✕ đỏ để đánh dấu nghỉ tập. Bấm lại vào ô đang chọn để bỏ tích. Chủ Nhật không nằm trong lịch tập nên bị khoá.</p>
+  <p class="hint">Mỗi ngày có 3 ô: <b>✓ xanh</b> = đã tập, <b>✕ đỏ</b> = nghỉ tập, <b>★ tím</b> = buổi tùy chọn. Bấm để chọn, bấm lại ô đang chọn để bỏ. Phần trăm mục tiêu tính theo số ngày <b>đã tập</b> (ô xanh).</p>
 </div>
 
 <script>
 const STORE_KEY='workout_attendance_v1';
 const GOAL=20;
-const WEEKDAY_LABELS=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','CN'];
+/* Monday-first week (ISO 8601 world standard). CN = Chủ Nhật = Sunday. */
+const DOW_LABELS=['T2','T3','T4','T5','T6','T7','CN'];
+const MONTH_NAMES=['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
 
 function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return{}}}
 function saveStore(s){localStorage.setItem(STORE_KEY,JSON.stringify(s))}
 function monthData(store,mk){if(!store[mk])store[mk]={cells:{},free:[null,null,null,null]};return store[mk]}
 function fmtKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 
-/* Standard calendar grid: 7 columns Mon..Sun, rows are real ISO weeks.
-   Sunday column is included for layout but locked (not trackable). */
-function buildWeeks(year,month){
+/* Canonical month grid: full weeks Mon..Sun, including faded days from the
+   adjacent months so the grid is always a complete rectangle — exactly how a
+   standard wall/phone calendar looks. */
+function buildGrid(year,month){
+  const first=new Date(year,month-1,1);
+  const dow=first.getDay();               // 0=Sun..6=Sat
+  const lead=(dow===0?6:dow-1);           // cells before the 1st to reach Monday
   const daysInMonth=new Date(year,month,0).getDate();
-  const lastDate=new Date(year,month-1,daysInMonth);
-  const firstDate=new Date(year,month-1,1);
-  const dow=firstDate.getDay(); // 0=Sun..6=Sat
-  const offsetToMonday=dow===0?-6:1-dow;
-  let weekStart=new Date(year,month-1,1+offsetToMonday);
-  const weeks=[];
-  while(weekStart<=lastDate){
-    const row=[];
-    let d=new Date(weekStart);
-    for(let i=0;i<7;i++){ // Mon..Sun
-      if(d.getMonth()===month-1&&d.getFullYear()===year)row.push({day:d.getDate(),key:fmtKey(d),isSunday:i===6});
-      else row.push(null);
-      d.setDate(d.getDate()+1);
-    }
-    weeks.push(row);
-    weekStart=new Date(weekStart.getFullYear(),weekStart.getMonth(),weekStart.getDate()+7);
+  const totalCells=Math.ceil((lead+daysInMonth)/7)*7;
+  const start=new Date(year,month-1,1-lead);
+  const cells=[];
+  const d=new Date(start);
+  for(let i=0;i<totalCells;i++){
+    cells.push({date:new Date(d),day:d.getDate(),inMonth:(d.getMonth()===month-1&&d.getFullYear()===year),dow:d.getDay()});
+    d.setDate(d.getDate()+1);
   }
-  return weeks;
+  return cells;
 }
 
 let store=loadStore();
 const picker=document.getElementById('monthPicker');
 const now=new Date();
+const todayKey=fmtKey(now);
 picker.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
 
 function currentMonthKey(){return picker.value}
 function currentYM(){const[y,m]=picker.value.split('-').map(Number);return{y,m}}
+function setMonth(y,m){picker.value=y+'-'+String(m).padStart(2,'0');render();}
 
 function ticksHtml(status){
   return `<span class="ticks">
-    <span class="tick g${status==='train'?' on':''}" data-status="train">✓</span>
-    <span class="tick r${status==='rest'?' on':''}" data-status="rest">✕</span>
+    <button class="tk g${status==='train'?' on':''}" data-status="train" title="Đã tập">✓</button>
+    <button class="tk r${status==='rest'?' on':''}" data-status="rest" title="Nghỉ tập">✕</button>
+    <button class="tk p${status==='custom'?' on':''}" data-status="custom" title="Tùy chọn">★</button>
   </span>`;
 }
 
@@ -199,30 +217,26 @@ function render(){
   const mk=currentMonthKey();
   const data=monthData(store,mk);
   const{y,m}=currentYM();
-  const weeks=buildWeeks(y,m);
 
-  const cal=document.getElementById('calTable');
-  let html='<thead><tr>'+WEEKDAY_LABELS.map((l,i)=>`<th${i===6?' class="cn"':''}>${l}</th>`).join('')+'</tr></thead><tbody>';
-  weeks.forEach(week=>{
-    html+='<tr>';
-    week.forEach(day=>{
-      if(!day){html+='<td><div class="cell empty"></div></td>';return}
-      if(day.isSunday){html+=`<td><div class="cell off"><span class="d">${day.day}</span><span class="cn-tag">CN</span></div></td>`;return}
-      const status=data.cells[day.key]||null;
-      const cls=status?' '+status:'';
-      html+=`<td><div class="cell${cls}" data-key="${day.key}"><span class="d">${day.day}</span>${ticksHtml(status)}</div></td>`;
-    });
-    html+='</tr>';
-  });
-  html+='</tbody>';
-  cal.innerHTML=html;
-  cal.querySelectorAll('.cell:not(.empty):not(.off) .tick').forEach(el=>{
+  document.getElementById('mLabel').textContent=MONTH_NAMES[m-1]+' '+y;
+
+  const dowRow=document.getElementById('dowRow');
+  dowRow.innerHTML=DOW_LABELS.map((l,i)=>`<div class="dow${i===6?' we':''}">${l}</div>`).join('');
+
+  const grid=document.getElementById('grid');
+  grid.innerHTML=buildGrid(y,m).map(c=>{
+    if(!c.inMonth)return `<div class="day out"><span class="dn">${c.day}</span></div>`;
+    const key=fmtKey(c.date);
+    const status=data.cells[key]||null;
+    const cls=(status?' '+status:'')+(key===todayKey?' today':'');
+    return `<div class="day${cls}" data-key="${key}"><span class="dn">${c.day}</span>${ticksHtml(status)}</div>`;
+  }).join('');
+  grid.querySelectorAll('.day:not(.out) .tk').forEach(el=>{
     el.onclick=()=>{
-      const key=el.closest('.cell').dataset.key;
+      const key=el.closest('.day').dataset.key;
       const desired=el.dataset.status;
       data.cells[key]=(data.cells[key]===desired)?null:desired;
-      saveStore(store);
-      render();
+      saveStore(store);render();
     };
   });
 
@@ -232,23 +246,24 @@ function render(){
     return `<div class="free-cell${cls}" data-idx="${i}"><span class="lbl">Đăng ký ${i+1}</span>${ticksHtml(status)}</div>`;
   }).join('');
   freeRow.querySelectorAll('.free-cell').forEach(cellEl=>{
-    cellEl.querySelectorAll('.tick').forEach(el=>{
+    cellEl.querySelectorAll('.tk').forEach(el=>{
       el.onclick=()=>{
         const idx=Number(cellEl.dataset.idx);
         const desired=el.dataset.status;
         data.free[idx]=(data.free[idx]===desired)?null:desired;
-        saveStore(store);
-        render();
+        saveStore(store);render();
       };
     });
   });
 
-  let train=0,rest=0;
-  Object.values(data.cells).forEach(s=>{if(s==='train')train++;else if(s==='rest')rest++});
-  data.free.forEach(s=>{if(s==='train')train++;else if(s==='rest')rest++});
+  let train=0,rest=0,custom=0;
+  const tally=s=>{if(s==='train')train++;else if(s==='rest')rest++;else if(s==='custom')custom++};
+  Object.values(data.cells).forEach(tally);
+  data.free.forEach(tally);
 
   document.getElementById('statTrain').textContent=train;
   document.getElementById('statRest').textContent=rest;
+  document.getElementById('statCustom').textContent=custom;
 
   const pct=Math.round((train/GOAL)*100);
   document.getElementById('goalTxt').textContent=train+' / '+GOAL+' buổi';
@@ -258,11 +273,12 @@ function render(){
 }
 
 picker.onchange=render;
+document.getElementById('prevM').onclick=()=>{let{y,m}=currentYM();m--;if(m<1){m=12;y--;}setMonth(y,m);};
+document.getElementById('nextM').onclick=()=>{let{y,m}=currentYM();m++;if(m>12){m=1;y++;}setMonth(y,m);};
 document.getElementById('resetBtn').onclick=()=>{
   if(!confirm('Xoá toàn bộ dữ liệu chấm công của tháng '+currentMonthKey()+'?'))return;
   delete store[currentMonthKey()];
-  saveStore(store);
-  render();
+  saveStore(store);render();
 };
 
 render();
