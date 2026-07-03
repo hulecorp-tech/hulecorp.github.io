@@ -55,43 +55,51 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
 
 /* calendar */
 .sec-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);margin-bottom:10px}
-.cal{width:100%;border-collapse:separate;border-spacing:6px;margin-bottom:8px}
-.cal th{font-size:.72rem;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;padding-bottom:2px}
-.cell{aspect-ratio:1;border-radius:12px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:.15s;user-select:none;min-width:0}
-.cell:not(.empty){cursor:pointer}
-.cell:not(.empty):hover{border-color:var(--orange);transform:translateY(-1px)}
+.cal{width:100%;border-collapse:separate;border-spacing:4px;margin-bottom:8px;table-layout:fixed}
+.cal th{font-size:.66rem;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.2px;padding-bottom:4px;text-align:center}
+.cal th.cn{color:#B8ac96}
+.cell{border-radius:9px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:.15s;user-select:none;min-width:0;padding:6px 2px;min-height:56px}
 .cell.empty{border-color:transparent;background:transparent}
-.cell .d{font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;color:var(--ink2)}
-.cell .mark{font-size:1.1rem;line-height:1}
-.cell.train{background:var(--green-bg);border-color:var(--green)}
+.cell.off{border-style:dashed;border-color:var(--bd);background:transparent;opacity:.55}
+.cell .d{font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;color:var(--ink2)}
+.cell .cn-tag{font-size:.58rem;font-weight:700;color:#B8AC96;text-transform:uppercase}
+.ticks{display:flex;gap:4px}
+.tick{width:16px;height:16px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:900;line-height:1;cursor:pointer;border:1.5px solid;transition:.12s;background:#fff}
+.tick.g{border-color:var(--green);color:transparent}
+.tick.g:hover{background:var(--green-bg)}
+.tick.g.on{background:var(--green);color:#fff}
+.tick.r{border-color:var(--red);color:transparent}
+.tick.r:hover{background:var(--red-bg)}
+.tick.r.on{background:var(--red);color:#fff}
+.cell.train{background:var(--green-bg)}
 .cell.train .d{color:var(--green)}
-.cell.rest{background:var(--red-bg);border-color:var(--red)}
+.cell.rest{background:var(--red-bg)}
 .cell.rest .d{color:var(--red)}
 
 .free-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
-.free-cell{aspect-ratio:1.4;border-radius:12px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:.15s}
-.free-cell:hover{border-color:var(--orange);transform:translateY(-1px)}
-.free-cell .lbl{font-size:.68rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px}
-.free-cell .mark{font-size:1.3rem;line-height:1}
-.free-cell.train{background:var(--green-bg);border-color:var(--green)}
+.free-cell{border-radius:12px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 6px;transition:.15s}
+.free-cell .lbl{font-size:.66rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;text-align:center}
+.free-cell.train{background:var(--green-bg)}
 .free-cell.train .lbl{color:var(--green)}
-.free-cell.rest{background:var(--red-bg);border-color:var(--red)}
+.free-cell.rest{background:var(--red-bg)}
 .free-cell.rest .lbl{color:var(--red)}
 
 .legend{display:flex;gap:20px;flex-wrap:wrap;font-size:.8rem;color:var(--ink2);margin-bottom:8px}
 .legend span{display:inline-flex;align-items:center;gap:7px}
-.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
-.legend .lg-train{background:var(--green-bg);border:1.5px solid var(--green)}
-.legend .lg-rest{background:var(--red-bg);border:1.5px solid var(--red)}
-.legend .lg-none{background:#fff;border:1.5px solid var(--bd)}
-.hint{font-size:.78rem;color:var(--ink2);margin-bottom:26px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block;border:1.5px solid}
+.legend .lg-train{background:var(--green);border-color:var(--green)}
+.legend .lg-rest{background:var(--red);border-color:var(--red)}
+.legend .lg-none{background:#fff;border-color:var(--bd)}
+.hint{font-size:.78rem;color:var(--ink2);margin-bottom:26px;line-height:1.6}
 
 @media(max-width:560px){
-  .stat-row{grid-template-columns:1fr 1fr}
-  .cal{border-spacing:3px}
-  .cell .d{font-size:.68rem}
-  .cell .mark{font-size:.9rem}
+  .cal{border-spacing:2px}
+  .cell{min-height:46px;padding:4px 1px;border-radius:7px}
+  .cell .d{font-size:.6rem}
+  .tick{width:13px;height:13px;font-size:.52rem;border-radius:4px}
+  .ticks{gap:3px}
   .free-row{gap:6px}
+  .free-cell{padding:10px 4px}
 }
 </style>
 </head>
@@ -127,7 +135,7 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
   <div class="sec-title">Lịch tập cố định (Thứ 2 — Thứ 7)</div>
   <table class="cal" id="calTable"></table>
 
-  <div class="sec-title">4 buổi tập tự do</div>
+  <div class="sec-title">4 buổi đăng ký</div>
   <div class="free-row" id="freeRow"></div>
 
   <div class="legend">
@@ -135,33 +143,34 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
     <span><i class="lg-rest"></i> Nghỉ tập</span>
     <span><i class="lg-none"></i> Chưa tích</span>
   </div>
-  <p class="hint">Bấm vào ô để chuyển: Chưa tích → Đã tập → Nghỉ tập → Chưa tích.</p>
+  <p class="hint">Bấm ô ✓ xanh để đánh dấu đã tập, ô ✕ đỏ để đánh dấu nghỉ tập. Bấm lại vào ô đang chọn để bỏ tích. Chủ Nhật không nằm trong lịch tập nên bị khoá.</p>
 </div>
 
 <script>
 const STORE_KEY='workout_attendance_v1';
 const GOAL=20;
-const WEEKDAY_LABELS=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+const WEEKDAY_LABELS=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','CN'];
 
 function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return{}}}
 function saveStore(s){localStorage.setItem(STORE_KEY,JSON.stringify(s))}
 function monthData(store,mk){if(!store[mk])store[mk]={cells:{},free:[null,null,null,null]};return store[mk]}
 function fmtKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function nextStatus(s){return s===null?'train':s==='train'?'rest':null}
 
+/* Standard calendar grid: 7 columns Mon..Sun, rows are real ISO weeks.
+   Sunday column is included for layout but locked (not trackable). */
 function buildWeeks(year,month){
   const daysInMonth=new Date(year,month,0).getDate();
   const lastDate=new Date(year,month-1,daysInMonth);
   const firstDate=new Date(year,month-1,1);
-  const dow=firstDate.getDay();
+  const dow=firstDate.getDay(); // 0=Sun..6=Sat
   const offsetToMonday=dow===0?-6:1-dow;
   let weekStart=new Date(year,month-1,1+offsetToMonday);
   const weeks=[];
   while(weekStart<=lastDate){
     const row=[];
     let d=new Date(weekStart);
-    for(let i=0;i<6;i++){
-      if(d.getMonth()===month-1&&d.getFullYear()===year)row.push({day:d.getDate(),key:fmtKey(d)});
+    for(let i=0;i<7;i++){ // Mon..Sun
+      if(d.getMonth()===month-1&&d.getFullYear()===year)row.push({day:d.getDate(),key:fmtKey(d),isSunday:i===6});
       else row.push(null);
       d.setDate(d.getDate()+1);
     }
@@ -179,10 +188,11 @@ picker.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
 function currentMonthKey(){return picker.value}
 function currentYM(){const[y,m]=picker.value.split('-').map(Number);return{y,m}}
 
-function markup(status){
-  if(status==='train')return '<span class="mark">✓</span>';
-  if(status==='rest')return '<span class="mark">✕</span>';
-  return '';
+function ticksHtml(status){
+  return `<span class="ticks">
+    <span class="tick g${status==='train'?' on':''}" data-status="train">✓</span>
+    <span class="tick r${status==='rest'?' on':''}" data-status="rest">✕</span>
+  </span>`;
 }
 
 function render(){
@@ -192,23 +202,25 @@ function render(){
   const weeks=buildWeeks(y,m);
 
   const cal=document.getElementById('calTable');
-  let html='<thead><tr>'+WEEKDAY_LABELS.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
+  let html='<thead><tr>'+WEEKDAY_LABELS.map((l,i)=>`<th${i===6?' class="cn"':''}>${l}</th>`).join('')+'</tr></thead><tbody>';
   weeks.forEach(week=>{
     html+='<tr>';
     week.forEach(day=>{
       if(!day){html+='<td><div class="cell empty"></div></td>';return}
+      if(day.isSunday){html+=`<td><div class="cell off"><span class="d">${day.day}</span><span class="cn-tag">CN</span></div></td>`;return}
       const status=data.cells[day.key]||null;
       const cls=status?' '+status:'';
-      html+=`<td><div class="cell${cls}" data-key="${day.key}"><span class="d">${day.day}</span>${markup(status)}</div></td>`;
+      html+=`<td><div class="cell${cls}" data-key="${day.key}"><span class="d">${day.day}</span>${ticksHtml(status)}</div></td>`;
     });
     html+='</tr>';
   });
   html+='</tbody>';
   cal.innerHTML=html;
-  cal.querySelectorAll('.cell:not(.empty)').forEach(el=>{
+  cal.querySelectorAll('.cell:not(.empty):not(.off) .tick').forEach(el=>{
     el.onclick=()=>{
-      const key=el.dataset.key;
-      data.cells[key]=nextStatus(data.cells[key]||null);
+      const key=el.closest('.cell').dataset.key;
+      const desired=el.dataset.status;
+      data.cells[key]=(data.cells[key]===desired)?null:desired;
       saveStore(store);
       render();
     };
@@ -217,15 +229,18 @@ function render(){
   const freeRow=document.getElementById('freeRow');
   freeRow.innerHTML=data.free.map((status,i)=>{
     const cls=status?' '+status:'';
-    return `<div class="free-cell${cls}" data-idx="${i}"><span class="lbl">Buổi ${i+1}</span>${markup(status)}</div>`;
+    return `<div class="free-cell${cls}" data-idx="${i}"><span class="lbl">Đăng ký ${i+1}</span>${ticksHtml(status)}</div>`;
   }).join('');
-  freeRow.querySelectorAll('.free-cell').forEach(el=>{
-    el.onclick=()=>{
-      const idx=Number(el.dataset.idx);
-      data.free[idx]=nextStatus(data.free[idx]||null);
-      saveStore(store);
-      render();
-    };
+  freeRow.querySelectorAll('.free-cell').forEach(cellEl=>{
+    cellEl.querySelectorAll('.tick').forEach(el=>{
+      el.onclick=()=>{
+        const idx=Number(cellEl.dataset.idx);
+        const desired=el.dataset.status;
+        data.free[idx]=(data.free[idx]===desired)?null:desired;
+        saveStore(store);
+        render();
+      };
+    });
   });
 
   let train=0,rest=0;
