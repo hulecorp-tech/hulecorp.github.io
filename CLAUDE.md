@@ -8,6 +8,7 @@ This repo has grown beyond a single portfolio page. It's a small hub for **Huy L
 - A **community forum** (`forum.html`) with Supabase-backed auth, roles, and an admin panel
 - A handful of **standalone Vietnamese-language utility tools**, each its own folder with a clean URL (`/qr`, `/barcode`, `/shopee`, `/design`, `/wheel`, `/paper`, `/midu_cbct`)
 - A **Supabase Edge Function** (`supabase/functions/magnific`) that proxies a third-party AI image API
+- A `/workout` tool for tracking daily company exercise attendance (localStorage only, no backend)
 
 There is still no build step, no package.json, no CI/CD, and no shared framework — each page is a self-contained static HTML file.
 
@@ -28,6 +29,7 @@ hulecorp.github.io/
 ├── design/index.html         # AI Design Studio (Magnific/Freepik image generation)
 ├── wheel/index.html          # 3D lucky-wheel spinner game (+ .mp3 sound effects)
 ├── paper/index.html          # Printable paper/notebook template generator (jsPDF)
+├── workout/index.html        # Daily exercise attendance tracker (localStorage only)
 ├── midu_cbct/index.html      # "Vinh danh Chiến binh Content" certificate generator
 ├── fonts/                    # Self-hosted OTFs used only by /midu_cbct
 │   ├── MTD_Brand_Pro.otf
@@ -91,6 +93,7 @@ Each is a clean-URL folder (`/foo` → `foo/index.html`, no `.html` extension in
 | `/design` | AI Design Studio | Generates images via Magnific/Freepik through the Supabase Edge Function (`FN_URL`); no API key in client code |
 | `/wheel` | 3D lucky-wheel spinner game | Sound effects (`nhac-xo-so.mp3`, `wowcongratulation.mp3`), localStorage persistence for wheel config |
 | `/paper` | Printable paper/notebook template generator | 40 templates, line styles, 4-side margins, watermark, page numbers; exports via jsPDF |
+| `/workout` | Daily exercise attendance tracker | Fixed Mon–Sat calendar + 4 free slots, tick train (green) / rest (red), goal = 20 sessions/month, congrats banner at 100%; localStorage only, no Supabase |
 | `/midu_cbct` | "Vinh danh Chiến binh Content" certificate generator | Draws text onto `cert-template.png` via `<canvas>`, using self-hosted `MTD Brand Pro` / `RubikMKT` fonts; Supabase-backed |
 
 Each tool page is independent — don't assume the portfolio's i18n system, class naming, or CSS tokens apply inside these folders. Some use Tailwind, some hand-written CSS, some their own design tokens.
