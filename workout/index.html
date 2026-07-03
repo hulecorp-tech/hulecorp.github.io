@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chấm Công Tập Thể Dục — Huy Le Creative</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F5EFE6;--card:#fff;--ink:#2D2A24;--ink2:#5F5646;--bd:#E5DDCE;
+  --green:#16A34A;--green-bg:#DCFCE7;--red:#DC2626;--red-bg:#FEE2E2;
+  --orange:#FF8400;--orange2:#FFA94D;--gold:#D69E00;--gold-bg:#FFF6DC;
+  --rad:16px
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Urbanist',-apple-system,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+.mono{font-family:'Space Mono',monospace}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:0;background:none}
+.wrap{max-width:920px;margin:0 auto;padding:24px 20px 80px}
+.back{font-size:.85rem;color:var(--ink2);display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;transition:.15s}
+.back:hover{color:var(--ink)}
+h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
+.sub{color:var(--ink2);font-size:.92rem;margin-bottom:24px;line-height:1.6}
+
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.month-field{display:flex;align-items:center;gap:10px}
+.month-field label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2)}
+.month-field input{padding:10px 13px;border:1.5px solid var(--bd);border-radius:11px;font-size:.9rem;font-family:inherit;background:#fff;color:var(--ink);outline:none}
+.month-field input:focus{border-color:var(--orange)}
+.reset-btn{padding:10px 16px;border:1.5px solid var(--bd);border-radius:11px;font-weight:700;font-size:.8rem;color:var(--ink2);background:#fff;transition:.15s}
+.reset-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* stats */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.stat-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:18px 20px}
+.stat-card .num{font-family:'Space Mono',monospace;font-weight:700;font-size:2rem;line-height:1}
+.stat-card .lbl{font-size:.78rem;color:var(--ink2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
+.stat-card.train .num{color:var(--green)}
+.stat-card.rest .num{color:var(--red)}
+
+.congrats{display:none;align-items:center;gap:12px;background:var(--gold-bg);border:1.5px solid #F3D473;border-radius:var(--rad);padding:16px 20px;margin-bottom:14px;font-weight:800;color:var(--gold);font-size:1rem}
+.congrats.show{display:flex}
+.congrats .emoji{font-size:1.6rem}
+
+.goal-card{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:20px;margin-bottom:28px}
+.goal-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.goal-head .pct{font-family:'Space Mono',monospace;font-weight:700;font-size:1.6rem;color:var(--orange)}
+.goal-head .txt{font-size:.82rem;color:var(--ink2);font-weight:700}
+.bar{height:12px;border-radius:8px;background:var(--cream2,#EDE3D3);overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--orange2));border-radius:8px;transition:width .3s ease;width:0%}
+
+/* calendar */
+.sec-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);margin-bottom:10px}
+.cal{width:100%;border-collapse:separate;border-spacing:6px;margin-bottom:8px}
+.cal th{font-size:.72rem;font-weight:800;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;padding-bottom:2px}
+.cell{aspect-ratio:1;border-radius:12px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:.15s;user-select:none;min-width:0}
+.cell:not(.empty){cursor:pointer}
+.cell:not(.empty):hover{border-color:var(--orange);transform:translateY(-1px)}
+.cell.empty{border-color:transparent;background:transparent}
+.cell .d{font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;color:var(--ink2)}
+.cell .mark{font-size:1.1rem;line-height:1}
+.cell.train{background:var(--green-bg);border-color:var(--green)}
+.cell.train .d{color:var(--green)}
+.cell.rest{background:var(--red-bg);border-color:var(--red)}
+.cell.rest .d{color:var(--red)}
+
+.free-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.free-cell{aspect-ratio:1.4;border-radius:12px;border:1.5px solid var(--bd);background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:.15s}
+.free-cell:hover{border-color:var(--orange);transform:translateY(-1px)}
+.free-cell .lbl{font-size:.68rem;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px}
+.free-cell .mark{font-size:1.3rem;line-height:1}
+.free-cell.train{background:var(--green-bg);border-color:var(--green)}
+.free-cell.train .lbl{color:var(--green)}
+.free-cell.rest{background:var(--red-bg);border-color:var(--red)}
+.free-cell.rest .lbl{color:var(--red)}
+
+.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:.8rem;color:var(--ink2);margin-bottom:8px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+.legend .lg-train{background:var(--green-bg);border:1.5px solid var(--green)}
+.legend .lg-rest{background:var(--red-bg);border:1.5px solid var(--red)}
+.legend .lg-none{background:#fff;border:1.5px solid var(--bd)}
+.hint{font-size:.78rem;color:var(--ink2);margin-bottom:26px}
+
+@media(max-width:560px){
+  .stat-row{grid-template-columns:1fr 1fr}
+  .cal{border-spacing:3px}
+  .cell .d{font-size:.68rem}
+  .cell .mark{font-size:.9rem}
+  .free-row{gap:6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="/forum.html#tools" class="back">← Quay lại Công cụ</a>
+  <h1>💪 Chấm Công Tập Thể Dục</h1>
+  <p class="sub">Tích vào ngày đã tập hoặc ngày nghỉ tập. Mục tiêu <b>20 buổi/tháng</b> theo quy định công ty.</p>
+
+  <div class="toolbar">
+    <div class="month-field">
+      <label for="monthPicker">Tháng</label>
+      <input type="month" id="monthPicker">
+    </div>
+    <button class="reset-btn" id="resetBtn">🗑 Xoá dữ liệu tháng này</button>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-card train"><div class="num" id="statTrain">0</div><div class="lbl">Ngày đã tập</div></div>
+    <div class="stat-card rest"><div class="num" id="statRest">0</div><div class="lbl">Ngày nghỉ tập</div></div>
+  </div>
+
+  <div class="congrats" id="congrats"><span class="emoji">🎉</span><span>Chúc mừng! Bạn đã hoàn thành mục tiêu tập luyện tháng này!</span></div>
+
+  <div class="goal-card">
+    <div class="goal-head">
+      <span class="txt" id="goalTxt">0 / 20 buổi</span>
+      <span class="pct" id="goalPct">0%</span>
+    </div>
+    <div class="bar"><i id="goalBar"></i></div>
+  </div>
+
+  <div class="sec-title">Lịch tập cố định (Thứ 2 — Thứ 7)</div>
+  <table class="cal" id="calTable"></table>
+
+  <div class="sec-title">4 buổi tập tự do</div>
+  <div class="free-row" id="freeRow"></div>
+
+  <div class="legend">
+    <span><i class="lg-train"></i> Đã tập</span>
+    <span><i class="lg-rest"></i> Nghỉ tập</span>
+    <span><i class="lg-none"></i> Chưa tích</span>
+  </div>
+  <p class="hint">Bấm vào ô để chuyển: Chưa tích → Đã tập → Nghỉ tập → Chưa tích.</p>
+</div>
+
+<script>
+const STORE_KEY='workout_attendance_v1';
+const GOAL=20;
+const WEEKDAY_LABELS=['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+
+function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{}}catch(e){return{}}}
+function saveStore(s){localStorage.setItem(STORE_KEY,JSON.stringify(s))}
+function monthData(store,mk){if(!store[mk])store[mk]={cells:{},free:[null,null,null,null]};return store[mk]}
+function fmtKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function nextStatus(s){return s===null?'train':s==='train'?'rest':null}
+
+function buildWeeks(year,month){
+  const daysInMonth=new Date(year,month,0).getDate();
+  const lastDate=new Date(year,month-1,daysInMonth);
+  const firstDate=new Date(year,month-1,1);
+  const dow=firstDate.getDay();
+  const offsetToMonday=dow===0?-6:1-dow;
+  let weekStart=new Date(year,month-1,1+offsetToMonday);
+  const weeks=[];
+  while(weekStart<=lastDate){
+    const row=[];
+    let d=new Date(weekStart);
+    for(let i=0;i<6;i++){
+      if(d.getMonth()===month-1&&d.getFullYear()===year)row.push({day:d.getDate(),key:fmtKey(d)});
+      else row.push(null);
+      d.setDate(d.getDate()+1);
+    }
+    weeks.push(row);
+    weekStart=new Date(weekStart.getFullYear(),weekStart.getMonth(),weekStart.getDate()+7);
+  }
+  return weeks;
+}
+
+let store=loadStore();
+const picker=document.getElementById('monthPicker');
+const now=new Date();
+picker.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+
+function currentMonthKey(){return picker.value}
+function currentYM(){const[y,m]=picker.value.split('-').map(Number);return{y,m}}
+
+function markup(status){
+  if(status==='train')return '<span class="mark">✓</span>';
+  if(status==='rest')return '<span class="mark">✕</span>';
+  return '';
+}
+
+function render(){
+  const mk=currentMonthKey();
+  const data=monthData(store,mk);
+  const{y,m}=currentYM();
+  const weeks=buildWeeks(y,m);
+
+  const cal=document.getElementById('calTable');
+  let html='<thead><tr>'+WEEKDAY_LABELS.map(l=>'<th>'+l+'</th>').join('')+'</tr></thead><tbody>';
+  weeks.forEach(week=>{
+    html+='<tr>';
+    week.forEach(day=>{
+      if(!day){html+='<td><div class="cell empty"></div></td>';return}
+      const status=data.cells[day.key]||null;
+      const cls=status?' '+status:'';
+      html+=`<td><div class="cell${cls}" data-key="${day.key}"><span class="d">${day.day}</span>${markup(status)}</div></td>`;
+    });
+    html+='</tr>';
+  });
+  html+='</tbody>';
+  cal.innerHTML=html;
+  cal.querySelectorAll('.cell:not(.empty)').forEach(el=>{
+    el.onclick=()=>{
+      const key=el.dataset.key;
+      data.cells[key]=nextStatus(data.cells[key]||null);
+      saveStore(store);
+      render();
+    };
+  });
+
+  const freeRow=document.getElementById('freeRow');
+  freeRow.innerHTML=data.free.map((status,i)=>{
+    const cls=status?' '+status:'';
+    return `<div class="free-cell${cls}" data-idx="${i}"><span class="lbl">Buổi ${i+1}</span>${markup(status)}</div>`;
+  }).join('');
+  freeRow.querySelectorAll('.free-cell').forEach(el=>{
+    el.onclick=()=>{
+      const idx=Number(el.dataset.idx);
+      data.free[idx]=nextStatus(data.free[idx]||null);
+      saveStore(store);
+      render();
+    };
+  });
+
+  let train=0,rest=0;
+  Object.values(data.cells).forEach(s=>{if(s==='train')train++;else if(s==='rest')rest++});
+  data.free.forEach(s=>{if(s==='train')train++;else if(s==='rest')rest++});
+
+  document.getElementById('statTrain').textContent=train;
+  document.getElementById('statRest').textContent=rest;
+
+  const pct=Math.round((train/GOAL)*100);
+  document.getElementById('goalTxt').textContent=train+' / '+GOAL+' buổi';
+  document.getElementById('goalPct').textContent=pct+'%';
+  document.getElementById('goalBar').style.width=Math.min(pct,100)+'%';
+  document.getElementById('congrats').classList.toggle('show',train>=GOAL);
+}
+
+picker.onchange=render;
+document.getElementById('resetBtn').onclick=()=>{
+  if(!confirm('Xoá toàn bộ dữ liệu chấm công của tháng '+currentMonthKey()+'?'))return;
+  delete store[currentMonthKey()];
+  saveStore(store);
+  render();
+};
+
+render();
+</script>
+</body>
+</html>
