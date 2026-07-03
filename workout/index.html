@@ -161,7 +161,7 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
     <span><i class="lg-rest"></i> Nghỉ tập</span>
     <span><i class="lg-custom"></i> Tùy chọn</span>
   </div>
-  <p class="hint">Mỗi ngày có 3 ô: <b>✓ xanh</b> = đã tập, <b>✕ đỏ</b> = nghỉ tập, <b>★ tím</b> = buổi tùy chọn. Bấm để chọn, bấm lại ô đang chọn để bỏ. Phần trăm mục tiêu tính theo số ngày <b>đã tập</b> (ô xanh).</p>
+  <p class="hint">Mỗi ngày có 3 ô: <b>✓ xanh</b> = đã tập, <b>✕ đỏ</b> = nghỉ tập, <b>★ tím</b> = buổi tùy chọn. Bấm để chọn, bấm lại ô đang chọn để bỏ. Phần trăm mục tiêu tính theo số buổi <b>đã tập</b> (ô xanh) <b>và tùy chọn</b> (ô tím).</p>
 </div>
 
 <script>
@@ -265,11 +265,12 @@ function render(){
   document.getElementById('statRest').textContent=rest;
   document.getElementById('statCustom').textContent=custom;
 
-  const pct=Math.round((train/GOAL)*100);
-  document.getElementById('goalTxt').textContent=train+' / '+GOAL+' buổi';
+  const done=train+custom; // ngày đã tập (xanh) + buổi tùy chọn (tím)
+  const pct=Math.round((done/GOAL)*100);
+  document.getElementById('goalTxt').textContent=done+' / '+GOAL+' buổi';
   document.getElementById('goalPct').textContent=pct+'%';
   document.getElementById('goalBar').style.width=Math.min(pct,100)+'%';
-  document.getElementById('congrats').classList.toggle('show',train>=GOAL);
+  document.getElementById('congrats').classList.toggle('show',done>=GOAL);
 }
 
 picker.onchange=render;
