@@ -9,6 +9,7 @@ This repo has grown beyond a single portfolio page. It's a small hub for **Huy L
 - A handful of **standalone Vietnamese-language utility tools**, each its own folder with a clean URL (`/qr`, `/barcode`, `/shopee`, `/design`, `/wheel`, `/paper`, `/midu_cbct`)
 - A **Supabase Edge Function** (`supabase/functions/magnific`) that proxies a third-party AI image API
 - A `/workout` tool for tracking daily company exercise attendance (localStorage only, no backend)
+- A `/studio` tool ("Xưởng Thiết Kế") — an internal design-order workflow: staff submit design orders, admins/mods see the order queue and fulfil them in a built-in AI-generation + canvas image-editor workspace (Supabase-backed via a `design_orders` table)
 
 There is still no build step, no package.json, no CI/CD, and no shared framework — each page is a self-contained static HTML file.
 
@@ -30,11 +31,13 @@ hulecorp.github.io/
 ├── wheel/index.html          # 3D lucky-wheel spinner game (+ .mp3 sound effects)
 ├── paper/index.html          # Printable paper/notebook template generator (jsPDF)
 ├── workout/index.html        # Daily exercise attendance tracker (localStorage only)
+├── studio/index.html         # Design-order workflow + AI-gen & image-editor workspace (Supabase)
 ├── midu_cbct/index.html      # "Vinh danh Chiến binh Content" certificate generator
 ├── fonts/                    # Self-hosted OTFs used only by /midu_cbct
 │   ├── MTD_Brand_Pro.otf
 │   ├── RubikMKT-Bold.otf
 │   └── RubikMKT-Regular.otf
+├── supabase/design_orders.sql              # SQL schema + RLS for the /studio design_orders table
 └── supabase/functions/magnific/index.ts   # Deno edge function proxying the Magnific API
 ```
 
@@ -94,6 +97,7 @@ Each is a clean-URL folder (`/foo` → `foo/index.html`, no `.html` extension in
 | `/wheel` | 3D lucky-wheel spinner game | Sound effects (`nhac-xo-so.mp3`, `wowcongratulation.mp3`), localStorage persistence for wheel config |
 | `/paper` | Printable paper/notebook template generator | 40 templates, line styles, 4-side margins, watermark, page numbers; exports via jsPDF |
 | `/workout` | Daily exercise attendance tracker | Fixed Mon–Sat calendar + 4 free slots, tick train (green) / rest (red), goal = 20 sessions/month, congrats banner at 100%; localStorage only, no Supabase |
+| `/studio` | Design-order workflow ("Xưởng Thiết Kế") | Requires a Forum login. Staff submit design orders; admin/mod see the full queue and fulfil each order in a workspace with **AI generation** (reuses the `magnific` edge function, same `generate`/`status`/`upscale` flow as `/design`) + a **canvas image editor** (filters, rotate/flip, draggable text, deliver). Backed by the Supabase `design_orders` table (see `supabase/design_orders.sql`) with role-based RLS |
 | `/midu_cbct` | "Vinh danh Chiến binh Content" certificate generator | Draws text onto `cert-template.png` via `<canvas>`, using self-hosted `MTD Brand Pro` / `RubikMKT` fonts; Supabase-backed |
 
 Each tool page is independent — don't assume the portfolio's i18n system, class naming, or CSS tokens apply inside these folders. Some use Tailwind, some hand-written CSS, some their own design tokens.
@@ -110,7 +114,8 @@ Archived snapshot of the original pre-redesign portfolio (before commit `4a7a051
 
 - Shared project ref: `dmvomgmhsivifionnkiu` → `https://dmvomgmhsivifionnkiu.supabase.co`
 - Client pages call `window.supabase.createClient(SB_URL, SB_KEY)` with the **public anon key** (safe to expose client-side).
-- `supabase/functions/magnific/index.ts` — Deno edge function. Actions: `generate` (POST `/v1/ai/mystic`), `status` (GET), `upscale` (POST `/v1/ai/image-upscaler`), `upscale_status` (GET). Reads `MAGNIFIC_API_KEY` from an environment secret set via `supabase secrets set MAGNIFIC_API_KEY=xxxx`; deployed via `supabase functions deploy magnific`. This keeps the real API key off the client entirely.
+- `supabase/functions/magnific/index.ts` — Deno edge function. Actions: `generate` (POST `/v1/ai/mystic`), `status` (GET), `upscale` (POST `/v1/ai/image-upscaler`), `upscale_status` (GET). Reads `MAGNIFIC_API_KEY` from an environment secret set via `supabase secrets set MAGNIFIC_API_KEY=xxxx`; deployed via `supabase functions deploy magnific`. This keeps the real API key off the client entirely. Used by both `/design` and `/studio`.
+- `design_orders` table (used by `/studio`) — **not created automatically**; run `supabase/design_orders.sql` once in the Supabase SQL editor. It defines the table plus RLS: any signed-in user may insert their own order and read their own orders; admins/moderators (via an `is_designer()` `SECURITY DEFINER` helper that checks `profiles.role`) may read/update/delete all orders. `/studio` shows a setup banner if the table is missing.
 
 ## Adding Content to the Portfolio (`index.html`)
 

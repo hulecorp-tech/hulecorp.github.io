@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xưởng Thiết Kế — Order & Thiết kế | Huy Le Creative</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖌️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{
+  --cream:#F5EFE6;--card:#fff;--ink:#2D2A24;--ink2:#5F5646;--bd:#E5DDCE;
+  --green:#16A34A;--green-bg:#DCFCE7;--red:#DC2626;--red-bg:#FEE2E2;
+  --purple:#7C3AED;--purple-bg:#EDE9FE;--blue:#2563EB;--blue-bg:#DBEAFE;
+  --orange:#FF8400;--orange2:#FFA94D;--amber:#D97706;--amber-bg:#FEF3C7;
+  --rad:16px
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Urbanist',-apple-system,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+.mono{font-family:'Space Mono',monospace}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:0;background:none}
+input,select,textarea{font-family:inherit}
+.spin{width:40px;height:40px;border:4px solid var(--bd);border-top-color:var(--orange);border-radius:50%;animation:sp 1s linear infinite;margin:60px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:40;background:rgba(245,239,230,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.top-in{max-width:1180px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.05rem;letter-spacing:-.5px}
+.brand .ic{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--orange),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.top-r{display:flex;align-items:center;gap:10px;font-size:.85rem}
+.who{color:var(--ink2)}
+.bdg{font-size:.66rem;font-weight:800;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
+.bdg-a{background:#FEE2E2;color:#B91C1C}.bdg-m{background:#DBEAFE;color:#1D4ED8}.bdg-u{background:#E5E7EB;color:#374151}
+.btn{border-radius:11px;font-weight:700;font-size:.85rem;padding:10px 18px;transition:.15s;display:inline-flex;align-items:center;gap:7px;border:1.5px solid transparent}
+.btn-o{background:var(--orange);color:#fff;box-shadow:0 6px 18px rgba(255,132,0,.3)}.btn-o:hover{background:#f07c00}
+.btn-g{background:#fff;border-color:var(--bd);color:var(--ink)}.btn-g:hover{border-color:var(--ink2)}
+.btn-p{background:var(--purple);color:#fff}.btn-p:hover{filter:brightness(1.08)}
+.btn-sm{padding:7px 13px;font-size:.78rem;border-radius:9px}
+.btn:disabled{opacity:.5;cursor:default;box-shadow:none}
+
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 90px}
+.back{font-size:.85rem;color:var(--ink2);display:inline-flex;gap:6px;margin-bottom:14px}.back:hover{color:var(--ink)}
+
+/* tabs */
+.tabs{display:flex;gap:6px;background:#fff;border:1px solid var(--bd);border-radius:14px;padding:6px;margin-bottom:22px;flex-wrap:wrap}
+.tab{flex:1;min-width:120px;padding:11px 14px;border-radius:10px;font-weight:700;font-size:.86rem;color:var(--ink2);text-align:center;transition:.15s}
+.tab.on{background:var(--ink);color:var(--cream)}
+.tab:not(.on):hover{background:var(--cream)}
+
+/* panels/cards */
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:22px}
+.h2{font-size:1.25rem;font-weight:900;letter-spacing:-.5px;margin-bottom:4px}
+.muted{color:var(--ink2);font-size:.9rem;line-height:1.6}
+label{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);margin:16px 0 7px}
+label:first-of-type{margin-top:0}
+input[type=text],input[type=date],select,textarea{width:100%;padding:12px 13px;border:1.5px solid var(--bd);border-radius:11px;font-size:.92rem;background:#fff;color:var(--ink);outline:none;transition:.15s}
+input:focus,select:focus,textarea:focus{border-color:var(--orange)}
+textarea{resize:vertical;min-height:92px;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.drop{border:2px dashed var(--bd);border-radius:12px;padding:20px;text-align:center;color:var(--ink2);font-size:.85rem;cursor:pointer;transition:.15s}
+.drop:hover{border-color:var(--orange);color:var(--ink)}
+.thumb{max-width:100%;max-height:200px;border-radius:10px;margin-top:10px;display:block}
+
+/* status pills */
+.pill{font-size:.68rem;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.st-new{background:var(--amber-bg);color:var(--amber)}
+.st-in_progress{background:var(--blue-bg);color:var(--blue)}
+.st-done{background:var(--green-bg);color:var(--green)}
+.pr-normal{background:#EEF2F6;color:#64748B}.pr-high{background:#FFEDD5;color:#C2410C}.pr-urgent{background:#FEE2E2;color:#B91C1C}
+
+/* order list */
+.olist{display:flex;flex-direction:column;gap:12px}
+.ocard{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:16px 18px;transition:.15s;cursor:pointer}
+.ocard:hover{box-shadow:0 8px 22px rgba(0,0,0,.08);border-color:var(--ink2)}
+.ocard .oc-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.ocard .oc-title{font-weight:800;font-size:1rem}
+.oc-meta{font-size:.78rem;color:var(--ink2);display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.empty{text-align:center;color:var(--ink2);padding:44px 20px;font-size:.9rem}
+.empty .emo{font-size:2.4rem;margin-bottom:10px}
+
+/* board */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.col-h{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);margin-bottom:12px}
+.col-h .cnt{background:var(--cream);border:1px solid var(--bd);border-radius:20px;padding:1px 9px;font-size:.72rem}
+.col .olist{gap:10px}
+
+/* setup / gate banners */
+.gate{max-width:620px;margin:40px auto;text-align:center;background:#fff;border:1px solid var(--bd);border-radius:20px;padding:40px 30px}
+.gate .emo{font-size:3rem;margin-bottom:14px}
+.gate h2{font-size:1.35rem;font-weight:900;margin-bottom:10px}
+.setup{background:#fff;border:1px solid var(--bd);border-left:4px solid var(--amber);border-radius:12px;padding:18px 20px;margin-bottom:20px}
+.setup pre{background:#1a1712;color:#e8ddc9;border-radius:10px;padding:14px;overflow:auto;font-size:.72rem;line-height:1.5;margin-top:12px;max-height:230px}
+
+/* workspace */
+.ws-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.ws{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+.brief-item{margin-bottom:12px}
+.brief-item .k{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2)}
+.brief-item .v{font-size:.9rem;line-height:1.55;margin-top:2px;white-space:pre-wrap}
+.subpanel{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:16px}
+.subpanel h3{font-size:.95rem;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+
+/* AI result + editor stage */
+.ai-out{min-height:220px;border:1.5px dashed var(--bd);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:18px;color:var(--ink2);font-size:.85rem}
+.ai-out img{max-width:100%;max-height:340px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.14)}
+.status{font-family:'Space Mono',monospace;font-size:.78rem;color:var(--ink2);letter-spacing:1px}
+.stage{position:relative;background:
+  linear-gradient(45deg,#eee 25%,transparent 25%),linear-gradient(-45deg,#eee 25%,transparent 25%),
+  linear-gradient(45deg,transparent 75%,#eee 75%),linear-gradient(-45deg,transparent 75%,#eee 75%);
+  background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0;
+  background-color:#fff;border:1px solid var(--bd);border-radius:12px;padding:12px;display:flex;justify-content:center;align-items:center;min-height:280px}
+#editCanvas{max-width:100%;touch-action:none;border-radius:6px;box-shadow:0 6px 20px rgba(0,0,0,.18);cursor:default}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ctrl{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--ink2);margin-top:10px}
+.ctrl input[type=range]{flex:1;accent-color:var(--orange)}
+.ctrl .val{font-family:'Space Mono',monospace;width:38px;text-align:right;font-size:.74rem}
+.txt-item{display:flex;gap:6px;align-items:center;margin-top:8px}
+.txt-item input[type=text]{flex:1;padding:8px 10px}
+.txt-item input[type=color]{width:34px;height:34px;padding:0;border:1.5px solid var(--bd);border-radius:8px;background:#fff}
+.txt-item input[type=number]{width:56px;padding:8px}
+.mini{font-size:.72rem;color:var(--ink2);line-height:1.5}
+
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:12px 20px;border-radius:12px;font-size:.86rem;font-weight:600;opacity:0;transition:.25s;z-index:100;pointer-events:none;box-shadow:0 12px 30px rgba(0,0,0,.25);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:#B91C1C}
+
+@media(max-width:900px){.ws{grid-template-columns:1fr}.board{grid-template-columns:1fr}}
+@media(max-width:560px){.row2{grid-template-columns:1fr}.tab{min-width:0}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="top"><div class="top-in">
+  <a href="/forum.html#tools" class="brand"><span class="ic">🖌️</span> Xưởng Thiết Kế</a>
+  <div class="top-r" id="topR"></div>
+</div></div>
+
+<div class="wrap" id="app"><div class="spin"></div></div>
+
+<script>
+const SB_URL='https://dmvomgmhsivifionnkiu.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtdm9tZ21oc2l2aWZpb25ua2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODcyMzAsImV4cCI6MjA5NzY2MzIzMH0.9HQDKLrzjaRwf1z44cWc3Wb-LMx6a4Ec-QN0QAOGZ00';
+const FN_URL=SB_URL+'/functions/v1/magnific';
+let sb=null;try{sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}});}catch(e){}
+
+let me=null,prof=null,isDesigner=false,tab='create',orders=[];
+
+const CATEGORIES=['Banner','Poster','Logo','Bao bì','Ấn phẩm Social','Thiệp / Chứng nhận','Khác'];
+const PRIORITY={normal:'Bình thường',high:'Ưu tiên',urgent:'Gấp'};
+const STATUS={new:'Mới',in_progress:'Đang thiết kế',done:'Hoàn thành'};
+const RATIOS={square_1_1:'Vuông 1:1',widescreen_16_9:'Ngang 16:9',social_story_9_16:'Dọc 9:16',traditional_3_4:'Đứng 3:4',classic_4_3:'Ngang 4:3'};
+const MODELS={realism:'Realism — chân thực',fluid:'Fluid — nghệ thuật',zen:'Zen — tối giản',super_real:'Super Real',editorial_portraits:'Editorial Portraits'};
+
+/* ---------- utils ---------- */
+const $=s=>document.querySelector(s);
+const app=()=>document.getElementById('app');
+const esc=s=>String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+let _t;function toast(m,err){const t=$('#toast');t.textContent=m;t.className='toast'+(err?' err':'');clearTimeout(_t);setTimeout(()=>t.classList.add('show'),10);_t=setTimeout(()=>t.classList.remove('show'),3600)}
+function ago(d){const s=Math.floor((Date.now()-new Date(d))/1000);if(s<60)return 'vừa xong';if(s<3600)return Math.floor(s/60)+' phút trước';if(s<86400)return Math.floor(s/3600)+' giờ trước';return Math.floor(s/86400)+' ngày trước'}
+function fmtDate(d){if(!d)return '—';try{return new Date(d).toLocaleDateString('vi-VN')}catch{return d}}
+function isMissingTable(err){const m=((err&&(err.message||err.code||''))+'').toLowerCase();return m.includes('design_orders')||m.includes('42p01')||m.includes('pgrst205')||m.includes('does not exist')||m.includes('schema cache')}
+
+/* downscale an image file/URL to a size-friendly data URL */
+function fileToDataURL(file,max=1400,quality=.85){
+  return new Promise((res,rej)=>{
+    const img=new Image();img.onload=()=>{
+      let{width:w,height:h}=img;const sc=Math.min(1,max/Math.max(w,h));
+      const c=document.createElement('canvas');c.width=Math.round(w*sc);c.height=Math.round(h*sc);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      res(c.toDataURL('image/jpeg',quality));
+    };img.onerror=()=>rej(new Error('Không đọc được ảnh'));
+    const fr=new FileReader();fr.onload=()=>img.src=fr.result;fr.onerror=()=>rej(new Error('Không đọc được file'));fr.readAsDataURL(file);
+  });
+}
+
+/* ---------- Magnific edge function ---------- */
+async function fn(payload){
+  const r=await fetch(FN_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_KEY,'apikey':SB_KEY},body:JSON.stringify(payload)});
+  return r.json();
+}
+const findTaskId=o=>{if(!o||typeof o!=='object')return null;if(o.task_id)return o.task_id;for(const k in o){const v=findTaskId(o[k]);if(v)return v}return null};
+const findStatus=o=>{if(!o||typeof o!=='object')return null;if(typeof o.status==='string')return o.status;for(const k in o){const v=findStatus(o[k]);if(v)return v}return null};
+function findImages(o,acc=[]){if(!o)return acc;if(typeof o==='string'){if(/^https?:\/\/.+/.test(o)&&/\.(png|jpe?g|webp)|generated|cdn|freepik|magnific/i.test(o))acc.push(o);return acc}if(Array.isArray(o)){o.forEach(x=>findImages(x,acc));return acc}if(typeof o==='object')for(const k in o)findImages(o[k],acc);return acc}
+
+/* ============================ BOOT ============================ */
+(async()=>{
+  if(!sb){renderGate('⚠️','Không kết nối được máy chủ','Không tải được thư viện Supabase. Kiểm tra mạng rồi thử lại.');return}
+  try{const {data:{user}}=await sb.auth.getUser();me=user||null;}catch(e){me=null;}
+  if(!me){
+    renderGate('🔒','Cần đăng nhập','Hãy đăng nhập bằng tài khoản Forum để tạo và theo dõi order thiết kế.',
+      '<a class="btn btn-o" href="/forum.html#login">Đăng nhập trên Forum</a>');
+    return;
+  }
+  try{const {data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data||null;}catch(e){}
+  isDesigner=!!prof&&['admin','moderator'].includes(prof.role);
+  tab=isDesigner?'studio':'create';
+  renderTopR();renderApp();
+})();
+
+function renderGate(emo,title,msg,extra=''){
+  document.getElementById('topR').innerHTML='';
+  app().innerHTML=`<div class="gate"><div class="emo">${emo}</div><h2>${esc(title)}</h2><p class="muted">${esc(msg)}</p><div style="margin-top:20px">${extra}</div></div>`;
+}
+function renderTopR(){
+  const role=prof?.role;const b=role==='admin'?'bdg-a':role==='moderator'?'bdg-m':'bdg-u';
+  const rl=role==='admin'?'Admin':role==='moderator'?'Mod':'Nhân sự';
+  document.getElementById('topR').innerHTML=`<span class="who">${esc(prof?.username||me.email||'Bạn')}</span><span class="bdg ${b}">${rl}</span><button class="btn btn-g btn-sm" id="logout">Đăng xuất</button>`;
+  $('#logout').onclick=async()=>{await sb.auth.signOut();location.reload()};
+}
+
+/* ============================ APP SHELL ============================ */
+function renderApp(){
+  const tabs=[['create','✍️ Tạo đơn'],['mine','📋 Đơn của tôi']];
+  if(isDesigner)tabs.push(['studio','🎨 Quản lý & Thiết kế']);
+  app().innerHTML=`
+    <div class="tabs">${tabs.map(([k,l])=>`<button class="tab ${tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('')}</div>
+    <div id="pane"></div>`;
+  app().querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderApp()});
+  if(tab==='create')renderCreate();
+  else if(tab==='mine')renderMine();
+  else renderStudio();
+}
+
+/* ---------- Tab: Create order ---------- */
+function renderCreate(){
+  $('#pane').innerHTML=`
+  <div class="panel" style="max-width:760px">
+    <div class="h2">✍️ Tạo đơn thiết kế</div>
+    <p class="muted" style="margin-bottom:20px">Điền yêu cầu, đơn sẽ được gửi tới bộ phận thiết kế. Bạn theo dõi tiến độ ở tab “Đơn của tôi”.</p>
+    <form id="of">
+      <label>Tiêu đề *</label>
+      <input type="text" name="title" required maxlength="120" placeholder="VD: Banner tuyển dụng tháng 7">
+      <div class="row2">
+        <div><label>Loại thiết kế</label>
+          <select name="category">${CATEGORIES.map(c=>`<option>${c}</option>`).join('')}</select></div>
+        <div><label>Độ ưu tiên</label>
+          <select name="priority">${Object.entries(PRIORITY).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+      </div>
+      <label>Mô tả yêu cầu *</label>
+      <textarea name="brief" required placeholder="Nội dung, thông điệp, màu sắc, phong cách, nội dung chữ cần có…"></textarea>
+      <div class="row2">
+        <div><label>Kích thước / tỉ lệ</label>
+          <input type="text" name="size" placeholder="VD: 1200x628, A4, vuông 1:1"></div>
+        <div><label>Deadline</label>
+          <input type="date" name="deadline"></div>
+      </div>
+      <label>Ảnh tham khảo (tuỳ chọn)</label>
+      <div class="drop" id="refDrop">🖼️ Bấm để chọn ảnh tham khảo (logo, mẫu, moodboard…)</div>
+      <input type="file" id="refFile" accept="image/*" hidden>
+      <div id="refPrev"></div>
+      <div style="margin-top:22px;display:flex;gap:10px">
+        <button type="submit" class="btn btn-o" id="submitBtn">📨 Gửi đơn</button>
+      </div>
+    </form>
+  </div>`;
+  let refData=null;
+  $('#refDrop').onclick=()=>$('#refFile').click();
+  $('#refFile').onchange=async e=>{
+    const f=e.target.files[0];if(!f)return;
+    try{refData=await fileToDataURL(f);$('#refPrev').innerHTML=`<img class="thumb" src="${refData}"><button type="button" class="btn btn-g btn-sm" id="rmRef" style="margin-top:8px">Xoá ảnh</button>`;$('#rmRef').onclick=()=>{refData=null;$('#refPrev').innerHTML=''};}
+    catch(err){toast(err.message,true)}
+  };
+  $('#of').onsubmit=async e=>{
+    e.preventDefault();const f=e.target,btn=$('#submitBtn');btn.disabled=true;btn.textContent='Đang gửi…';
+    const row={requester_id:me.id,requester_name:prof?.username||me.email,title:f.title.value.trim(),category:f.category.value,priority:f.priority.value,brief:f.brief.value.trim(),size:f.size.value.trim()||null,deadline:f.deadline.value||null,ref_image:refData,status:'new'};
+    const {error}=await sb.from('design_orders').insert(row);
+    if(error){btn.disabled=false;btn.textContent='📨 Gửi đơn';return toast(isMissingTable(error)?'Chưa cấu hình bảng design_orders trên Supabase — chạy file supabase/design_orders.sql.':error.message,true)}
+    toast('Đã gửi đơn thiết kế! 🎉');tab='mine';renderApp();
+  };
+}
+
+/* ---------- Tab: My orders ---------- */
+async function renderMine(){
+  $('#pane').innerHTML='<div class="spin"></div>';
+  const {data,error}=await sb.from('design_orders').select('*').eq('requester_id',me.id).order('created_at',{ascending:false});
+  if(error){if(isMissingTable(error))return $('#pane').innerHTML=setupHtml();return $('#pane').innerHTML=`<div class="empty">${esc(error.message)}</div>`}
+  const list=data||[];
+  $('#pane').innerHTML=`<div class="panel"><div class="h2">📋 Đơn của tôi</div><p class="muted" style="margin-bottom:18px">${list.length} đơn</p>
+    ${list.length?`<div class="olist">${list.map(o=>orderCard(o,false)).join('')}</div>`:`<div class="empty"><div class="emo">📭</div>Chưa có đơn nào.<br><small>Sang tab “Tạo đơn” để bắt đầu.</small></div>`}</div>`;
+  bindOrderCards(false);
+}
+
+function orderCard(o,forDesigner){
+  return `<div class="ocard" data-id="${o.id}">
+    <div class="oc-top">
+      <div class="oc-title">${esc(o.title)}</div>
+      <span class="pill st-${o.status}">${STATUS[o.status]||o.status}</span>
+    </div>
+    <div class="muted" style="font-size:.84rem;max-height:40px;overflow:hidden">${esc(o.brief||'')}</div>
+    <div class="oc-meta">
+      <span>🏷️ ${esc(o.category||'—')}</span>
+      <span class="pill pr-${o.priority}">${PRIORITY[o.priority]||o.priority}</span>
+      ${o.deadline?`<span>⏰ ${fmtDate(o.deadline)}</span>`:''}
+      ${forDesigner?`<span>👤 ${esc(o.requester_name||'—')}</span>`:''}
+      <span>🕒 ${ago(o.created_at)}</span>
+      ${o.result_image?'<span>✅ Đã có bản thiết kế</span>':''}
+    </div>
+  </div>`;
+}
+function bindOrderCards(forDesigner){
+  document.querySelectorAll('.ocard').forEach(c=>c.onclick=()=>{
+    const o=orders.find(x=>x.id===c.dataset.id);
+    if(forDesigner&&o)openWorkspace(o);
+    else viewOrder(c.dataset.id);
+  });
+}
+
+/* staff read-only order view */
+async function viewOrder(id){
+  const {data:o}=await sb.from('design_orders').select('*').eq('id',id).single();
+  if(!o)return;
+  $('#pane').innerHTML=`<a class="back" id="bk">← Quay lại</a>
+    <div class="panel">
+      <div class="ws-head"><div><div class="h2">${esc(o.title)}</div><div class="muted">${esc(o.category||'')} · gửi ${ago(o.created_at)}</div></div><span class="pill st-${o.status}">${STATUS[o.status]||o.status}</span></div>
+      ${briefBlock(o)}
+      ${o.result_image?`<div class="subpanel"><h3>✅ Bản thiết kế đã giao</h3><img class="thumb" style="max-height:420px" src="${o.result_image}"><div style="margin-top:10px"><a class="btn btn-o btn-sm" href="${o.result_image}" download="thiet-ke.png">⬇️ Tải về</a></div></div>`:`<div class="muted" style="margin-top:12px">Bản thiết kế sẽ hiển thị ở đây khi hoàn thành.</div>`}
+    </div>`;
+  $('#bk').onclick=()=>renderApp();
+}
+function briefBlock(o){
+  return `<div class="subpanel">
+    <div class="brief-item"><div class="k">Yêu cầu</div><div class="v">${esc(o.brief||'—')}</div></div>
+    <div class="row2">
+      <div class="brief-item"><div class="k">Kích thước</div><div class="v">${esc(o.size||'—')}</div></div>
+      <div class="brief-item"><div class="k">Deadline</div><div class="v">${fmtDate(o.deadline)}</div></div>
+    </div>
+    ${o.ref_image?`<div class="brief-item"><div class="k">Ảnh tham khảo</div><img class="thumb" src="${o.ref_image}"></div>`:''}
+  </div>`;
+}
+
+/* ---------- Tab: Studio (designer) ---------- */
+function setupHtml(){
+  const sql='-- Chạy file supabase/design_orders.sql trong Supabase SQL editor\n-- (tạo bảng design_orders + RLS). Xem file trong repo để lấy full SQL.';
+  return `<div class="setup"><b>⚙️ Cần cấu hình một lần</b><p class="muted" style="margin-top:6px">Bảng <code>design_orders</code> chưa tồn tại trên Supabase. Mở <b>Supabase → SQL editor</b> và chạy file <code>supabase/design_orders.sql</code> trong repo, sau đó tải lại trang.</p><pre>${esc(sql)}</pre></div>`;
+}
+async function renderStudio(){
+  $('#pane').innerHTML='<div class="spin"></div>';
+  const {data,error}=await sb.from('design_orders').select('*').order('created_at',{ascending:false});
+  if(error){if(isMissingTable(error))return $('#pane').innerHTML=setupHtml();return $('#pane').innerHTML=`<div class="empty">${esc(error.message)}</div>`}
+  orders=data||[];
+  const cols=[['new','🆕 Mới'],['in_progress','🎨 Đang thiết kế'],['done','✅ Hoàn thành']];
+  $('#pane').innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;flex-wrap:wrap">
+      <div><div class="h2">🎨 Quản lý & Thiết kế</div><p class="muted">${orders.length} đơn · bấm một đơn để mở xưởng thiết kế</p></div>
+      <button class="btn btn-g btn-sm" id="refresh">↻ Làm mới</button>
+    </div>
+    <div class="board">${cols.map(([st,lbl])=>{
+      const items=orders.filter(o=>o.status===st);
+      return `<div class="col"><div class="col-h">${lbl}<span class="cnt">${items.length}</span></div>
+        <div class="olist">${items.length?items.map(o=>orderCard(o,true)).join(''):'<div class="empty" style="padding:24px 10px"><div class="emo">—</div>Trống</div>'}</div></div>`;
+    }).join('')}</div>`;
+  $('#refresh').onclick=renderStudio;
+  bindOrderCards(true);
+}
+
+/* ============================ DESIGN WORKSPACE ============================ */
+let ED=null; // editor state
+
+function openWorkspace(o){
+  $('#pane').innerHTML=`
+  <a class="back" id="bk">← Danh sách đơn</a>
+  <div class="ws-head">
+    <div><div class="h2">${esc(o.title)}</div><div class="muted">👤 ${esc(o.requester_name||'—')} · ${esc(o.category||'')} · ${ago(o.created_at)}</div></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="pill pr-${o.priority}">${PRIORITY[o.priority]||o.priority}</span>
+      <select id="stSel">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${o.status===k?'selected':''}>${v}</option>`).join('')}</select>
+      <button class="btn btn-g btn-sm" id="saveSt">Lưu trạng thái</button>
+    </div>
+  </div>
+  <div class="ws">
+    <div>${briefBlock(o)}
+      ${o.ref_image?`<button class="btn btn-g btn-sm" id="useRef" style="width:100%;margin-bottom:12px">✏️ Chỉnh ảnh tham khảo</button>`:''}
+      ${o.result_image?`<div class="subpanel"><h3>Bản đã giao</h3><img class="thumb" src="${o.result_image}"></div>`:''}
+    </div>
+    <div>
+      <div class="subpanel">
+        <h3>🤖 Tạo ảnh AI</h3>
+        <label>Mô tả (prompt)</label>
+        <textarea id="prompt">${esc(o.design_prompt||o.brief||'')}</textarea>
+        <div class="row2" style="margin-top:12px">
+          <div><label>Phong cách</label><select id="model">${Object.entries(MODELS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+          <div><label>Tỉ lệ</label><select id="ratio">${Object.entries(RATIOS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+        </div>
+        <div class="tools"><button class="btn btn-p btn-sm" id="genBtn">✨ Tạo ảnh</button><button class="btn btn-g btn-sm" id="upBtn" disabled>⬆️ Nâng cấp</button></div>
+        <div class="ai-out" id="aiOut" style="margin-top:14px">Nhập mô tả rồi bấm <b>Tạo ảnh</b>. Có thể để trống dùng nội dung yêu cầu.</div>
+        <div class="tools" id="aiActions" style="display:none"><button class="btn btn-g btn-sm" id="toEdit">✏️ Đưa vào chỉnh sửa</button></div>
+      </div>
+
+      <div class="subpanel">
+        <h3>🎛️ Chỉnh sửa ảnh</h3>
+        <div class="tools">
+          <button class="btn btn-g btn-sm" id="upload">📁 Tải ảnh lên</button>
+          <button class="btn btn-g btn-sm" id="rot">↻ Xoay 90°</button>
+          <button class="btn btn-g btn-sm" id="flh">↔ Lật ngang</button>
+          <button class="btn btn-g btn-sm" id="flv">↕ Lật dọc</button>
+          <button class="btn btn-g btn-sm" id="reset">⟲ Đặt lại</button>
+        </div>
+        <input type="file" id="upFile" accept="image/*" hidden>
+        <div class="stage" id="stage" style="margin-top:12px"><div class="mini">Chưa có ảnh. Tạo ảnh AI, tải ảnh lên, hoặc chỉnh ảnh tham khảo.</div></div>
+        <div id="editCtrls" style="display:none">
+          <div class="ctrl">☀️ Sáng<input type="range" id="brightness" min="50" max="150" value="100"><span class="val" id="brightnessV">100</span></div>
+          <div class="ctrl">◐ Tương phản<input type="range" id="contrast" min="50" max="150" value="100"><span class="val" id="contrastV">100</span></div>
+          <div class="ctrl">🎨 Bão hoà<input type="range" id="saturate" min="0" max="200" value="100"><span class="val" id="saturateV">100</span></div>
+          <div class="ctrl">🌫️ Xám<input type="range" id="grayscale" min="0" max="100" value="0"><span class="val" id="grayscaleV">0</span></div>
+          <label>Chữ trên ảnh</label>
+          <div id="texts"></div>
+          <button class="btn btn-g btn-sm" id="addText" style="margin-top:8px">➕ Thêm chữ</button>
+          <p class="mini" style="margin-top:8px">Kéo chữ trực tiếp trên ảnh để di chuyển.</p>
+          <div class="tools" style="margin-top:14px">
+            <button class="btn btn-g btn-sm" id="dl">⬇️ Tải PNG</button>
+            <button class="btn btn-o btn-sm" id="deliver">📦 Giao thiết kế cho đơn</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  $('#bk').onclick=renderStudio;
+  $('#saveSt').onclick=async()=>{
+    const st=$('#stSel').value;
+    const {error}=await sb.from('design_orders').update({status:st,designer_id:me.id,designer_name:prof?.username||me.email}).eq('id',o.id);
+    if(error)return toast(error.message,true);o.status=st;toast('Đã cập nhật trạng thái.');
+  };
+
+  // AI generation
+  const aiOut=$('#aiOut'),aiActions=$('#aiActions');let aiImage='';
+  async function poll(action,id,label){
+    for(let i=0;i<60;i++){await new Promise(r=>setTimeout(r,2500));const res=await fn({action,task_id:id});const st=(findStatus(res)||'').toUpperCase();aiOut.innerHTML=`<div class="spin" style="margin:20px auto"></div><div class="status">${label}… ${st||'ĐANG XỬ LÝ'}</div>`;
+      if(st==='COMPLETED'){const im=findImages(res);if(im.length){aiImage=im[im.length-1];aiOut.innerHTML=`<img src="${aiImage}" crossorigin="anonymous" alt="AI">`;aiActions.style.display='flex';$('#upBtn').disabled=false;return}aiOut.innerHTML='<div class="status">Hoàn tất nhưng không thấy ảnh.</div>';return}
+      if(st==='FAILED'){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Tạo ảnh thất bại. Thử prompt khác.</div>';return}}
+    aiOut.innerHTML='<div class="status">Quá thời gian chờ.</div>';
+  }
+  $('#genBtn').onclick=async()=>{
+    const prompt=$('#prompt').value.trim();if(!prompt)return toast('Nhập mô tả trước.',true);
+    $('#genBtn').disabled=true;aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">Đang gửi yêu cầu…</div>';aiActions.style.display='none';
+    try{const res=await fn({action:'generate',prompt,model:$('#model').value,aspect_ratio:$('#ratio').value,resolution:'2k'});
+      if(res.error){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">${esc(res.error)}</div>`;return}
+      const id=findTaskId(res);if(!id){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Không nhận được task_id (kiểm tra Edge Function).</div>';return}
+      // save prompt onto the order for reference
+      sb.from('design_orders').update({design_prompt:prompt}).eq('id',o.id);
+      await poll('status',id,'Đang tạo ảnh');
+    }catch(e){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">Lỗi: ${esc(e.message)}</div>`}
+    finally{$('#genBtn').disabled=false}
+  };
+  $('#upBtn').onclick=async()=>{
+    if(!aiImage)return;$('#upBtn').disabled=true;aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">Đang nâng cấp…</div>';
+    try{const res=await fn({action:'upscale',image:aiImage});if(res.error){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">${esc(res.error)}</div>`;return}const id=findTaskId(res);if(id)await poll('upscale_status',id,'Đang nâng cấp');}
+    catch(e){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">Lỗi: ${esc(e.message)}</div>`}
+    finally{$('#upBtn').disabled=false}
+  };
+  $('#toEdit').onclick=()=>{if(aiImage)loadEditor(aiImage,true)};
+
+  // editor buttons
+  $('#upload').onclick=()=>$('#upFile').click();
+  $('#upFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{loadEditor(await fileToDataURL(f,1800,.92),false)}catch(err){toast(err.message,true)}};
+  if($('#useRef'))$('#useRef').onclick=()=>loadEditor(o.ref_image,false);
+  $('#rot').onclick=()=>{if(!ED)return;ED.rot=(ED.rot+90)%360;drawEditor()};
+  $('#flh').onclick=()=>{if(!ED)return;ED.flipH=!ED.flipH;drawEditor()};
+  $('#flv').onclick=()=>{if(!ED)return;ED.flipV=!ED.flipV;drawEditor()};
+  $('#reset').onclick=()=>{if(!ED)return;ED.rot=0;ED.flipH=ED.flipV=false;ED.texts=[];['brightness','contrast','saturate'].forEach(k=>{$('#'+k).value=100;$('#'+k+'V').textContent='100'});$('#grayscale').value=0;$('#grayscaleV').textContent='0';renderTextList();drawEditor()};
+  ['brightness','contrast','saturate','grayscale'].forEach(k=>{const el=$('#'+k);if(el)el.oninput=()=>{$('#'+k+'V').textContent=el.value;drawEditor()}});
+  $('#addText').onclick=()=>{if(!ED)return;ED.texts.push({text:'Nội dung',x:ED.w/2,y:ED.h/2,size:Math.round(ED.h*.08),color:'#ffffff'});renderTextList();drawEditor()};
+  $('#dl').onclick=()=>{if(!ED)return;const url=exportCanvas();if(!url)return;const a=document.createElement('a');a.href=url;a.download='thiet-ke.png';a.click()};
+  $('#deliver').onclick=async()=>{
+    if(!ED)return;const url=exportCanvas(1600,'image/jpeg',.9);if(!url)return;
+    $('#deliver').disabled=true;
+    const {error}=await sb.from('design_orders').update({result_image:url,status:'done',designer_id:me.id,designer_name:prof?.username||me.email}).eq('id',o.id);
+    $('#deliver').disabled=false;
+    if(error)return toast(error.message,true);
+    o.result_image=url;o.status='done';toast('Đã giao thiết kế cho đơn! ✅');
+  };
+}
+
+/* ---------- canvas editor engine ---------- */
+function loadEditor(src,isCross){
+  const img=new Image();if(isCross)img.crossOrigin='anonymous';
+  img.onload=()=>{
+    ED={img,rot:0,flipH:false,flipV:false,texts:[],w:img.naturalWidth,h:img.naturalHeight,tainted:false};
+    const stage=$('#stage');stage.innerHTML='<canvas id="editCanvas"></canvas>';
+    $('#editCtrls').style.display='block';
+    ['brightness','contrast','saturate'].forEach(k=>{$('#'+k).value=100;$('#'+k+'V').textContent='100'});
+    $('#grayscale').value=0;$('#grayscaleV').textContent='0';
+    renderTextList();bindCanvasDrag();drawEditor();
+  };
+  img.onerror=()=>toast('Không tải được ảnh (có thể do CORS). Hãy tải ảnh về rồi tải lên lại.',true);
+  img.src=src;
+}
+function orientedSize(){const swap=ED.rot%180!==0;return{w:swap?ED.h:ED.w,h:swap?ED.w:ED.h}}
+function filterStr(){return `brightness(${$('#brightness').value}%) contrast(${$('#contrast').value}%) saturate(${$('#saturate').value}%) grayscale(${$('#grayscale').value}%)`}
+function drawBase(ctx,W,H){
+  ctx.save();ctx.filter=filterStr();ctx.translate(W/2,H/2);ctx.rotate(ED.rot*Math.PI/180);
+  ctx.scale(ED.flipH?-1:1,ED.flipV?-1:1);ctx.drawImage(ED.img,-ED.w/2,-ED.h/2);ctx.restore();
+}
+function drawTexts(ctx){ED.texts.forEach(t=>{ctx.save();ctx.font=`800 ${t.size}px Urbanist, sans-serif`;ctx.fillStyle=t.color;ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineWidth=Math.max(2,t.size*.06);ctx.strokeStyle='rgba(0,0,0,.35)';ctx.strokeText(t.text,t.x,t.y);ctx.fillText(t.text,t.x,t.y);ctx.restore()})}
+function drawEditor(){
+  if(!ED)return;const{w:W,h:H}=orientedSize();const c=$('#editCanvas');if(!c)return;
+  c.width=W;c.height=H;
+  // fit display within stage width
+  const maxW=Math.min(($('#stage').clientWidth||600)-24,760);const scale=Math.min(1,maxW/W);
+  c.style.width=(W*scale)+'px';c.style.height='auto';c.dataset.scale=scale;
+  const ctx=c.getContext('2d');ctx.clearRect(0,0,W,H);drawBase(ctx,W,H);drawTexts(ctx);
+}
+function exportCanvas(max=0,type='image/png',q=.92){
+  if(!ED)return null;const{w:W,h:H}=orientedSize();
+  const c=document.createElement('canvas');let ow=W,oh=H;
+  if(max&&Math.max(W,H)>max){const s=max/Math.max(W,H);ow=Math.round(W*s);oh=Math.round(H*s)}
+  c.width=ow;c.height=oh;const ctx=c.getContext('2d');const sx=ow/W;ctx.scale(sx,sx);
+  drawBase(ctx,W,H);drawTexts(ctx);
+  try{return c.toDataURL(type,q)}catch(e){toast('Ảnh bị khoá CORS, không xuất được. Tải ảnh về từ khung AI rồi tải lên lại để chỉnh.',true);return null}
+}
+function renderTextList(){
+  const box=$('#texts');if(!box)return;
+  box.innerHTML=ED.texts.map((t,i)=>`<div class="txt-item">
+    <input type="text" value="${esc(t.text)}" data-i="${i}" data-f="text">
+    <input type="number" value="${t.size}" min="8" data-i="${i}" data-f="size" title="Cỡ chữ">
+    <input type="color" value="${t.color}" data-i="${i}" data-f="color">
+    <button class="btn btn-g btn-sm" data-del="${i}">✕</button>
+  </div>`).join('');
+  box.querySelectorAll('input').forEach(el=>el.oninput=()=>{const i=+el.dataset.i,f=el.dataset.f;ED.texts[i][f]=f==='size'?+el.value:el.value;drawEditor()});
+  box.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ED.texts.splice(+b.dataset.del,1);renderTextList();drawEditor()});
+}
+function bindCanvasDrag(){
+  const c=$('#editCanvas');if(!c)return;let drag=null;
+  const pt=ev=>{const r=c.getBoundingClientRect();const scale=(c.width/r.width);return{x:(ev.clientX-r.left)*scale,y:(ev.clientY-r.top)*scale}};
+  c.onpointerdown=ev=>{const p=pt(ev);for(let i=ED.texts.length-1;i>=0;i--){const t=ED.texts[i];const half=t.size;if(Math.abs(p.x-t.x)<t.text.length*t.size*.35+20&&Math.abs(p.y-t.y)<half){drag={i,dx:p.x-t.x,dy:p.y-t.y};c.setPointerCapture(ev.pointerId);c.style.cursor='grabbing';return}}};
+  c.onpointermove=ev=>{if(!drag)return;const p=pt(ev);ED.texts[drag.i].x=p.x-drag.dx;ED.texts[drag.i].y=p.y-drag.dy;drawEditor()};
+  c.onpointerup=()=>{drag=null;c.style.cursor='default'};
+}
+window.addEventListener('resize',()=>{if(ED)drawEditor()});
+</script>
+</body>
+</html>
