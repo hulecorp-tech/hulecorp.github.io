@@ -171,7 +171,7 @@ function renderNav(){
     <div class="nav-links">
       <a href="#home" class="${on('home')}">Diễn đàn</a>
       <a href="#tools" class="${on('tools')}">🛠 Công cụ</a>
-      ${['admin','moderator'].includes(prof?.role)?`<a href="/midu_cbct" style="color:var(--or);font-weight:700">🏆 Vinh danh</a>`:''}
+      <a href="/midu_cbct" style="color:var(--or);font-weight:700">🏆 Vinh danh</a>
       ${prof?.role==='admin'?`<a href="#admin" class="${on('admin')}">Quản trị</a>`:''}
       ${me?`<a href="#profile" class="${on('profile')}">Hồ sơ</a>`:''}
     </div>
@@ -248,12 +248,12 @@ function renderTools(){
         <div style="color:var(--tx2);font-size:.84rem;line-height:1.55">Chấm công tập thể dục theo lịch tháng — tích ngày tập/nghỉ + buổi tập thêm, tự tính % đạt mục tiêu 20 buổi/tháng.</div>
         <div style="margin-top:16px;font-size:.78rem;font-weight:700;color:var(--or)">Mở công cụ →</div>
       </a>
-      ${['admin','moderator'].includes(prof?.role)?`<a href="/midu_cbct" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
+      <a href="/midu_cbct" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2.4rem;margin-bottom:12px">🏆</div>
         <div style="font-weight:800;font-size:1.05rem;margin-bottom:6px">Vinh Danh Chiến Binh Content</div>
-        <div style="color:var(--tx2);font-size:.84rem;line-height:1.55">Tạo ảnh vinh danh "Chiến binh Content" — điền tên, nội dung, ngày rồi tải ảnh chứng nhận. <b>(Admin/Mod)</b></div>
+        <div style="color:var(--tx2);font-size:.84rem;line-height:1.55">Tạo ảnh vinh danh "Chiến binh Content" — điền tên, nội dung, ngày rồi tải ảnh chứng nhận.</div>
         <div style="margin-top:16px;font-size:.78rem;font-weight:700;color:var(--or)">Mở công cụ →</div>
-      </a>`:''}
+      </a>
     </div>
   `);
 }

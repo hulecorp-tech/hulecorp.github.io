@@ -117,7 +117,8 @@ details.adv summary{cursor:pointer;font-weight:700;font-size:.82rem;color:var(--
 <script>
 const SB_URL='https://dmvomgmhsivifionnkiu.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtdm9tZ21oc2l2aWZpb25ua2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODcyMzAsImV4cCI6MjA5NzY2MzIzMH0.9HQDKLrzjaRwf1z44cWc3Wb-LMx6a4Ec-QN0QAOGZ00';
-const sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+let sb=null;
+try{sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}});}catch(e){}
 
 /* ---------- utils ---------- */
 const $=s=>document.querySelector(s);
@@ -368,7 +369,7 @@ function renderTool(prof){
   <div class="top"><div class="wrap top-in">
     <div class="brand"><div class="ic">🏆</div> Vinh danh Content</div>
     <div class="top-r">
-      <span class="bdg ${prof.role==='admin'?'bdg-a':'bdg-m'}">${prof.role==='admin'?'Admin':'Mod'}</span>
+      ${prof&&['admin','moderator'].includes(prof.role)?`<span class="bdg ${prof.role==='admin'?'bdg-a':'bdg-m'}">${prof.role==='admin'?'Admin':'Mod'}</span>`:''}
       <a href="/forum.html" class="btn btn-g btn-sm">← Về Forum</a>
     </div>
   </div></div>
@@ -531,26 +532,19 @@ function renderSliders(){
   });
 }
 
-/* ---------- access gate ---------- */
-function renderDenied(msg){
-  $('#app').innerHTML=`<div class="gate"><div class="gate-box">
-    <div class="emo">🔒</div>
-    <h2>Không có quyền truy cập</h2>
-    <p>${esc(msg)}</p>
-    <a href="/forum.html" class="btn btn-o">Về Forum</a>
-  </div></div>`;
-}
-
+/* ---------- boot (open to everyone) ---------- */
 (async()=>{
   await ensureFonts();
   await loadTemplate();
   canvasSize();
-  const {data:{user}}=await sb.auth.getUser();
-  if(!user){renderDenied('Bạn cần đăng nhập bằng tài khoản Mod hoặc Admin trên Forum trước.');return}
-  const {data:prof}=await sb.from('profiles').select('*').eq('id',user.id).single();
-  if(!prof||!['admin','moderator'].includes(prof.role)){
-    renderDenied('Tool này chỉ dành cho thành viên có quyền Mod hoặc Admin. Liên hệ Admin để được cấp quyền.');return;
-  }
+  // Optionally look up the signed-in profile only to show an Admin/Mod badge — never blocks access.
+  let prof=null;
+  try{
+    if(sb){
+      const {data:{user}}=await sb.auth.getUser();
+      if(user){const {data}=await sb.from('profiles').select('*').eq('id',user.id).single();prof=data||null;}
+    }
+  }catch(e){}
   renderTool(prof);
 })();
 </script>
