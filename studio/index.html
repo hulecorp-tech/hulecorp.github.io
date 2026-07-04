@@ -145,7 +145,7 @@ textarea{resize:vertical;min-height:92px;line-height:1.5}
 <script>
 const SB_URL='https://dmvomgmhsivifionnkiu.supabase.co';
 const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtdm9tZ21oc2l2aWZpb25ua2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODcyMzAsImV4cCI6MjA5NzY2MzIzMH0.9HQDKLrzjaRwf1z44cWc3Wb-LMx6a4Ec-QN0QAOGZ00';
-const FN_URL=SB_URL+'/functions/v1/magnific';
+const IMG_FN=SB_URL+'/functions/v1/openai-image';
 let sb=null;try{sb=window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}});}catch(e){}
 
 let me=null,prof=null,isDesigner=false,tab='create',orders=[];
@@ -153,8 +153,8 @@ let me=null,prof=null,isDesigner=false,tab='create',orders=[];
 const CATEGORIES=['Banner','Poster','Logo','Bao bì','Ấn phẩm Social','Thiệp / Chứng nhận','Khác'];
 const PRIORITY={normal:'Bình thường',high:'Ưu tiên',urgent:'Gấp'};
 const STATUS={new:'Mới',in_progress:'Đang thiết kế',done:'Hoàn thành'};
-const RATIOS={square_1_1:'Vuông 1:1',widescreen_16_9:'Ngang 16:9',social_story_9_16:'Dọc 9:16',traditional_3_4:'Đứng 3:4',classic_4_3:'Ngang 4:3'};
-const MODELS={realism:'Realism — chân thực',fluid:'Fluid — nghệ thuật',zen:'Zen — tối giản',super_real:'Super Real',editorial_portraits:'Editorial Portraits'};
+const SIZES={'1024x1024':'Vuông 1:1','1536x1024':'Ngang 3:2','1024x1536':'Dọc 2:3'};
+const QUALITY={low:'Thấp — nhanh, tiết kiệm',medium:'Trung bình',high:'Cao — đẹp nhất'};
 
 /* ---------- utils ---------- */
 const $=s=>document.querySelector(s);
@@ -178,14 +178,13 @@ function fileToDataURL(file,max=1400,quality=.85){
   });
 }
 
-/* ---------- Magnific edge function ---------- */
-async function fn(payload){
-  const r=await fetch(FN_URL,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_KEY,'apikey':SB_KEY},body:JSON.stringify(payload)});
-  return r.json();
+/* ---------- OpenAI image edge function (proxy keeps OPENAI_API_KEY server-side) ---------- */
+async function genImage(payload){
+  const r=await fetch(IMG_FN,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+SB_KEY,'apikey':SB_KEY},body:JSON.stringify(payload)});
+  let data;try{data=await r.json()}catch(e){data={error:'Phản hồi không hợp lệ từ máy chủ'}}
+  if(!r.ok&&!data.error)data.error='Lỗi máy chủ ('+r.status+')';
+  return data;
 }
-const findTaskId=o=>{if(!o||typeof o!=='object')return null;if(o.task_id)return o.task_id;for(const k in o){const v=findTaskId(o[k]);if(v)return v}return null};
-const findStatus=o=>{if(!o||typeof o!=='object')return null;if(typeof o.status==='string')return o.status;for(const k in o){const v=findStatus(o[k]);if(v)return v}return null};
-function findImages(o,acc=[]){if(!o)return acc;if(typeof o==='string'){if(/^https?:\/\/.+/.test(o)&&/\.(png|jpe?g|webp)|generated|cdn|freepik|magnific/i.test(o))acc.push(o);return acc}if(Array.isArray(o)){o.forEach(x=>findImages(x,acc));return acc}if(typeof o==='object')for(const k in o)findImages(o[k],acc);return acc}
 
 /* ============================ BOOT ============================ */
 (async()=>{
@@ -379,15 +378,15 @@ function openWorkspace(o){
     </div>
     <div>
       <div class="subpanel">
-        <h3>🤖 Tạo ảnh AI</h3>
+        <h3>🤖 Tạo ảnh AI <span class="mini" style="font-weight:600">· GPT Image</span></h3>
         <label>Mô tả (prompt)</label>
         <textarea id="prompt">${esc(o.design_prompt||o.brief||'')}</textarea>
         <div class="row2" style="margin-top:12px">
-          <div><label>Phong cách</label><select id="model">${Object.entries(MODELS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
-          <div><label>Tỉ lệ</label><select id="ratio">${Object.entries(RATIOS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+          <div><label>Kích thước</label><select id="size">${Object.entries(SIZES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+          <div><label>Chất lượng</label><select id="quality"><option value="medium">Trung bình</option><option value="high">Cao — đẹp nhất</option><option value="low">Thấp — nhanh</option></select></div>
         </div>
-        <div class="tools"><button class="btn btn-p btn-sm" id="genBtn">✨ Tạo ảnh</button><button class="btn btn-g btn-sm" id="upBtn" disabled>⬆️ Nâng cấp</button></div>
-        <div class="ai-out" id="aiOut" style="margin-top:14px">Nhập mô tả rồi bấm <b>Tạo ảnh</b>. Có thể để trống dùng nội dung yêu cầu.</div>
+        <div class="tools"><button class="btn btn-p btn-sm" id="genBtn">✨ Tạo ảnh</button></div>
+        <div class="ai-out" id="aiOut" style="margin-top:14px">Nhập mô tả rồi bấm <b>Tạo ảnh</b>. Có thể để trống để dùng nội dung yêu cầu.</div>
         <div class="tools" id="aiActions" style="display:none"><button class="btn btn-g btn-sm" id="toEdit">✏️ Đưa vào chỉnh sửa</button></div>
       </div>
 
@@ -426,33 +425,25 @@ function openWorkspace(o){
     if(error)return toast(error.message,true);o.status=st;toast('Đã cập nhật trạng thái.');
   };
 
-  // AI generation
+  // AI generation via OpenAI (GPT Image) — single synchronous call, returns a data URL
   const aiOut=$('#aiOut'),aiActions=$('#aiActions');let aiImage='';
-  async function poll(action,id,label){
-    for(let i=0;i<60;i++){await new Promise(r=>setTimeout(r,2500));const res=await fn({action,task_id:id});const st=(findStatus(res)||'').toUpperCase();aiOut.innerHTML=`<div class="spin" style="margin:20px auto"></div><div class="status">${label}… ${st||'ĐANG XỬ LÝ'}</div>`;
-      if(st==='COMPLETED'){const im=findImages(res);if(im.length){aiImage=im[im.length-1];aiOut.innerHTML=`<img src="${aiImage}" crossorigin="anonymous" alt="AI">`;aiActions.style.display='flex';$('#upBtn').disabled=false;return}aiOut.innerHTML='<div class="status">Hoàn tất nhưng không thấy ảnh.</div>';return}
-      if(st==='FAILED'){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Tạo ảnh thất bại. Thử prompt khác.</div>';return}}
-    aiOut.innerHTML='<div class="status">Quá thời gian chờ.</div>';
-  }
   $('#genBtn').onclick=async()=>{
     const prompt=$('#prompt').value.trim();if(!prompt)return toast('Nhập mô tả trước.',true);
-    $('#genBtn').disabled=true;aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">Đang gửi yêu cầu…</div>';aiActions.style.display='none';
-    try{const res=await fn({action:'generate',prompt,model:$('#model').value,aspect_ratio:$('#ratio').value,resolution:'2k'});
+    $('#genBtn').disabled=true;aiActions.style.display='none';
+    aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">GPT đang vẽ… (10–30 giây)</div>';
+    try{
+      const res=await genImage({action:'generate',prompt,size:$('#size').value,quality:$('#quality').value});
       if(res.error){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">${esc(res.error)}</div>`;return}
-      const id=findTaskId(res);if(!id){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Không nhận được task_id (kiểm tra Edge Function).</div>';return}
-      // save prompt onto the order for reference
-      sb.from('design_orders').update({design_prompt:prompt}).eq('id',o.id);
-      await poll('status',id,'Đang tạo ảnh');
-    }catch(e){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">Lỗi: ${esc(e.message)}</div>`}
+      if(!res.image){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Không nhận được ảnh (kiểm tra Edge Function / OPENAI_API_KEY).</div>';return}
+      aiImage=res.image; // data:image/png;base64,...
+      aiOut.innerHTML=`<img src="${aiImage}" alt="AI">`;aiActions.style.display='flex';
+      // remember prompt on the order — fire-and-forget, must never clobber the shown image
+      try{sb?.from('design_orders').update({design_prompt:prompt}).eq('id',o.id).then(()=>{},()=>{})}catch(_){}
+    }catch(e){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">Lỗi kết nối: ${esc(e.message)}</div>`}
     finally{$('#genBtn').disabled=false}
   };
-  $('#upBtn').onclick=async()=>{
-    if(!aiImage)return;$('#upBtn').disabled=true;aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">Đang nâng cấp…</div>';
-    try{const res=await fn({action:'upscale',image:aiImage});if(res.error){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">${esc(res.error)}</div>`;return}const id=findTaskId(res);if(id)await poll('upscale_status',id,'Đang nâng cấp');}
-    catch(e){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">Lỗi: ${esc(e.message)}</div>`}
-    finally{$('#upBtn').disabled=false}
-  };
-  $('#toEdit').onclick=()=>{if(aiImage)loadEditor(aiImage,true)};
+  // AI result is a same-origin data URL → editable without CORS taint
+  $('#toEdit').onclick=()=>{if(aiImage)loadEditor(aiImage,false)};
 
   // editor buttons
   $('#upload').onclick=()=>$('#upFile').click();
