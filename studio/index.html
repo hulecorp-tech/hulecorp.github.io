@@ -153,11 +153,16 @@ let me=null,prof=null,isDesigner=false,tab='create',orders=[];
 const CATEGORIES=['Banner','Poster','Logo','Bao bì','Ấn phẩm Social','Thiệp / Chứng nhận','Khác'];
 const PRIORITY={normal:'Bình thường',high:'Ưu tiên',urgent:'Gấp'};
 const STATUS={new:'Mới',in_progress:'Đang thiết kế',done:'Hoàn thành'};
-/* OpenAI image models — mỗi model có bộ size/quality riêng */
+/* OpenAI image models — cả họ gpt-image-* dùng chung bộ size/quality */
+const GPT_IMG={
+  sizes:{'1024x1024':'Vuông 1:1','1536x1024':'Ngang 3:2','1024x1536':'Dọc 2:3'},
+  quality:{low:'Thấp — nhanh, rẻ',medium:'Trung bình',high:'Cao — đẹp nhất'}
+};
 const OAI_MODELS={
-  'gpt-image-1':{label:'GPT Image 1 — mới nhất, chữ đẹp nhất',
-    sizes:{'1024x1024':'Vuông 1:1','1536x1024':'Ngang 3:2','1024x1536':'Dọc 2:3'},
-    quality:{low:'Thấp — nhanh, rẻ',medium:'Trung bình',high:'Cao — đẹp nhất'}},
+  'gpt-image-2':{label:'GPT Image 2 — mới nhất, khuyên dùng',...GPT_IMG},
+  'gpt-image-1.5':{label:'GPT Image 1.5 — bản trước',...GPT_IMG},
+  'gpt-image-1':{label:'GPT Image 1 — đời đầu',...GPT_IMG},
+  'gpt-image-1-mini':{label:'GPT Image 1 Mini — tiết kiệm chi phí',...GPT_IMG},
   'dall-e-3':{label:'DALL·E 3 — nghệ thuật, tỉ lệ 16:9',
     sizes:{'1024x1024':'Vuông 1:1','1792x1024':'Ngang 16:9','1024x1792':'Dọc 9:16'},
     quality:{standard:'Standard',hd:'HD — sắc nét'}},

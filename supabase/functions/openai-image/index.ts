@@ -4,9 +4,11 @@
 // Set key: supabase secrets set OPENAI_API_KEY=sk-...
 //
 // Frontend gọi POST với JSON body:
-//   { action:"generate", prompt, size?, quality?, background? }
-//     size:    "1024x1024" | "1536x1024" | "1024x1536" | "auto"   (mặc định 1024x1024)
-//     quality: "low" | "medium" | "high" | "auto"                 (mặc định medium)
+//   { action:"generate", model?, prompt, size?, quality?, background? }
+//     model:   gpt-image-2 | gpt-image-1.5 | gpt-image-1 | gpt-image-1-mini | dall-e-3 | dall-e-2
+//              (mặc định gpt-image-2; ID lạ sẽ bị đưa về mặc định)
+//     size:    tuỳ model (vd gpt-image: 1024x1024 | 1536x1024 | 1024x1536)
+//     quality: gpt-image: low|medium|high ; dall-e-3: standard|hd
 //   -> trả về { image: "data:image/png;base64,..." }
 //
 //   { action:"edit", prompt, image, size?, quality? }
@@ -16,8 +18,15 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 const KEY = Deno.env.get("OPENAI_API_KEY") ?? "";
-const ALLOWED_MODELS = ["gpt-image-1", "dall-e-3", "dall-e-2"];
-const DEFAULT_MODEL = "gpt-image-1";
+const ALLOWED_MODELS = [
+  "gpt-image-2",
+  "gpt-image-1.5",
+  "gpt-image-1",
+  "gpt-image-1-mini",
+  "dall-e-3",
+  "dall-e-2",
+];
+const DEFAULT_MODEL = "gpt-image-2";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -59,10 +68,11 @@ serve(async (req) => {
     let r: Response;
 
     if (action === "edit") {
-      // Image editing is only supported by gpt-image-1 (and dall-e-2); force gpt-image-1.
+      // Image editing uses the gpt-image family; fall back to the default if a dall-e model was picked.
       if (!body.image) return json({ error: "Thiếu ảnh gốc để chỉnh sửa." }, 400);
+      const editModel = model.startsWith("gpt-image") ? model : DEFAULT_MODEL;
       const form = new FormData();
-      form.append("model", "gpt-image-1");
+      form.append("model", editModel);
       form.append("prompt", body.prompt);
       form.append("size", size);
       if (quality) form.append("quality", quality);
@@ -75,8 +85,8 @@ serve(async (req) => {
     } else {
       // generate — each model family takes different params
       const payload: Record<string, unknown> = { model, prompt: body.prompt, size, n: 1 };
-      if (model === "gpt-image-1") {
-        // gpt-image-1 returns b64_json by default; quality is low|medium|high|auto
+      if (model.startsWith("gpt-image")) {
+        // gpt-image-* returns b64_json by default; quality is low|medium|high|auto
         if (quality) payload.quality = quality;
         if (body.background) payload.background = body.background;
       } else {
