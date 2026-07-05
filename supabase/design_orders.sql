@@ -36,12 +36,12 @@ drop trigger if exists design_orders_touch on public.design_orders;
 create trigger design_orders_touch before update on public.design_orders
   for each row execute function public.touch_design_orders();
 
--- is the current user a designer (admin/moderator)?
+-- is the current user a designer? (design feature is admin-only)
 create or replace function public.is_designer() returns boolean
   language sql stable security definer set search_path = public as $$
   select exists (
     select 1 from public.profiles
-    where id = auth.uid() and role in ('admin','moderator')
+    where id = auth.uid() and role = 'admin'
   );
 $$;
 

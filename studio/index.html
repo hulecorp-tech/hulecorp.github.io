@@ -153,8 +153,18 @@ let me=null,prof=null,isDesigner=false,tab='create',orders=[];
 const CATEGORIES=['Banner','Poster','Logo','Bao bì','Ấn phẩm Social','Thiệp / Chứng nhận','Khác'];
 const PRIORITY={normal:'Bình thường',high:'Ưu tiên',urgent:'Gấp'};
 const STATUS={new:'Mới',in_progress:'Đang thiết kế',done:'Hoàn thành'};
-const SIZES={'1024x1024':'Vuông 1:1','1536x1024':'Ngang 3:2','1024x1536':'Dọc 2:3'};
-const QUALITY={low:'Thấp — nhanh, tiết kiệm',medium:'Trung bình',high:'Cao — đẹp nhất'};
+/* OpenAI image models — mỗi model có bộ size/quality riêng */
+const OAI_MODELS={
+  'gpt-image-1':{label:'GPT Image 1 — mới nhất, chữ đẹp nhất',
+    sizes:{'1024x1024':'Vuông 1:1','1536x1024':'Ngang 3:2','1024x1536':'Dọc 2:3'},
+    quality:{low:'Thấp — nhanh, rẻ',medium:'Trung bình',high:'Cao — đẹp nhất'}},
+  'dall-e-3':{label:'DALL·E 3 — nghệ thuật, tỉ lệ 16:9',
+    sizes:{'1024x1024':'Vuông 1:1','1792x1024':'Ngang 16:9','1024x1792':'Dọc 9:16'},
+    quality:{standard:'Standard',hd:'HD — sắc nét'}},
+  'dall-e-2':{label:'DALL·E 2 — cũ, rẻ nhất',
+    sizes:{'256x256':'Nhỏ 256','512x512':'Vừa 512','1024x1024':'Lớn 1024'},
+    quality:null}
+};
 
 /* ---------- utils ---------- */
 const $=s=>document.querySelector(s);
@@ -196,7 +206,7 @@ async function genImage(payload){
     return;
   }
   try{const {data}=await sb.from('profiles').select('*').eq('id',me.id).single();prof=data||null;}catch(e){}
-  isDesigner=!!prof&&['admin','moderator'].includes(prof.role);
+  isDesigner=!!prof&&prof.role==='admin'; // chỉ admin được dùng khu thiết kế
   tab=isDesigner?'studio':'create';
   renderTopR();renderApp();
 })();
@@ -378,12 +388,14 @@ function openWorkspace(o){
     </div>
     <div>
       <div class="subpanel">
-        <h3>🤖 Tạo ảnh AI <span class="mini" style="font-weight:600">· GPT Image</span></h3>
+        <h3>🤖 Tạo ảnh AI <span class="mini" style="font-weight:600">· OpenAI</span></h3>
         <label>Mô tả (prompt)</label>
         <textarea id="prompt">${esc(o.design_prompt||o.brief||'')}</textarea>
+        <label>Model</label>
+        <select id="model">${Object.entries(OAI_MODELS).map(([k,m])=>`<option value="${k}">${m.label}</option>`).join('')}</select>
         <div class="row2" style="margin-top:12px">
-          <div><label>Kích thước</label><select id="size">${Object.entries(SIZES).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
-          <div><label>Chất lượng</label><select id="quality"><option value="medium">Trung bình</option><option value="high">Cao — đẹp nhất</option><option value="low">Thấp — nhanh</option></select></div>
+          <div><label>Kích thước</label><select id="size"></select></div>
+          <div id="qualityWrap"><label>Chất lượng</label><select id="quality"></select></div>
         </div>
         <div class="tools"><button class="btn btn-p btn-sm" id="genBtn">✨ Tạo ảnh</button></div>
         <div class="ai-out" id="aiOut" style="margin-top:14px">Nhập mô tả rồi bấm <b>Tạo ảnh</b>. Có thể để trống để dùng nội dung yêu cầu.</div>
@@ -425,14 +437,23 @@ function openWorkspace(o){
     if(error)return toast(error.message,true);o.status=st;toast('Đã cập nhật trạng thái.');
   };
 
-  // AI generation via OpenAI (GPT Image) — single synchronous call, returns a data URL
+  // model → repopulate size/quality with that model's valid options
+  function syncModelOpts(){
+    const m=OAI_MODELS[$('#model').value];
+    $('#size').innerHTML=Object.entries(m.sizes).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+    if(m.quality){$('#qualityWrap').style.display='';$('#quality').innerHTML=Object.entries(m.quality).map(([k,v])=>`<option value="${k}"${k==='medium'||k==='standard'?' selected':''}>${v}</option>`).join('')}
+    else{$('#qualityWrap').style.display='none';$('#quality').innerHTML=''}
+  }
+  $('#model').onchange=syncModelOpts;syncModelOpts();
+
+  // AI generation via OpenAI — single synchronous call, returns a data URL
   const aiOut=$('#aiOut'),aiActions=$('#aiActions');let aiImage='';
   $('#genBtn').onclick=async()=>{
     const prompt=$('#prompt').value.trim();if(!prompt)return toast('Nhập mô tả trước.',true);
     $('#genBtn').disabled=true;aiActions.style.display='none';
-    aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">GPT đang vẽ… (10–30 giây)</div>';
+    aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">AI đang vẽ… (10–30 giây)</div>';
     try{
-      const res=await genImage({action:'generate',prompt,size:$('#size').value,quality:$('#quality').value});
+      const res=await genImage({action:'generate',model:$('#model').value,prompt,size:$('#size').value,quality:$('#quality').value||undefined});
       if(res.error){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">${esc(res.error)}</div>`;return}
       if(!res.image){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Không nhận được ảnh (kiểm tra Edge Function / OPENAI_API_KEY).</div>';return}
       aiImage=res.image; // data:image/png;base64,...

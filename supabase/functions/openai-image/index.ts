@@ -16,7 +16,8 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 const KEY = Deno.env.get("OPENAI_API_KEY") ?? "";
-const MODEL = "gpt-image-1";
+const ALLOWED_MODELS = ["gpt-image-1", "dall-e-3", "dall-e-2"];
+const DEFAULT_MODEL = "gpt-image-1";
 
 const cors = {
   "Access-Control-Allow-Origin": "*",
@@ -47,8 +48,9 @@ serve(async (req) => {
   try {
     const body = await req.json();
     const action = body.action || "generate";
+    const model = ALLOWED_MODELS.includes(body.model) ? body.model : DEFAULT_MODEL;
     const size = body.size || "1024x1024";
-    const quality = body.quality || "medium";
+    const quality = body.quality; // meaning differs per model; may be undefined
 
     if (!body.prompt || !String(body.prompt).trim()) {
       return json({ error: "Thiếu prompt." }, 400);
@@ -57,12 +59,13 @@ serve(async (req) => {
     let r: Response;
 
     if (action === "edit") {
+      // Image editing is only supported by gpt-image-1 (and dall-e-2); force gpt-image-1.
       if (!body.image) return json({ error: "Thiếu ảnh gốc để chỉnh sửa." }, 400);
       const form = new FormData();
-      form.append("model", MODEL);
+      form.append("model", "gpt-image-1");
       form.append("prompt", body.prompt);
       form.append("size", size);
-      form.append("quality", quality);
+      if (quality) form.append("quality", quality);
       form.append("image", dataUrlToBlob(body.image), "image.png");
       r = await fetch("https://api.openai.com/v1/images/edits", {
         method: "POST",
@@ -70,18 +73,24 @@ serve(async (req) => {
         body: form,
       });
     } else {
-      // generate
+      // generate — each model family takes different params
+      const payload: Record<string, unknown> = { model, prompt: body.prompt, size, n: 1 };
+      if (model === "gpt-image-1") {
+        // gpt-image-1 returns b64_json by default; quality is low|medium|high|auto
+        if (quality) payload.quality = quality;
+        if (body.background) payload.background = body.background;
+      } else {
+        // dall-e-2 / dall-e-3 need response_format to return base64
+        payload.response_format = "b64_json";
+        if (model === "dall-e-3") {
+          payload.quality = quality === "hd" ? "hd" : "standard"; // standard|hd
+          if (body.style) payload.style = body.style; // vivid|natural
+        }
+      }
       r = await fetch("https://api.openai.com/v1/images/generations", {
         method: "POST",
         headers: { Authorization: `Bearer ${KEY}`, "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: MODEL,
-          prompt: body.prompt,
-          size,
-          quality,
-          n: 1,
-          ...(body.background ? { background: body.background } : {}),
-        }),
+        body: JSON.stringify(payload),
       });
     }
 
