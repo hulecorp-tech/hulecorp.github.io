@@ -24,6 +24,10 @@ create table if not exists public.design_orders (
   designer_name text
 );
 
+-- version history of delivered designs (optional; the /studio "Lịch sử" tab
+-- falls back to result_image if this column is missing). Safe to run anytime.
+alter table public.design_orders add column if not exists deliveries jsonb not null default '[]'::jsonb;
+
 create index if not exists design_orders_status_idx on public.design_orders(status);
 create index if not exists design_orders_requester_idx on public.design_orders(requester_id);
 
