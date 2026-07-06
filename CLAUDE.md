@@ -80,6 +80,7 @@ This file went through an "editorial redesign" (inspired by David Heckhoff) — 
 - Project filter: buttons use `data-f="category|all"` (not `data-filter`), cards use `data-c="event|mascot|brand|pack|promo"` (not `data-category`). Card markup: `.card > .thumb + .card-body > .card-cat/.card-name/.card-desc/.view`. Filter grid container is `#grid`.
 - Scroll-reveal: elements with class `.reveal` (not `.fade-up`) get `.in` added (not `.visible`) via `IntersectionObserver`.
 - Responsive breakpoints: `@media (max-width: 920px)` and `@media (max-width: 680px)` (hamburger `.hamb` + `#mnav` mobile menu activates here).
+- **"Wow" FX layer** (vanilla reimplementations of react-bits-style effects, added in a self-contained `<script>` at the very end of `<body>`, guarded by `prefers-reduced-motion`): an interactive **particle constellation** on the hero (`<canvas id="heroFx">`, dots link to each other and to the cursor), a **cursor spotlight** glow on `.card` (JS sets `--mx`/`--my`, rendered by `.card::after`), and a global **click-spark** burst (`<canvas id="clickSpark">`). Purely additive — doesn't touch the preloader / hologram-scroll / i18n logic.
 
 ### `forum.html` — Community forum
 
