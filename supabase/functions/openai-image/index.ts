@@ -14,6 +14,10 @@
 //   { action:"edit", prompt, image, size?, quality? }
 //     image: data URL (base64) của ảnh gốc cần chỉnh
 //   -> trả về { image: "data:image/png;base64,..." }
+//
+//   { action:"magic", prompt }
+//     -> viết lại prompt ngắn (có thể tiếng Việt) thành prompt tiếng Anh chi tiết
+//     -> trả về { prompt: "..." }   (dùng chat model gpt-4o-mini)
 
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
@@ -63,6 +67,28 @@ serve(async (req) => {
 
     if (!body.prompt || !String(body.prompt).trim()) {
       return json({ error: "Thiếu prompt." }, 400);
+    }
+
+    // Magic Prompt — expand a short (possibly Vietnamese) brief into a rich English image prompt.
+    if (action === "magic") {
+      const mr = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          temperature: 0.8,
+          max_tokens: 320,
+          messages: [
+            { role: "system", content: "You are a prompt engineer for AI image generation. Rewrite the user's short brief (which may be in Vietnamese) into ONE vivid, detailed English image-generation prompt. Cover subject, style, composition, lighting and colours. Return ONLY the prompt text — no quotes, no preamble, no explanation." },
+            { role: "user", content: String(body.prompt) },
+          ],
+        }),
+      });
+      const md = await mr.json().catch(() => ({}));
+      if (!mr.ok) return json({ error: md?.error?.message || `OpenAI lỗi (${mr.status})` }, mr.status);
+      const text = md?.choices?.[0]?.message?.content?.trim();
+      if (!text) return json({ error: "Không tạo được prompt." }, 502);
+      return json({ prompt: text });
     }
 
     let r: Response;
