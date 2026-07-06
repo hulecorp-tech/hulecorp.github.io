@@ -142,6 +142,26 @@ textarea{resize:vertical;min-height:96px;line-height:1.55}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.err{background:var(--red)}
 
+/* prompt style chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.chip{font-size:.76rem;font-weight:600;padding:6px 12px;border-radius:999px;border:1.5px solid var(--bd);background:#fff;color:var(--ink2);transition:.15s}
+.chip:hover{border-color:var(--orange);color:var(--orange);background:var(--peach)}
+/* session generation strip */
+.gen-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.gen-strip img{width:54px;height:54px;object-fit:cover;border-radius:10px;border:2px solid var(--bd);cursor:pointer;transition:.15s}
+.gen-strip img:hover{border-color:var(--orange);transform:translateY(-2px)}
+/* history gallery */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.gcard{background:#fff;border:1px solid var(--bd);border-radius:var(--radsm);overflow:hidden;box-shadow:var(--shadow);transition:.18s}
+.gcard:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(34,36,59,.12)}
+.gthumb{position:relative;aspect-ratio:4/3;background:var(--peach);overflow:hidden}
+.gthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.gdl{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 4px 12px rgba(0,0,0,.16);text-decoration:none}
+.gdl:hover{background:var(--orange)}
+.gmeta{padding:12px 14px}
+.gtitle{font-weight:800;font-size:.9rem;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gsub{font-size:.75rem;color:var(--ink2);margin-top:3px}
+
 @media(max-width:900px){.ws{grid-template-columns:1fr}.board{grid-template-columns:1fr}}
 @media(max-width:560px){.row2{grid-template-columns:1fr}.tab{min-width:0}.wrap{padding:20px 16px 90px}.panel{padding:20px}}
 </style>
@@ -167,6 +187,46 @@ let me=null,prof=null,isDesigner=false,tab='create',orders=[];
 const CATEGORIES=['Banner','Poster','Logo','Bao bì','Ấn phẩm Social','Thiệp / Chứng nhận','Khác'];
 const PRIORITY={normal:'Bình thường',high:'Ưu tiên',urgent:'Gấp'};
 const STATUS={new:'Mới',in_progress:'Đang thiết kế',done:'Hoàn thành'};
+/* common design sizes for quick pick in the order form */
+const SIZE_PRESETS=[
+  ['Mạng xã hội',[
+    ['Facebook — Bài đăng','1200 × 630 px'],
+    ['Facebook — Ảnh bìa','1640 × 624 px'],
+    ['Instagram — Vuông','1080 × 1080 px'],
+    ['Instagram — Dọc','1080 × 1350 px'],
+    ['Story / Reels / TikTok','1080 × 1920 px'],
+    ['YouTube — Thumbnail','1280 × 720 px'],
+    ['Zalo — Bài đăng','1080 × 1080 px'],
+  ]],
+  ['In ấn (300dpi)',[
+    ['A4 dọc','2480 × 3508 px (A4)'],
+    ['A5','1748 × 2480 px (A5)'],
+    ['A3','3508 × 4961 px (A3)'],
+    ['Danh thiếp','1063 × 638 px (90×54 mm)'],
+    ['Standee','60 × 160 cm'],
+    ['Poster A2','420 × 594 mm'],
+  ]],
+  ['Khác',[
+    ['Vuông 1:1','1080 × 1080 px'],
+    ['Banner web','1200 × 628 px'],
+    ['Logo','1000 × 1000 px'],
+    ['Ảnh đại diện','500 × 500 px'],
+  ]],
+];
+/* quick style keywords appended to the AI prompt */
+const STYLE_CHIPS=[
+  {label:'Phẳng vector',add:'flat vector illustration'},
+  {label:'3D',add:'3D render, soft lighting'},
+  {label:'Tối giản',add:'minimalist, clean, lots of whitespace'},
+  {label:'Gradient',add:'vibrant gradient background'},
+  {label:'Ánh sáng studio',add:'studio lighting, high detail'},
+  {label:'Chân thực',add:'photorealistic, 4k'},
+  {label:'Nền trong suốt',add:'isolated on transparent background'},
+];
+/* filename-safe slug from a Vietnamese title */
+function slug(s){return (String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase())||'thiet-ke'}
+/* all delivered versions of an order, newest first (falls back to result_image) */
+function deliveriesOf(o){const d=o.deliveries;if(Array.isArray(d)&&d.length)return d.slice().reverse();return o.result_image?[{image:o.result_image,at:o.updated_at||o.created_at}]:[]}
 /* OpenAI image models — cả họ gpt-image-* dùng chung bộ size/quality */
 const GPT_IMG={
   sizes:{'1024x1024':'Vuông 1:1','1536x1024':'Ngang 3:2','1024x1536':'Dọc 2:3'},
@@ -244,13 +304,14 @@ function renderTopR(){
 /* ============================ APP SHELL ============================ */
 function renderApp(){
   const tabs=[['create','✍️ Tạo đơn'],['mine','📋 Đơn của tôi']];
-  if(isDesigner)tabs.push(['studio','🎨 Quản lý & Thiết kế']);
+  if(isDesigner){tabs.push(['studio','🎨 Quản lý & Thiết kế']);tabs.push(['history','🗂 Lịch sử']);}
   app().innerHTML=`
     <div class="tabs">${tabs.map(([k,l])=>`<button class="tab ${tab===k?'on':''}" data-tab="${k}">${l}</button>`).join('')}</div>
     <div id="pane"></div>`;
   app().querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderApp()});
   if(tab==='create')renderCreate();
   else if(tab==='mine')renderMine();
+  else if(tab==='history')renderHistory();
   else renderStudio();
 }
 
@@ -273,7 +334,8 @@ function renderCreate(){
       <textarea name="brief" required placeholder="Nội dung, thông điệp, màu sắc, phong cách, nội dung chữ cần có…"></textarea>
       <div class="row2">
         <div><label>Kích thước / tỉ lệ</label>
-          <input type="text" name="size" placeholder="VD: 1200x628, A4, vuông 1:1"></div>
+          <select id="sizePreset" style="margin-bottom:8px"><option value="">⚡ Chọn nhanh kích thước thông dụng…</option>${SIZE_PRESETS.map(([g,opts])=>`<optgroup label="${g}">${opts.map(([lbl,val])=>`<option value="${esc(val)}">${lbl} · ${val}</option>`).join('')}</optgroup>`).join('')}</select>
+          <input type="text" name="size" placeholder="Chọn ở trên hoặc tự nhập (VD: 1200 × 630 px)"></div>
         <div><label>Deadline</label>
           <input type="date" name="deadline"></div>
       </div>
@@ -287,6 +349,7 @@ function renderCreate(){
     </form>
   </div>`;
   let refData=null;
+  $('#sizePreset').onchange=e=>{if(e.target.value)$('#of').querySelector('[name=size]').value=e.target.value;};
   $('#refDrop').onclick=()=>$('#refFile').click();
   $('#refFile').onchange=async e=>{
     const f=e.target.files[0];if(!f)return;
@@ -386,6 +449,28 @@ async function renderStudio(){
   bindOrderCards(true);
 }
 
+/* ---------- Tab: History (all delivered designs, downloadable anytime) ---------- */
+async function renderHistory(){
+  $('#pane').innerHTML='<div class="spin"></div>';
+  const {data,error}=await sb.from('design_orders').select('*').order('updated_at',{ascending:false});
+  if(error){if(isMissingTable(error))return $('#pane').innerHTML=setupHtml();return $('#pane').innerHTML=`<div class="empty">${esc(error.message)}</div>`}
+  const items=[];
+  (data||[]).forEach(o=>deliveriesOf(o).forEach(d=>{if(d&&d.image)items.push({o,d})}));
+  items.sort((a,b)=>new Date(b.d.at||0)-new Date(a.d.at||0));
+  $('#pane').innerHTML=`
+    <div class="h2">🗂 Lịch sử thiết kế</div>
+    <p class="muted" style="margin-bottom:18px">${items.length} bản thiết kế đã hoàn thành · tải về bất cứ lúc nào</p>
+    ${items.length?`<div class="gallery">${items.map((it,idx)=>`
+      <div class="gcard">
+        <div class="gthumb"><img src="${it.d.image}" alt="" loading="lazy"><a class="gdl" href="#" data-dl="${idx}" title="Tải về">⬇️</a></div>
+        <div class="gmeta"><div class="gtitle">${esc(it.o.title)}</div><div class="gsub">👤 ${esc(it.o.requester_name||'—')}${it.d.at?' · '+ago(it.d.at):''}</div></div>
+      </div>`).join('')}</div>`:`<div class="empty"><div class="emo">🗂</div>Chưa có bản thiết kế nào hoàn thành.<br><small>Giao một đơn ở tab “Quản lý & Thiết kế” để lưu vào đây.</small></div>`}`;
+  $('#pane').querySelectorAll('[data-dl]').forEach(a=>a.onclick=e=>{
+    e.preventDefault();const it=items[+a.dataset.dl];
+    const l=document.createElement('a');l.href=it.d.image;l.download=slug(it.o.title)+'.png';l.click();
+  });
+}
+
 /* ============================ DESIGN WORKSPACE ============================ */
 let ED=null; // editor state
 
@@ -403,13 +488,14 @@ function openWorkspace(o){
   <div class="ws">
     <div>${briefBlock(o)}
       ${o.ref_image?`<button class="btn btn-g btn-sm" id="useRef" style="width:100%;margin-bottom:12px">✏️ Chỉnh ảnh tham khảo</button>`:''}
-      ${o.result_image?`<div class="subpanel"><h3>Bản đã giao</h3><img class="thumb" src="${o.result_image}"></div>`:''}
+      ${o.result_image?`<div class="subpanel"><h3>Bản đã giao</h3><img class="thumb" src="${o.result_image}"><div style="margin-top:10px"><a class="btn btn-o btn-sm" href="${o.result_image}" download="${slug(o.title)}.png">⬇️ Tải về</a></div></div>`:''}
     </div>
     <div>
       <div class="subpanel">
         <h3>🤖 Tạo ảnh AI <span class="mini" style="font-weight:600">· OpenAI</span></h3>
         <label>Mô tả (prompt)</label>
         <textarea id="prompt">${esc(o.design_prompt||o.brief||'')}</textarea>
+        <div class="chips" id="styleChips">${STYLE_CHIPS.map(c=>`<button type="button" class="chip" data-add="${esc(c.add)}">+ ${c.label}</button>`).join('')}</div>
         <label>Model</label>
         <select id="model">${Object.entries(OAI_MODELS).map(([k,m])=>`<option value="${k}">${m.label}</option>`).join('')}</select>
         <div class="row2" style="margin-top:12px">
@@ -419,6 +505,7 @@ function openWorkspace(o){
         <div class="tools"><button class="btn btn-p btn-sm" id="genBtn">✨ Tạo ảnh</button></div>
         <div class="ai-out" id="aiOut" style="margin-top:14px">Nhập mô tả rồi bấm <b>Tạo ảnh</b>. Có thể để trống để dùng nội dung yêu cầu.</div>
         <div class="tools" id="aiActions" style="display:none"><button class="btn btn-g btn-sm" id="toEdit">✏️ Đưa vào chỉnh sửa</button></div>
+        <div class="gen-strip" id="genStrip"></div>
       </div>
 
       <div class="subpanel">
@@ -466,7 +553,9 @@ function openWorkspace(o){
   $('#model').onchange=syncModelOpts;syncModelOpts();
 
   // AI generation via OpenAI — single synchronous call, returns a data URL
-  const aiOut=$('#aiOut'),aiActions=$('#aiActions');let aiImage='';
+  const aiOut=$('#aiOut'),aiActions=$('#aiActions');let aiImage='',gens=[];
+  function renderGens(){const s=$('#genStrip');if(!s)return;s.innerHTML=gens.map((g,i)=>`<img src="${g}" data-g="${i}" title="Ảnh #${i+1} — bấm để xem/sửa">`).join('');s.querySelectorAll('img').forEach(im=>im.onclick=()=>{aiImage=gens[+im.dataset.g];aiOut.innerHTML=`<img src="${aiImage}" alt="AI">`;aiActions.style.display='flex';});}
+  document.querySelectorAll('#styleChips .chip').forEach(c=>c.onclick=()=>{const t=$('#prompt'),add=c.dataset.add;if(!t.value.toLowerCase().includes(add.toLowerCase()))t.value=(t.value.trim()?t.value.trim()+', ':'')+add;t.focus();});
   $('#genBtn').onclick=async()=>{
     const prompt=$('#prompt').value.trim();if(!prompt)return toast('Nhập mô tả trước.',true);
     $('#genBtn').disabled=true;aiActions.style.display='none';
@@ -477,6 +566,7 @@ function openWorkspace(o){
       if(!res.image){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Không nhận được ảnh (kiểm tra Edge Function / OPENAI_API_KEY).</div>';return}
       aiImage=res.image; // data:image/png;base64,...
       aiOut.innerHTML=`<img src="${aiImage}" alt="AI">`;aiActions.style.display='flex';
+      gens.push(aiImage);renderGens();
       // remember prompt on the order — fire-and-forget, must never clobber the shown image
       try{sb?.from('design_orders').update({design_prompt:prompt}).eq('id',o.id).then(()=>{},()=>{})}catch(_){}
     }catch(e){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">Lỗi kết nối: ${esc(e.message)}</div>`}
@@ -495,14 +585,21 @@ function openWorkspace(o){
   $('#reset').onclick=()=>{if(!ED)return;ED.rot=0;ED.flipH=ED.flipV=false;ED.texts=[];['brightness','contrast','saturate'].forEach(k=>{$('#'+k).value=100;$('#'+k+'V').textContent='100'});$('#grayscale').value=0;$('#grayscaleV').textContent='0';renderTextList();drawEditor()};
   ['brightness','contrast','saturate','grayscale'].forEach(k=>{const el=$('#'+k);if(el)el.oninput=()=>{$('#'+k+'V').textContent=el.value;drawEditor()}});
   $('#addText').onclick=()=>{if(!ED)return;ED.texts.push({text:'Nội dung',x:ED.w/2,y:ED.h/2,size:Math.round(ED.h*.08),color:'#ffffff'});renderTextList();drawEditor()};
-  $('#dl').onclick=()=>{if(!ED)return;const url=exportCanvas();if(!url)return;const a=document.createElement('a');a.href=url;a.download='thiet-ke.png';a.click()};
+  $('#dl').onclick=()=>{if(!ED)return;const url=exportCanvas();if(!url)return;const a=document.createElement('a');a.href=url;a.download=slug(o.title)+'.png';a.click()};
   $('#deliver').onclick=async()=>{
     if(!ED)return;const url=exportCanvas(1600,'image/jpeg',.9);if(!url)return;
     $('#deliver').disabled=true;
     const {error}=await sb.from('design_orders').update({result_image:url,status:'done',designer_id:me.id,designer_name:prof?.username||me.email}).eq('id',o.id);
+    if(error){$('#deliver').disabled=false;return toast(error.message,true);}
+    // best-effort: append to the version history (needs the `deliveries` jsonb column; ignored if absent)
+    try{
+      const cur=Array.isArray(o.deliveries)?o.deliveries:[];
+      const next=[...cur,{image:url,at:new Date().toISOString(),by:prof?.username||me.email}];
+      const r=await sb.from('design_orders').update({deliveries:next}).eq('id',o.id);
+      if(!r.error)o.deliveries=next;
+    }catch(_){}
     $('#deliver').disabled=false;
-    if(error)return toast(error.message,true);
-    o.result_image=url;o.status='done';toast('Đã giao thiết kế cho đơn! ✅');
+    o.result_image=url;o.status='done';toast('Đã giao thiết kế! Đã lưu vào Lịch sử. ✅');
   };
 }
 
