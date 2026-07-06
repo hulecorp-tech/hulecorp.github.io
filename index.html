@@ -216,6 +216,21 @@ footer .mono{color:var(--orange2)}
   .hud-skills{display:none}
 }
 </style>
+<style id="fx-css">
+/* ===== react-bits-style FX (vanilla, additive) ===== */
+.hero-fx{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero .wrap{position:relative;z-index:2}
+.hero .scroll-hint{z-index:2}
+/* Spotlight cards */
+.card{position:relative}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .35s ease;z-index:4;
+  background:radial-gradient(200px circle at var(--mx,50%) var(--my,50%), rgba(255,132,0,.15), transparent 60%)}
+[data-theme="dark"] .card::after{background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%), rgba(255,169,77,.22), transparent 60%)}
+.card:hover::after{opacity:1}
+/* Click sparks */
+#clickSpark{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:6000}
+@media (prefers-reduced-motion:reduce){.hero-fx,#clickSpark{display:none}}
+</style>
 </head>
 <body>
 
@@ -258,6 +273,7 @@ footer .mono{color:var(--orange2)}
 
 <!-- HERO -->
 <header class="hero" id="top">
+  <canvas class="hero-fx" id="heroFx" aria-hidden="true"></canvas>
   <div class="wrap hero-grid">
     <div>
       <div class="avail"><i></i> <span data-i18n="v3.available">Available for work</span></div>
@@ -531,6 +547,87 @@ bt.onclick=()=>scrollTo({top:0,behavior:'smooth'});
 })();
 
 applyLang('vi');update();
+</script>
+
+<canvas id="clickSpark" aria-hidden="true"></canvas>
+<script>
+/* ================= react-bits-style vanilla FX ================= */
+(function(){
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Spotlight cards — glow follows the cursor */
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('pointermove',e=>{
+      const r=card.getBoundingClientRect();
+      card.style.setProperty('--mx',(e.clientX-r.left)+'px');
+      card.style.setProperty('--my',(e.clientY-r.top)+'px');
+    });
+  });
+
+  if(reduce)return;
+  const dark=()=>document.documentElement.getAttribute('data-theme')==='dark';
+
+  /* Hero particle constellation — dots link to each other & to the cursor */
+  const cv=document.getElementById('heroFx'),hero=document.getElementById('top');
+  if(cv&&hero){
+    const ctx=cv.getContext('2d');
+    let W=0,H=0,DPR=Math.min(2,devicePixelRatio||1),pts=[],mx=-9999,my=-9999;
+    function size(){
+      const r=hero.getBoundingClientRect();W=r.width;H=r.height;
+      cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+'px';cv.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);
+      const n=Math.min(90,Math.round(W*H/16000));
+      pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35}));
+    }
+    size();addEventListener('resize',size);
+    addEventListener('mousemove',e=>{const r=hero.getBoundingClientRect();mx=e.clientX-r.left;my=e.clientY-r.top;},{passive:true});
+    addEventListener('mouseout',()=>{mx=my=-9999;});
+    (function loop(){
+      requestAnimationFrame(loop);
+      if(hero.getBoundingClientRect().bottom<0)return; // hero off-screen → skip
+      ctx.clearRect(0,0,W,H);
+      const dot=dark()?'rgba(255,169,77,':'rgba(0,36,116,';
+      const ln=dark()?'rgba(120,160,255,':'rgba(95,86,70,';
+      for(const p of pts){
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>W)p.vx*=-1;
+        if(p.y<0||p.y>H)p.vy*=-1;
+        const dx=mx-p.x,dy=my-p.y,d=Math.hypot(dx,dy);
+        if(d<140&&d>0){p.x+=dx/d*.4;p.y+=dy/d*.4;}
+        ctx.beginPath();ctx.arc(p.x,p.y,1.6,0,7);ctx.fillStyle=dot+'.55)';ctx.fill();
+      }
+      for(let i=0;i<pts.length;i++){
+        const a=pts[i];
+        for(let j=i+1;j<pts.length;j++){
+          const b=pts[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+          if(d<120){ctx.strokeStyle=ln+(0.14*(1-d/120))+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}
+        }
+        const dm=Math.hypot(a.x-mx,a.y-my);
+        if(dm<160){ctx.strokeStyle='rgba(255,132,0,'+(0.5*(1-dm/160))+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(mx,my);ctx.stroke();}
+      }
+    })();
+  }
+
+  /* Click spark — orange burst on every click/tap */
+  const sc=document.getElementById('clickSpark');
+  if(sc){
+    const sx=sc.getContext('2d');let sw,sh,SDPR=Math.min(2,devicePixelRatio||1),sparks=[],run=false;
+    function ss(){sw=innerWidth;sh=innerHeight;sc.width=sw*SDPR;sc.height=sh*SDPR;sx.setTransform(SDPR,0,0,SDPR,0,0);}
+    ss();addEventListener('resize',ss);
+    addEventListener('pointerdown',e=>{
+      const n=10;for(let i=0;i<n;i++){const a=Math.PI*2*i/n+Math.random()*.3,sp=3+Math.random()*3;sparks.push({x:e.clientX,y:e.clientY,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:1});}
+      if(!run){run=true;step();}
+    });
+    function step(){
+      sx.clearRect(0,0,sw,sh);sparks=sparks.filter(s=>s.life>0);
+      for(const s of sparks){
+        s.x+=s.vx;s.y+=s.vy;s.vx*=.9;s.vy*=.9;s.life-=.045;
+        sx.strokeStyle='rgba(255,132,0,'+Math.max(0,s.life)+')';sx.lineWidth=2;sx.lineCap='round';
+        sx.beginPath();sx.moveTo(s.x,s.y);sx.lineTo(s.x-s.vx*2.2,s.y-s.vy*2.2);sx.stroke();
+      }
+      if(sparks.length)requestAnimationFrame(step);else{sx.clearRect(0,0,sw,sh);run=false;}
+    }
+  }
+})();
 </script>
 </body>
 </html>
