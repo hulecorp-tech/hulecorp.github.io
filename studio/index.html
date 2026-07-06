@@ -223,6 +223,14 @@ const STYLE_CHIPS=[
   {label:'Chân thực',add:'photorealistic, 4k'},
   {label:'Nền trong suốt',add:'isolated on transparent background'},
 ];
+/* brand identity presets appended to the prompt */
+const BRAND_PRESETS=[
+  {label:'— Bộ nhận diện —',add:''},
+  {label:'Hulecorp — Cam & Navy',add:'brand palette: vivid orange (#FF8400) and deep navy (#002474), modern clean corporate style'},
+  {label:'Tối giản sáng',add:'clean minimalist look, soft neutral palette, generous whitespace'},
+  {label:'Năng động trẻ trung',add:'youthful energetic vibe, bright vibrant colors, playful shapes'},
+  {label:'Sang trọng',add:'premium luxury aesthetic, elegant, gold accents, refined typography'},
+];
 /* filename-safe slug from a Vietnamese title */
 function slug(s){return (String(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase())||'thiet-ke'}
 /* all delivered versions of an order, newest first (falls back to result_image) */
@@ -502,9 +510,23 @@ function openWorkspace(o){
           <div><label>Kích thước</label><select id="size"></select></div>
           <div id="qualityWrap"><label>Chất lượng</label><select id="quality"></select></div>
         </div>
-        <div class="tools"><button class="btn btn-p btn-sm" id="genBtn">✨ Tạo ảnh</button></div>
+        <div class="row2" style="margin-top:12px">
+          <div><label>Số lượng biến thể</label><select id="count"><option value="1">1 ảnh</option><option value="2">2 ảnh</option><option value="4">4 ảnh</option></select></div>
+          <div><label>Bộ nhận diện</label><select id="brand">${BRAND_PRESETS.map((b,i)=>`<option value="${i}">${b.label}</option>`).join('')}</select></div>
+        </div>
+        <div class="tools">
+          <button class="btn btn-p btn-sm" id="genBtn">✨ Tạo ảnh</button>
+          <button class="btn btn-g btn-sm" id="magicBtn">🪄 Prompt hay hơn</button>
+        </div>
         <div class="ai-out" id="aiOut" style="margin-top:14px">Nhập mô tả rồi bấm <b>Tạo ảnh</b>. Có thể để trống để dùng nội dung yêu cầu.</div>
-        <div class="tools" id="aiActions" style="display:none"><button class="btn btn-g btn-sm" id="toEdit">✏️ Đưa vào chỉnh sửa</button></div>
+        <div class="tools" id="aiActions" style="display:none">
+          <button class="btn btn-g btn-sm" id="toEdit">✏️ Đưa vào chỉnh sửa</button>
+          <button class="btn btn-g btn-sm" id="upBtn">✨ Nâng nét (AI)</button>
+        </div>
+        <div id="editAiWrap" style="display:none;margin-top:10px">
+          <input type="text" id="editPrompt" placeholder="Sửa bằng AI: vd “đổi nền sang xanh”, “thêm ánh sáng studio”…">
+          <button class="btn btn-g btn-sm" id="editAiBtn" style="margin-top:8px">🖌 Sửa ảnh bằng AI</button>
+        </div>
         <div class="gen-strip" id="genStrip"></div>
       </div>
 
@@ -554,24 +576,51 @@ function openWorkspace(o){
 
   // AI generation via OpenAI — single synchronous call, returns a data URL
   const aiOut=$('#aiOut'),aiActions=$('#aiActions');let aiImage='',gens=[];
-  function renderGens(){const s=$('#genStrip');if(!s)return;s.innerHTML=gens.map((g,i)=>`<img src="${g}" data-g="${i}" title="Ảnh #${i+1} — bấm để xem/sửa">`).join('');s.querySelectorAll('img').forEach(im=>im.onclick=()=>{aiImage=gens[+im.dataset.g];aiOut.innerHTML=`<img src="${aiImage}" alt="AI">`;aiActions.style.display='flex';});}
+  const spin=m=>`<div class="spin" style="margin:20px auto"></div><div class="status">${esc(m)}</div>`;
+  const aiErr=m=>{aiOut.innerHTML=`<div class="status" style="color:#B91C1C">${esc(m)}</div>`};
+  function showAi(img){aiImage=img;aiOut.innerHTML=`<img src="${img}" alt="AI">`;aiActions.style.display='flex';$('#editAiWrap').style.display='block';}
+  function renderGens(){const s=$('#genStrip');if(!s)return;s.innerHTML=gens.map((g,i)=>`<img src="${g}" data-g="${i}" title="Ảnh #${i+1} — bấm để xem/sửa">`).join('');s.querySelectorAll('img').forEach(im=>im.onclick=()=>showAi(gens[+im.dataset.g]));}
   document.querySelectorAll('#styleChips .chip').forEach(c=>c.onclick=()=>{const t=$('#prompt'),add=c.dataset.add;if(!t.value.toLowerCase().includes(add.toLowerCase()))t.value=(t.value.trim()?t.value.trim()+', ':'')+add;t.focus();});
+  // brand preset → append to prompt then reset the select
+  $('#brand').onchange=e=>{const b=BRAND_PRESETS[+e.target.value];if(b&&b.add){const t=$('#prompt');if(!t.value.toLowerCase().includes(b.add.slice(0,18).toLowerCase()))t.value=(t.value.trim()?t.value.trim()+', ':'')+b.add;}e.target.value='0';};
+
+  const genOne=prompt=>genImage({action:'generate',model:$('#model').value,prompt,size:$('#size').value,quality:$('#quality').value||undefined});
   $('#genBtn').onclick=async()=>{
     const prompt=$('#prompt').value.trim();if(!prompt)return toast('Nhập mô tả trước.',true);
-    $('#genBtn').disabled=true;aiActions.style.display='none';
-    aiOut.innerHTML='<div class="spin" style="margin:20px auto"></div><div class="status">AI đang vẽ… (10–30 giây)</div>';
+    const count=+($('#count').value||1);
+    $('#genBtn').disabled=true;aiActions.style.display='none';$('#editAiWrap').style.display='none';
+    aiOut.innerHTML=spin('AI đang vẽ '+count+' ảnh…');
     try{
-      const res=await genImage({action:'generate',model:$('#model').value,prompt,size:$('#size').value,quality:$('#quality').value||undefined});
-      if(res.error){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">${esc(res.error)}</div>`;return}
-      if(!res.image){aiOut.innerHTML='<div class="status" style="color:#B91C1C">Không nhận được ảnh (kiểm tra Edge Function / OPENAI_API_KEY).</div>';return}
-      aiImage=res.image; // data:image/png;base64,...
-      aiOut.innerHTML=`<img src="${aiImage}" alt="AI">`;aiActions.style.display='flex';
-      gens.push(aiImage);renderGens();
-      // remember prompt on the order — fire-and-forget, must never clobber the shown image
+      const results=await Promise.all(Array.from({length:count},()=>genOne(prompt)));
+      const imgs=results.filter(r=>r&&r.image).map(r=>r.image);
+      if(!imgs.length){aiErr((results.find(r=>r&&r.error)||{}).error||'Không nhận được ảnh (kiểm tra Edge Function / OPENAI_API_KEY).');return}
+      imgs.forEach(im=>gens.push(im));renderGens();showAi(imgs[0]);
       try{sb?.from('design_orders').update({design_prompt:prompt}).eq('id',o.id).then(()=>{},()=>{})}catch(_){}
-    }catch(e){aiOut.innerHTML=`<div class="status" style="color:#B91C1C">Lỗi kết nối: ${esc(e.message)}</div>`}
+    }catch(e){aiErr('Lỗi kết nối: '+e.message)}
     finally{$('#genBtn').disabled=false}
   };
+
+  $('#magicBtn').onclick=async()=>{
+    const prompt=$('#prompt').value.trim();if(!prompt)return toast('Nhập ý tưởng ngắn trước.',true);
+    const btn=$('#magicBtn'),old=btn.textContent;btn.disabled=true;btn.textContent='🪄 Đang viết…';
+    try{const r=await genImage({action:'magic',prompt});if(r.error)toast(r.error,true);else if(r.prompt){$('#prompt').value=r.prompt;toast('Đã nâng cấp prompt ✨');}}
+    catch(e){toast('Lỗi: '+e.message,true)}
+    finally{btn.disabled=false;btn.textContent=old}
+  };
+
+  async function aiEdit(editPrompt,label){
+    if(!aiImage)return toast('Chưa có ảnh AI để sửa. Hãy tạo ảnh trước.',true);
+    aiActions.style.display='none';$('#editAiWrap').style.display='none';aiOut.innerHTML=spin(label);
+    try{
+      const r=await genImage({action:'edit',prompt:editPrompt,image:aiImage,size:$('#size').value,quality:$('#quality').value||undefined});
+      if(r.error){aiErr(r.error);return}
+      if(!r.image){aiErr('Không nhận được ảnh.');return}
+      gens.push(r.image);renderGens();showAi(r.image);
+    }catch(e){aiErr('Lỗi: '+e.message)}
+  }
+  $('#editAiBtn').onclick=()=>{const t=$('#editPrompt').value.trim();if(!t)return toast('Nhập yêu cầu sửa.',true);aiEdit(t,'AI đang sửa ảnh…');};
+  $('#upBtn').onclick=()=>aiEdit('Enhance this exact image: sharper details, higher clarity and resolution; keep the same composition, subject and colors.','AI đang nâng nét…');
+
   // AI result is a same-origin data URL → editable without CORS taint
   $('#toEdit').onclick=()=>{if(aiImage)loadEditor(aiImage,false)};
 
