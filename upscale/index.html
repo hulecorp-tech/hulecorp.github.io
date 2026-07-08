@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nâng cấp độ phân giải ảnh — AI Upscale | Huy Le Creative</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔎</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF;--peach:#FFF3EC;--peach2:#FFE4D3;
+  --card:#FFFFFF;--ink:#22243B;--ink2:#6E7191;--bd:#F0EBE6;--bd2:#FADFC9;
+  --green:#16A34A;--green-bg:#DCFCE7;--red:#E23A45;--red-bg:#FDE8E8;
+  --purple:#7C4DFF;--blue:#2F6BFF;--blue-bg:#E4ECFF;
+  --orange:#FA7419;--orange2:#FF9E4D;--amber:#D97706;--amber-bg:#FFF3D6;
+  --rad:20px;--radsm:14px;
+  --shadow:0 14px 36px rgba(34,36,59,.07);
+  --glow:0 14px 30px rgba(250,116,25,.28);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+   radial-gradient(28% 30% at 6% 4%, rgba(250,116,25,.06), transparent 70%),
+   radial-gradient(26% 26% at 97% 10%, rgba(124,77,255,.05), transparent 70%),
+   radial-gradient(30% 30% at 94% 90%, rgba(47,107,255,.045), transparent 70%);}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:0;background:none}
+input,select{font-family:inherit}
+.mono{font-variant-numeric:tabular-nums}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.top-in{max-width:1120px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.12rem;letter-spacing:-.4px;color:var(--ink)}
+.brand .ic{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:flex;align-items:center;justify-content:center;font-size:1.15rem;box-shadow:var(--glow)}
+.btn{border-radius:999px;font-weight:700;font-size:.85rem;padding:11px 20px;transition:.18s;display:inline-flex;align-items:center;gap:7px;border:1.5px solid transparent;white-space:nowrap}
+.btn-o{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;box-shadow:var(--glow)}.btn-o:hover{transform:translateY(-1px);box-shadow:0 16px 34px rgba(250,116,25,.36)}
+.btn-g{background:#fff;border-color:var(--bd);color:var(--ink)}.btn-g:hover{border-color:var(--orange);color:var(--orange)}
+.btn-sm{padding:8px 14px;font-size:.78rem}
+.btn:disabled{opacity:.5;cursor:default;box-shadow:none;transform:none}
+
+.wrap{max-width:1120px;margin:0 auto;padding:30px 22px 96px}
+.back{font-size:.85rem;color:var(--ink2);font-weight:600;display:inline-flex;gap:6px;margin-bottom:18px}.back:hover{color:var(--orange)}
+.hero{text-align:center;margin-bottom:30px}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--peach);border:1px solid var(--bd2);color:var(--orange);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.6px;padding:6px 14px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:2.1rem;font-weight:800;letter-spacing:-.8px;line-height:1.15}
+.hero p{color:var(--ink2);font-size:.98rem;margin-top:10px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.65}
+
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:26px;box-shadow:var(--shadow)}
+label{display:block;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);margin:0 0 8px}
+select{width:100%;padding:13px 15px;border:1.5px solid var(--bd);border-radius:var(--radsm);font-size:.92rem;background:#fff;color:var(--ink);outline:none;transition:.15s}
+select:focus{border-color:var(--orange);box-shadow:0 0 0 4px rgba(250,116,25,.12)}
+
+.drop{border:2px dashed var(--bd2);border-radius:var(--rad);padding:44px 22px;text-align:center;color:var(--ink2);cursor:pointer;transition:.15s;background:var(--peach)}
+.drop:hover,.drop.hover{border-color:var(--orange);color:var(--orange);background:#FFF6EF}
+.drop .emo{font-size:2.6rem;margin-bottom:10px}
+.drop b{color:var(--ink);font-size:1rem}
+.drop small{display:block;margin-top:8px;font-size:.78rem}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+/* meta chips */
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;font-size:.8rem;color:var(--ink2)}
+.chip{background:var(--peach);border:1px solid var(--bd2);border-radius:999px;padding:5px 13px;font-weight:600}
+
+/* progress */
+.prog-wrap{margin-top:20px;display:none}
+.prog-wrap.on{display:block}
+.prog-lbl{display:flex;justify-content:space-between;font-size:.8rem;font-weight:600;color:var(--ink2);margin-bottom:7px}
+.prog{height:12px;border-radius:999px;background:var(--peach2);overflow:hidden}
+.prog i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--orange),var(--orange2));transition:width .25s ease}
+
+/* compare */
+.result{margin-top:24px;display:none}
+.result.on{display:block}
+.cmp{position:relative;border-radius:var(--rad);overflow:hidden;border:1px solid var(--bd);background:#0e0e14 repeating-conic-gradient(#1a1a24 0% 25%, #14141c 0% 50%) 50%/22px 22px;touch-action:none;user-select:none}
+.cmp img{display:block;width:100%;height:auto;pointer-events:none}
+.cmp .after{position:absolute;inset:0;overflow:hidden;width:50%}
+.cmp .after img{width:100%;max-width:none}
+.cmp .after-inner{position:absolute;inset:0;overflow:hidden}
+.cmp .handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:#fff;transform:translateX(-50%);box-shadow:0 0 0 1px rgba(0,0,0,.2)}
+.cmp .handle::after{content:"⟺";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;box-shadow:0 6px 18px rgba(0,0,0,.28)}
+.cmp .tag{position:absolute;top:12px;font-size:.66rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;backdrop-filter:blur(4px);z-index:3}
+.cmp .tag.l{left:12px}.cmp .tag.r{right:12px}
+.result .actions{margin-top:18px}
+
+.note{margin-top:22px;background:var(--amber-bg);border:1px solid #F4E2B8;border-left:4px solid var(--amber);border-radius:var(--radsm);padding:14px 18px;font-size:.83rem;line-height:1.6;color:#8a6410}
+.err{margin-top:18px;background:var(--red-bg);border:1px solid #F6C6C6;border-left:4px solid var(--red);border-radius:var(--radsm);padding:14px 18px;font-size:.85rem;color:#B02631;display:none}
+.err.on{display:block}
+
+/* how it works */
+.hiw{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.hiw .c{background:var(--peach);border:1px solid var(--bd);border-radius:var(--radsm);padding:20px}
+.hiw .c .n{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:var(--glow)}
+.hiw .c b{display:block;font-size:.95rem;margin-bottom:5px}
+.hiw .c p{font-size:.82rem;color:var(--ink2);line-height:1.6}
+
+@media(max-width:760px){
+  .hero h1{font-size:1.6rem}
+  .opts,.row2,.hiw{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="/"><span class="ic">🔎</span><span>Nâng cấp ảnh AI</span></a>
+    <a class="btn btn-g btn-sm" href="/forum.html#tools">← Công cụ</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <a class="back" href="/forum.html#tools">← Quay lại danh sách công cụ</a>
+
+  <div class="hero">
+    <span class="eyebrow">✨ AI Super-Resolution</span>
+    <h1>Nâng cấp độ phân giải ảnh</h1>
+    <p>Phóng to ảnh <b>2× hoặc 4×</b> mà vẫn giữ nét, khử răng cưa bằng mô hình ESRGAN chạy <b>ngay trên trình duyệt của bạn</b> — ảnh không bao giờ rời khỏi máy, hoàn toàn miễn phí, không cần API key.</p>
+  </div>
+
+  <section class="panel">
+    <!-- drop zone -->
+    <div id="drop" class="drop">
+      <div class="emo">🖼️</div>
+      <b>Kéo &amp; thả ảnh vào đây</b>
+      <small>hoặc bấm để chọn tệp · dán ảnh (Ctrl/⌘+V) cũng được · PNG, JPG, WebP</small>
+    </div>
+    <input id="file" type="file" accept="image/*" hidden>
+
+    <!-- source preview + options (hidden until an image is loaded) -->
+    <div id="cfg" style="display:none">
+      <div class="meta" id="srcMeta"></div>
+
+      <div class="opts">
+        <div>
+          <label>Mức phóng to</label>
+          <select id="scale">
+            <option value="2">2× — nhanh, nhẹ (khuyên dùng)</option>
+            <option value="4">4× — sắc nét tối đa (tải mô hình lớn hơn)</option>
+          </select>
+        </div>
+        <div>
+          <label>Định dạng tải về</label>
+          <select id="fmt">
+            <option value="image/png">PNG — không nén, chất lượng cao</option>
+            <option value="image/jpeg">JPG — dung lượng nhỏ</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="go" class="btn btn-o">✨ Nâng cấp ngay</button>
+        <button id="reset" class="btn btn-g">Chọn ảnh khác</button>
+      </div>
+
+      <div class="err" id="err"></div>
+
+      <div class="prog-wrap" id="progWrap">
+        <div class="prog-lbl"><span id="progTxt">Đang tải mô hình AI…</span><span id="progPct" class="mono">0%</span></div>
+        <div class="prog"><i id="progBar"></i></div>
+      </div>
+    </div>
+
+    <!-- result -->
+    <div class="result" id="result">
+      <div class="cmp" id="cmp">
+        <img id="beforeImg" alt="Trước">
+        <div class="after" id="afterBox">
+          <div class="after-inner"><img id="afterImg" alt="Sau"></div>
+        </div>
+        <div class="handle" id="handle"></div>
+        <span class="tag l">Trước</span>
+        <span class="tag r">Sau · AI</span>
+      </div>
+      <div class="meta" id="resMeta"></div>
+      <div class="actions">
+        <button id="download" class="btn btn-o">⬇️ Tải ảnh đã nâng cấp</button>
+        <button id="again" class="btn btn-g">Nâng cấp ảnh khác</button>
+      </div>
+    </div>
+
+    <div class="note">
+      ⏳ <b>Lần đầu chạy</b> trình duyệt sẽ tải mô hình AI (vài giây tới ~1 phút tuỳ mạng), các lần sau sẽ nhanh hơn nhờ cache. Ảnh càng lớn xử lý càng lâu — nên nâng cấp ảnh gốc dưới ~1500px để tối ưu tốc độ.
+    </div>
+  </section>
+
+  <div class="hiw">
+    <div class="c"><div class="n">1</div><b>Riêng tư tuyệt đối</b><p>Toàn bộ xử lý diễn ra trên máy bạn bằng WebGL/TensorFlow.js. Ảnh không được gửi lên bất kỳ máy chủ nào.</p></div>
+    <div class="c"><div class="n">2</div><b>Mô hình ESRGAN</b><p>Super-resolution học sâu, tái tạo chi tiết và cạnh sắc nét hơn hẳn phóng to thông thường.</p></div>
+    <div class="c"><div class="n">3</div><b>Miễn phí, không giới hạn</b><p>Không cần đăng nhập, không API key, không watermark. Dùng bao nhiêu tuỳ thích.</p></div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+<script>
+(function(){
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const drop=$('drop'), fileIn=$('file'), cfg=$('cfg'), srcMeta=$('srcMeta'),
+        scaleSel=$('scale'), fmtSel=$('fmt'), goBtn=$('go'), resetBtn=$('reset'),
+        errBox=$('err'), progWrap=$('progWrap'), progTxt=$('progTxt'),
+        progPct=$('progPct'), progBar=$('progBar'), result=$('result'),
+        beforeImg=$('beforeImg'), afterImg=$('afterImg'), afterBox=$('afterBox'),
+        handle=$('handle'), cmp=$('cmp'), resMeta=$('resMeta'),
+        downloadBtn=$('download'), againBtn=$('again');
+
+  let srcDataUrl=null, srcName='anh', srcW=0, srcH=0, outDataUrl=null, busy=false;
+
+  // ---- CDN sources (users' browsers reach jsdelivr fine) ----
+  const CDN='https://cdn.jsdelivr.net/npm/';
+  const UPSCALER_JS = CDN+'upscaler@1.0.0/dist/browser/umd/upscaler.min.js';
+  const MODELS = {
+    2:{ js:CDN+'@upscalerjs/esrgan-thick@1.0.0/dist/umd/models/esrgan-thick/src/x2/index.min.js',
+        weights:CDN+'@upscalerjs/esrgan-thick@1.0.0/models/x2/model.json', global:'ESRGANThick2x' },
+    4:{ js:CDN+'@upscalerjs/esrgan-thick@1.0.0/dist/umd/models/esrgan-thick/src/x4/index.min.js',
+        weights:CDN+'@upscalerjs/esrgan-thick@1.0.0/models/x4/model.json', global:'ESRGANThick4x' }
+  };
+  const loaded={};                 // url -> Promise (script loaded)
+  const upscalers={};              // scale -> Upscaler instance (cached)
+
+  function loadScript(src){
+    if(loaded[src]) return loaded[src];
+    loaded[src]=new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src=src; s.onload=res; s.onerror=()=>rej(new Error('Không tải được: '+src));
+      document.head.appendChild(s);
+    });
+    return loaded[src];
+  }
+
+  async function getUpscaler(scale){
+    if(upscalers[scale]) return upscalers[scale];
+    const m=MODELS[scale];
+    await (window.tf?.ready ? window.tf.ready() : Promise.resolve());
+    await loadScript(UPSCALER_JS);
+    await loadScript(m.js);
+    const Upscaler = window.Upscaler || (window.UpscalerJS && window.UpscalerJS.default) || window.UpscalerJS;
+    const baseModel = window[m.global];
+    if(typeof Upscaler!=='function' || !baseModel) throw new Error('Không khởi tạo được engine AI.');
+    // override the weights path to the jsdelivr CDN copy
+    const model=Object.assign({},baseModel,{path:m.weights});
+    const up=new Upscaler({model});
+    upscalers[scale]=up;
+    return up;
+  }
+
+  // ---- file intake ----
+  function showError(msg){ errBox.textContent='⚠️ '+msg; errBox.classList.add('on'); }
+  function clearError(){ errBox.classList.remove('on'); }
+
+  function loadFile(file){
+    if(!file || !file.type.startsWith('image/')){ showError('Vui lòng chọn một tệp ảnh hợp lệ.'); return; }
+    srcName=(file.name||'anh').replace(/\.[^.]+$/,'') || 'anh';
+    const fr=new FileReader();
+    fr.onload=e=>{
+      srcDataUrl=e.target.result;
+      const img=new Image();
+      img.onload=()=>{
+        srcW=img.naturalWidth; srcH=img.naturalHeight;
+        beforeImg.src=srcDataUrl;
+        srcMeta.innerHTML=
+          `<span class="chip">📐 ${srcW} × ${srcH}px</span>`+
+          `<span class="chip">📦 ${(file.size/1024).toFixed(0)} KB</span>`+
+          `<span class="chip">🏷️ ${(file.type.split('/')[1]||'').toUpperCase()}</span>`;
+        drop.style.display='none'; cfg.style.display='block'; result.classList.remove('on');
+        clearError(); outDataUrl=null;
+        // warn on very large sources
+        if(srcW*srcH > 2200*2200) showError('Ảnh khá lớn — quá trình nâng cấp có thể mất nhiều thời gian hoặc tràn bộ nhớ. Cân nhắc dùng ảnh nhỏ hơn.');
+      };
+      img.onerror=()=>showError('Không đọc được ảnh này.');
+      img.src=srcDataUrl;
+    };
+    fr.readAsDataURL(file);
+  }
+
+  drop.addEventListener('click',()=>fileIn.click());
+  fileIn.addEventListener('change',e=>{ if(e.target.files[0]) loadFile(e.target.files[0]); });
+  ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('hover');}));
+  ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('hover');}));
+  drop.addEventListener('drop',e=>{ const f=e.dataTransfer.files[0]; if(f) loadFile(f); });
+  window.addEventListener('paste',e=>{
+    const items=e.clipboardData?.items||[];
+    for(const it of items){ if(it.type.startsWith('image/')){ loadFile(it.getAsFile()); break; } }
+  });
+
+  function resetAll(){
+    srcDataUrl=null; outDataUrl=null; fileIn.value='';
+    drop.style.display='block'; cfg.style.display='none';
+    result.classList.remove('on'); progWrap.classList.remove('on'); clearError();
+  }
+  resetBtn.addEventListener('click',resetAll);
+  againBtn.addEventListener('click',resetAll);
+
+  // ---- upscale ----
+  function setProg(p,txt){ progBar.style.width=(p*100).toFixed(0)+'%'; progPct.textContent=(p*100).toFixed(0)+'%'; if(txt) progTxt.textContent=txt; }
+
+  goBtn.addEventListener('click',async()=>{
+    if(busy || !srcDataUrl) return;
+    busy=true; clearError();
+    const scale=+scaleSel.value;
+    goBtn.disabled=true; resetBtn.disabled=true; result.classList.remove('on');
+    progWrap.classList.add('on'); setProg(0.02,'Đang tải mô hình AI…');
+    try{
+      const up=await getUpscaler(scale);
+      setProg(0.12,'Đang xử lý ảnh… (giữ tab này mở)');
+      const out=await up.upscale(srcDataUrl,{
+        output:'base64',
+        patchSize:64, padding:6,
+        progress:(rate)=>{ // rate 0..1 over the patches
+          const p=0.12+Math.max(0,Math.min(1,rate))*0.86;
+          setProg(p,'Đang xử lý ảnh… (giữ tab này mở)');
+        }
+      });
+      setProg(1,'Hoàn tất!');
+      outDataUrl=out.startsWith('data:')?out:('data:image/png;base64,'+out);
+      // measure output
+      const oi=new Image();
+      oi.onload=()=>{
+        afterImg.src=outDataUrl; beforeImg.src=srcDataUrl;
+        resMeta.innerHTML=
+          `<span class="chip">📐 ${srcW}×${srcH} → <b>${oi.naturalWidth}×${oi.naturalHeight}px</b></span>`+
+          `<span class="chip">🔍 ${scale}× phóng to</span>`+
+          `<span class="chip">🤖 ESRGAN</span>`;
+        result.classList.add('on');
+        setTimeout(()=>result.scrollIntoView({behavior:'smooth',block:'nearest'}),80);
+      };
+      oi.src=outDataUrl;
+    }catch(err){
+      console.error(err);
+      showError((err&&err.message)||'Có lỗi khi nâng cấp ảnh. Thử lại với ảnh nhỏ hơn hoặc tải lại trang.');
+    }finally{
+      busy=false; goBtn.disabled=false; resetBtn.disabled=false;
+      setTimeout(()=>progWrap.classList.remove('on'),600);
+    }
+  });
+
+  // ---- download (with optional format conversion) ----
+  downloadBtn.addEventListener('click',()=>{
+    if(!outDataUrl) return;
+    const fmt=fmtSel.value;
+    const finish=(url,ext)=>{
+      const a=document.createElement('a');
+      a.href=url; a.download=`${srcName}-upscaled-${scaleSel.value}x.${ext}`;
+      document.body.appendChild(a); a.click(); a.remove();
+    };
+    if(fmt==='image/png'){ finish(outDataUrl,'png'); return; }
+    const im=new Image();
+    im.onload=()=>{
+      const c=document.createElement('canvas'); c.width=im.naturalWidth; c.height=im.naturalHeight;
+      const ctx=c.getContext('2d');
+      if(fmt==='image/jpeg'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,c.width,c.height); }
+      ctx.drawImage(im,0,0);
+      finish(c.toDataURL(fmt,0.95), fmt==='image/jpeg'?'jpg':'png');
+    };
+    im.src=outDataUrl;
+  });
+
+  // ---- before/after slider ----
+  function setSlider(clientX){
+    const r=cmp.getBoundingClientRect();
+    let pct=((clientX-r.left)/r.width)*100;
+    pct=Math.max(0,Math.min(100,pct));
+    afterBox.style.width=pct+'%'; handle.style.left=pct+'%';
+  }
+  let dragging=false;
+  cmp.addEventListener('pointerdown',e=>{ dragging=true; setSlider(e.clientX); cmp.setPointerCapture(e.pointerId); });
+  cmp.addEventListener('pointermove',e=>{ if(dragging) setSlider(e.clientX); });
+  cmp.addEventListener('pointerup',()=>dragging=false);
+  cmp.addEventListener('pointercancel',()=>dragging=false);
+})();
+</script>
+</body>
+</html>

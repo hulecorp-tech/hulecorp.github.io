@@ -6,7 +6,7 @@ This repo has grown beyond a single portfolio page. It's a small hub for **Huy L
 
 - The main **portfolio** (`index.html`) — event branding, mascot design, banner & panel, packaging, brand identity, promotion
 - A **community forum** (`forum.html`) with Supabase-backed auth, roles, and an admin panel
-- A handful of **standalone Vietnamese-language utility tools**, each its own folder with a clean URL (`/qr`, `/barcode`, `/shopee`, `/design`, `/wheel`, `/paper`, `/midu_cbct`)
+- A handful of **standalone Vietnamese-language utility tools**, each its own folder with a clean URL (`/qr`, `/barcode`, `/shopee`, `/design`, `/wheel`, `/paper`, `/midu_cbct`, `/upscale`)
 - A **Supabase Edge Function** (`supabase/functions/magnific`) that proxies a third-party AI image API
 - A `/workout` tool for tracking daily company exercise attendance (localStorage only, no backend)
 - A `/studio` tool ("Xưởng Thiết Kế") — an internal design-order workflow: staff submit design orders, admins/mods see the order queue and fulfil them in a built-in AI-generation + canvas image-editor workspace (Supabase-backed via a `design_orders` table)
@@ -32,6 +32,7 @@ hulecorp.github.io/
 ├── paper/index.html          # Printable paper/notebook template generator (jsPDF)
 ├── workout/index.html        # Daily exercise attendance tracker (localStorage only)
 ├── studio/index.html         # Design-order workflow + AI-gen & image-editor workspace (Supabase)
+├── upscale/index.html        # Client-side AI image upscaler (ESRGAN via UpscalerJS + TensorFlow.js; no backend)
 ├── midu_cbct/index.html      # "Vinh danh Chiến binh Content" certificate generator
 ├── fonts/                    # Self-hosted OTFs used only by /midu_cbct
 │   ├── MTD_Brand_Pro.otf
@@ -50,6 +51,7 @@ hulecorp.github.io/
   - `/paper`: Google Fonts — Rubik, plus jsPDF (`cdnjs.cloudflare.com`)
   - `/qr`: Tailwind CDN (`cdn.tailwindcss.com`) + `qr-code-styling` (`unpkg.com`)
   - `/barcode`: JsBarcode (`cdn.jsdelivr.net`)
+  - `/upscale` (and `/studio`'s `🔎 Nâng phân giải` button): TensorFlow.js (`@tensorflow/tfjs@4.22.0`) + UpscalerJS (`upscaler@1.0.0`) + ESRGAN weights (`@upscalerjs/esrgan-thick@1.0.0`), all from `cdn.jsdelivr.net`, loaded **lazily on first use**; upscaling runs 100% client-side (no key, no backend)
   - `/midu_cbct`: self-hosted OTF fonts (`/fonts/*.otf`) drawn onto a `<canvas>`
 - **Supabase** (hosted Postgres + Auth) is shared across `forum.html`, `/shopee`, `/midu_cbct`, `/design` via the JS client loaded from `cdn.jsdelivr.net`, project ref `dmvomgmhsivifionnkiu` (`https://dmvomgmhsivifionnkiu.supabase.co`). Client code uses the public anon key — safe to expose, do not confuse with a service-role key.
 - **Deno Supabase Edge Function** (`supabase/functions/magnific/index.ts`) proxies the Magnific (Freepik) AI image API for `/design`, keeping `MAGNIFIC_API_KEY` server-side only.
@@ -99,7 +101,8 @@ Each is a clean-URL folder (`/foo` → `foo/index.html`, no `.html` extension in
 | `/wheel` | 3D lucky-wheel spinner game | Sound effects (`nhac-xo-so.mp3`, `wowcongratulation.mp3`), localStorage persistence for wheel config |
 | `/paper` | Printable paper/notebook template generator | 40 templates, line styles, 4-side margins, watermark, page numbers; exports via jsPDF |
 | `/workout` | Daily exercise attendance tracker | Fixed Mon–Sat calendar + 4 free slots, tick train (green) / rest (red), goal = 20 sessions/month, congrats banner at 100%; localStorage only, no Supabase |
-| `/studio` | Design-order workflow ("Xưởng Thiết Kế") | Requires a Forum login. Any staff submit design orders (with a quick-pick **size-preset** dropdown that still allows free text); **only `admin`** sees the queue, a **"Lịch sử" gallery** of all delivered designs (downloadable anytime, filenames slugged from the order title), and fulfils each order in a workspace with **AI generation** (via the `openai-image` edge function → selectable OpenAI image models (`gpt-image-2` default, `gpt-image-1.5`, `gpt-image-1`, `gpt-image-1-mini`, `dall-e-3`, `dall-e-2`); prompt **style chips**, **brand presets**, **Magic Prompt** (AI rewrites the brief), **batch** 1/2/4 variations, **AI edit** (image-to-image) + **AI upscale/enhance** via the `edit` action, and a **session generation strip**) + a **canvas image editor** (filters, rotate/flip, draggable text, deliver). Backed by the Supabase `design_orders` table (see `supabase/design_orders.sql`); RLS restricts read/update of all orders to admins (`is_designer()` checks `role = 'admin'`). Delivering appends to a `deliveries` jsonb version-history column (optional; falls back to `result_image`) |
+| `/studio` | Design-order workflow ("Xưởng Thiết Kế") | Requires a Forum login. Any staff submit design orders (with a quick-pick **size-preset** dropdown that still allows free text); **only `admin`** sees the queue, a **"Lịch sử" gallery** of all delivered designs (downloadable anytime, filenames slugged from the order title), and fulfils each order in a workspace with **AI generation** (via the `openai-image` edge function → selectable OpenAI image models (`gpt-image-2` default, `gpt-image-1.5`, `gpt-image-1`, `gpt-image-1-mini`, `dall-e-3`, `dall-e-2`); prompt **style chips**, **brand presets**, **Magic Prompt** (AI rewrites the brief), **batch** 1/2/4 variations, **AI edit** (image-to-image) + **AI upscale/enhance** via the `edit` action, plus a **client-side ESRGAN super-resolution** button (`🔎 Nâng phân giải 2×` — shared `clientUpscale()` helper, see `/upscale` below), and a **session generation strip**) + a **canvas image editor** (filters, rotate/flip, draggable text, deliver). Backed by the Supabase `design_orders` table (see `supabase/design_orders.sql`); RLS restricts read/update of all orders to admins (`is_designer()` checks `role = 'admin'`). Delivering appends to a `deliveries` jsonb version-history column (optional; falls back to `result_image`) |
+| `/upscale` | Client-side AI image upscaler | Drag/drop/paste an image → pick **2× or 4×** → super-resolves with **ESRGAN** via **UpscalerJS** (`upscaler@1.0.0`) on top of **TensorFlow.js** (`@tensorflow/tfjs@4.22.0`), all loaded lazily from jsdelivr and run **entirely in the browser** (no backend, no API key, image never leaves the device). Model weights come from `@upscalerjs/esrgan-thick@1.0.0` (`ESRGANThick2x`/`ESRGANThick4x`; the model config's `path` is overridden to the jsdelivr `models/x{N}/model.json` copy). Before/after slider, tiled processing (`patchSize:64, padding:6`) for large images, progress bar, PNG/JPG download. First run downloads the model (cached after). Site cream/orange theme + Be Vietnam Pro |
 | `/midu_cbct` | "Vinh danh Chiến binh Content" certificate generator | Draws text onto `cert-template.png` via `<canvas>`, using self-hosted `MTD Brand Pro` / `RubikMKT` fonts; Supabase-backed |
 
 Each tool page is independent — don't assume the portfolio's i18n system, class naming, or CSS tokens apply inside these folders. Some use Tailwind, some hand-written CSS, some their own design tokens.
@@ -196,7 +199,7 @@ Checklist after changing `index.html`:
 - [ ] Layout is correct at mobile width (<680px) — hamburger menu (`.hamb`/`#mnav`) should appear
 - [ ] New content/sections scroll-animate with `.reveal` if applicable
 
-Checklist after changing a standalone tool page (`/qr`, `/barcode`, `/shopee`, `/design`, `/wheel`, `/paper`, `/midu_cbct`):
+Checklist after changing a standalone tool page (`/qr`, `/barcode`, `/shopee`, `/design`, `/wheel`, `/paper`, `/midu_cbct`, `/upscale`):
 - [ ] The tool works standalone (open its `index.html` directly)
 - [ ] The "back" link to `/forum.html#tools` (where present) still resolves
 - [ ] If Supabase-backed, verify against the shared project — don't introduce a second project

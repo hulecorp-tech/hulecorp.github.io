@@ -283,6 +283,34 @@ async function genImage(payload){
   return data;
 }
 
+/* ===== Client-side super-resolution (ESRGAN via UpscalerJS + TensorFlow.js) =====
+   Free, no API key — runs entirely in the browser. Libraries load lazily on first use. */
+const _CDN='https://cdn.jsdelivr.net/npm/';
+const _UP_MODELS={
+  2:{js:_CDN+'@upscalerjs/esrgan-thick@1.0.0/dist/umd/models/esrgan-thick/src/x2/index.min.js',weights:_CDN+'@upscalerjs/esrgan-thick@1.0.0/models/x2/model.json',global:'ESRGANThick2x'},
+  4:{js:_CDN+'@upscalerjs/esrgan-thick@1.0.0/dist/umd/models/esrgan-thick/src/x4/index.min.js',weights:_CDN+'@upscalerjs/esrgan-thick@1.0.0/models/x4/model.json',global:'ESRGANThick4x'}
+};
+const _upLoaded={},_upInst={};
+function _loadScript(src){if(_upLoaded[src])return _upLoaded[src];_upLoaded[src]=new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('Không tải được thư viện AI.'));document.head.appendChild(s);});return _upLoaded[src];}
+async function _getUpscaler(scale){
+  if(_upInst[scale])return _upInst[scale];
+  const m=_UP_MODELS[scale]||_UP_MODELS[2];
+  await _loadScript(_CDN+'@tensorflow/tfjs@4.22.0/dist/tf.min.js');
+  if(window.tf&&window.tf.ready)await window.tf.ready();
+  await _loadScript(_CDN+'upscaler@1.0.0/dist/browser/umd/upscaler.min.js');
+  await _loadScript(m.js);
+  const Upscaler=window.Upscaler||(window.UpscalerJS&&window.UpscalerJS.default)||window.UpscalerJS;
+  const baseModel=window[m.global];
+  if(typeof Upscaler!=='function'||!baseModel)throw new Error('Không khởi tạo được engine AI.');
+  const up=new Upscaler({model:Object.assign({},baseModel,{path:m.weights})});
+  _upInst[scale]=up;return up;
+}
+async function clientUpscale(dataUrl,scale,onProgress){
+  const up=await _getUpscaler(scale);
+  const out=await up.upscale(dataUrl,{output:'base64',patchSize:64,padding:6,progress:p=>{if(onProgress)onProgress(Math.max(0,Math.min(1,p)));}});
+  return out.startsWith('data:')?out:('data:image/png;base64,'+out);
+}
+
 /* ============================ BOOT ============================ */
 (async()=>{
   if(!sb){renderGate('⚠️','Không kết nối được máy chủ','Không tải được thư viện Supabase. Kiểm tra mạng rồi thử lại.');return}
@@ -521,7 +549,7 @@ function openWorkspace(o){
         <div class="ai-out" id="aiOut" style="margin-top:14px">Nhập mô tả rồi bấm <b>Tạo ảnh</b>. Có thể để trống để dùng nội dung yêu cầu.</div>
         <div class="tools" id="aiActions" style="display:none">
           <button class="btn btn-g btn-sm" id="toEdit">✏️ Đưa vào chỉnh sửa</button>
-          <button class="btn btn-g btn-sm" id="upBtn">✨ Nâng nét (AI)</button>
+          <button class="btn btn-g btn-sm" id="upBtn" title="Nâng độ phân giải bằng ESRGAN — xử lý ngay trên trình duyệt">🔎 Nâng phân giải 2×</button>
         </div>
         <div id="editAiWrap" style="display:none;margin-top:10px">
           <input type="text" id="editPrompt" placeholder="Sửa bằng AI: vd “đổi nền sang xanh”, “thêm ánh sáng studio”…">
@@ -619,7 +647,16 @@ function openWorkspace(o){
     }catch(e){aiErr('Lỗi: '+e.message)}
   }
   $('#editAiBtn').onclick=()=>{const t=$('#editPrompt').value.trim();if(!t)return toast('Nhập yêu cầu sửa.',true);aiEdit(t,'AI đang sửa ảnh…');};
-  $('#upBtn').onclick=()=>aiEdit('Enhance this exact image: sharper details, higher clarity and resolution; keep the same composition, subject and colors.','AI đang nâng nét…');
+  // Real super-resolution — ESRGAN running client-side (free, no API). Replaces the old "AI enhance" hack.
+  $('#upBtn').onclick=async()=>{
+    if(!aiImage)return toast('Chưa có ảnh để nâng phân giải. Hãy tạo ảnh trước.',true);
+    aiActions.style.display='none';$('#editAiWrap').style.display='none';
+    aiOut.innerHTML=spin('Đang tải mô hình & nâng phân giải…');
+    try{
+      const out=await clientUpscale(aiImage,2,r=>{aiOut.innerHTML=spin('Đang nâng phân giải… '+Math.round(r*100)+'%');});
+      gens.push(out);renderGens();showAi(out);toast('Đã nâng phân giải 2× ✨');
+    }catch(e){aiErr('Không nâng phân giải được: '+(e.message||e));}
+  };
 
   // AI result is a same-origin data URL → editable without CORS taint
   $('#toEdit').onclick=()=>{if(aiImage)loadEditor(aiImage,false)};
