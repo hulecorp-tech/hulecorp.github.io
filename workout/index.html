@@ -292,14 +292,14 @@ function render(){
   document.getElementById('statRest').textContent=rest;
   document.getElementById('statCustom').textContent=extra;
 
-  // Hai mục tiêu tính riêng, mỗi cái tối đa 100%; rồi gộp lại: hàng ngày 50% + tập thêm 50%.
-  const dailyPct=Math.min(train/GOAL_DAILY,1);   // tập hàng ngày (xanh)
-  const extraPct=Math.min(extra/GOAL_EXTRA,1);   // tập thêm (tím)
+  // Hai mục tiêu tính riêng (KHÔNG chặn trần — tập dư sẽ vượt 100%); gộp lại: hàng ngày 50% + tập thêm 50%.
+  const dailyPct=train/GOAL_DAILY;   // tập hàng ngày (xanh)
+  const extraPct=extra/GOAL_EXTRA;   // tập thêm (tím)
   const totalPct=Math.round((dailyPct*0.5+extraPct*0.5)*100);
   document.getElementById('goalTxt').textContent=
     'Hàng ngày '+train+'/'+GOAL_DAILY+' ('+Math.round(dailyPct*50)+'%) · Tập thêm '+extra+'/'+GOAL_EXTRA+' ('+Math.round(extraPct*50)+'%)';
   document.getElementById('goalPct').textContent=totalPct+'%';
-  document.getElementById('goalBar').style.width=totalPct+'%';
+  document.getElementById('goalBar').style.width=Math.min(totalPct,100)+'%'; // thanh bar chỉ hiển thị tối đa 100% cho gọn
   document.getElementById('congrats').classList.toggle('show',totalPct>=100);
 }
 
