@@ -152,7 +152,7 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
 <div class="wrap">
   <a href="/forum.html#tools" class="back">← Quay lại Công cụ</a>
   <h1>💪 Chấm Công Tập Thể Dục</h1>
-  <p class="sub">Đánh dấu mỗi ngày đã tập, nghỉ tập. Ô tím là buổi <b>tập thêm</b> — có thể tích chồng lên ngày đã tập hoặc nghỉ. Mục tiêu <b>20 buổi/tháng</b> theo quy định công ty.</p>
+  <p class="sub">Đánh dấu mỗi ngày đã tập, nghỉ tập. Ô tím là buổi <b>tập thêm</b> — có thể tích chồng lên ngày đã tập hoặc nghỉ. Mục tiêu: <b>tập hàng ngày 16 buổi</b> (chiếm 50%) và <b>tập thêm 4 buổi</b> (chiếm 50%) — cộng lại thành 100%.</p>
 
   <div class="toolbar">
     <div class="month-field">
@@ -198,7 +198,7 @@ h1{font-size:1.8rem;font-weight:900;letter-spacing:-1px;margin-bottom:4px}
 
 <script>
 const STORE_KEY='workout_attendance_v1';
-const GOAL=20;
+const GOAL_DAILY=16, GOAL_EXTRA=4; // hàng ngày 16 buổi = 100% (nửa điểm) · tập thêm 4 buổi = 100% (nửa điểm)
 /* Monday-first week (ISO 8601 world standard). CN = Chủ Nhật = Sunday. */
 const DOW_LABELS=['T2','T3','T4','T5','T6','T7','CN'];
 const MONTH_NAMES=['Tháng 1','Tháng 2','Tháng 3','Tháng 4','Tháng 5','Tháng 6','Tháng 7','Tháng 8','Tháng 9','Tháng 10','Tháng 11','Tháng 12'];
@@ -292,12 +292,15 @@ function render(){
   document.getElementById('statRest').textContent=rest;
   document.getElementById('statCustom').textContent=extra;
 
-  const done=train+extra; // đã tập (xanh) + tập thêm (tím)
-  const pct=Math.round((done/GOAL)*100);
-  document.getElementById('goalTxt').textContent=done+' / '+GOAL+' buổi';
-  document.getElementById('goalPct').textContent=pct+'%';
-  document.getElementById('goalBar').style.width=Math.min(pct,100)+'%';
-  document.getElementById('congrats').classList.toggle('show',done>=GOAL);
+  // Hai mục tiêu tính riêng, mỗi cái tối đa 100%; rồi gộp lại: hàng ngày 50% + tập thêm 50%.
+  const dailyPct=Math.min(train/GOAL_DAILY,1);   // tập hàng ngày (xanh)
+  const extraPct=Math.min(extra/GOAL_EXTRA,1);   // tập thêm (tím)
+  const totalPct=Math.round((dailyPct*0.5+extraPct*0.5)*100);
+  document.getElementById('goalTxt').textContent=
+    'Hàng ngày '+train+'/'+GOAL_DAILY+' ('+Math.round(dailyPct*50)+'%) · Tập thêm '+extra+'/'+GOAL_EXTRA+' ('+Math.round(extraPct*50)+'%)';
+  document.getElementById('goalPct').textContent=totalPct+'%';
+  document.getElementById('goalBar').style.width=totalPct+'%';
+  document.getElementById('congrats').classList.toggle('show',totalPct>=100);
 }
 
 picker.onchange=render;
