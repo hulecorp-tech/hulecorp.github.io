@@ -7,6 +7,7 @@ This repo has grown beyond a single portfolio page. It's a small hub for **Huy L
 - The main **portfolio** (`index.html`) — event branding, mascot design, banner & panel, packaging, brand identity, promotion
 - A **community forum** (`forum.html`) with Supabase-backed auth, roles, and an admin panel
 - A handful of **standalone Vietnamese-language utility tools**, each its own folder with a clean URL (`/qr`, `/barcode`, `/shopee`, `/design`, `/wheel`, `/paper`, `/midu_cbct`, `/upscale`)
+- A **public tools hub** (`/tools`) — a login-free, Supabase-free landing page linked from the portfolio nav that lists every tool usable **without an account** (excludes the paid-API tools `/design` and `/studio`, which stay admin-only inside the forum)
 - A **Supabase Edge Function** (`supabase/functions/magnific`) that proxies a third-party AI image API
 - A `/workout` tool for tracking daily company exercise attendance (localStorage only, no backend)
 - A `/studio` tool ("Xưởng Thiết Kế") — an internal design-order workflow: staff submit design orders, admins/mods see the order queue and fulfil them in a built-in AI-generation + canvas image-editor workspace (Supabase-backed via a `design_orders` table)
@@ -23,6 +24,7 @@ hulecorp.github.io/
 ├── cert.html                # Meta-refresh + JS redirect shim → /midu_cbct
 ├── cert-template.png        # Canvas template image used by /midu_cbct
 ├── forum.html                # Community forum (Supabase auth, posts, admin panel)
+├── tools/index.html          # Public tools hub (no login, no Supabase) — links every account-free tool
 ├── CNAME                     # Custom domain: huyle.io.vn
 ├── qr/index.html             # QR code generator with logo
 ├── barcode/index.html        # EAN-13 barcode generator
@@ -106,6 +108,11 @@ Each is a clean-URL folder (`/foo` → `foo/index.html`, no `.html` extension in
 | `/midu_cbct` | "Vinh danh Chiến binh Content" certificate generator | Draws text onto `cert-template.png` via `<canvas>`, using self-hosted `MTD Brand Pro` / `RubikMKT` fonts; Supabase-backed |
 
 Each tool page is independent — don't assume the portfolio's i18n system, class naming, or CSS tokens apply inside these folders. Some use Tailwind, some hand-written CSS, some their own design tokens.
+
+**Public vs admin split (important):**
+- `/tools` (`tools/index.html`) is the **public entry point** — no login, no Supabase call at all — and lists only the account-free tools: `/upscale`, `/qr`, `/barcode`, `/paper`, `/wheel`, `/shopee`, `/workout`, `/midu_cbct`. It is linked from the portfolio nav (`index.html`, desktop pill + `#mnav`).
+- The **paid-API tools** `/design` (Magnific) and `/studio` (OpenAI) are **not** on `/tools`; their cards in `forum.html`'s `#tools` grid are gated to `prof?.role==='admin'` (labelled `ADMIN · API`).
+- `/shopee` and `/midu_cbct` use Supabase only for **optional** extras (voucher list / role badge). Both wrap `createClient` and every `sb.*` call so a Supabase outage (paused project, blocked CDN) **never breaks the core tool** — keep this defensive pattern (`let sb=null;try{…}catch{}`, guard every `sb.` with `if(sb)`) if you touch them.
 
 ### `cert.html`
 

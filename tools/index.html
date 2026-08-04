@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Công cụ miễn phí — Huy Le Creative</title>
+<meta name="description" content="Bộ công cụ thiết kế & tiện ích miễn phí: tạo QR, mã vạch, nâng cấp ảnh AI, mẫu giấy in, vòng quay may mắn… Dùng ngay, không cần đăng nhập.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F5EFE6;--cream2:#EDE3D3;--cream3:#DFD1BC;
+  --ink:#2D2A24;--ink2:#5F5646;
+  --orange:#FF8400;--orange2:#FFA94D;
+  --navy1:#002474;--navy3:#234BA2;--cyan:#34BFFF;
+  --card:#FFFFFF;--bd:#E7DCC9;
+  --rad:18px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Urbanist',-apple-system,'Segoe UI',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(30% 34% at 8% 4%,rgba(255,132,0,.07),transparent 70%),
+             radial-gradient(28% 30% at 96% 8%,rgba(52,191,255,.07),transparent 70%),
+             radial-gradient(30% 30% at 92% 96%,rgba(0,36,116,.05),transparent 70%);}
+
+/* top */
+.top{position:sticky;top:0;z-index:30;background:rgba(245,239,230,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--cream3)}
+.top-in{max-width:1120px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;font-size:1.1rem;letter-spacing:-.4px}
+.brand .ic{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--orange),var(--orange2));display:flex;align-items:center;justify-content:center;font-size:1.05rem;box-shadow:0 8px 20px rgba(255,132,0,.32)}
+.top-links{display:flex;gap:6px}
+.top-links a{padding:9px 15px;border-radius:999px;font-weight:700;font-size:.85rem;color:var(--ink2);transition:.16s}
+.top-links a:hover{background:var(--cream2);color:var(--orange)}
+.top-links a.pri{background:linear-gradient(135deg,var(--orange),var(--orange2));color:#fff;box-shadow:0 8px 20px rgba(255,132,0,.28)}
+
+.wrap{max-width:1120px;margin:0 auto;padding:44px 22px 90px}
+.hero{text-align:center;margin-bottom:40px}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--cream3);color:var(--orange);font-weight:800;font-size:.72rem;text-transform:uppercase;letter-spacing:.7px;padding:7px 15px;border-radius:999px;margin-bottom:16px}
+.hero h1{font-size:2.5rem;font-weight:900;letter-spacing:-1.2px;line-height:1.1}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero p{color:var(--ink2);font-size:1.02rem;margin:14px auto 0;max-width:600px;line-height:1.65;font-weight:500}
+.hero .free{display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+.hero .free span{font-size:.78rem;font-weight:700;color:var(--ink2);background:var(--card);border:1px solid var(--cream3);padding:6px 13px;border-radius:999px}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:18px}
+.tool{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--bd);border-radius:var(--rad);padding:24px;transition:.2s;overflow:hidden}
+.tool::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--orange),var(--orange2));opacity:0;transition:.2s}
+.tool:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(45,42,36,.13);border-color:var(--cream3)}
+.tool:hover::before{opacity:1}
+.tool .emo{font-size:2.5rem;margin-bottom:14px;line-height:1}
+.tool h3{font-weight:800;font-size:1.08rem;margin-bottom:7px;letter-spacing:-.3px}
+.tool p{color:var(--ink2);font-size:.86rem;line-height:1.55;font-weight:500;flex:1}
+.tool .go{margin-top:16px;font-size:.8rem;font-weight:800;color:var(--orange);display:inline-flex;align-items:center;gap:6px}
+.tool .tag{position:absolute;top:16px;right:16px;font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:4px 9px;border-radius:999px;background:var(--cream2);color:var(--ink2)}
+.tool .tag.off{background:#E4F6EC;color:#188A4B}
+
+/* footer */
+.foot{text-align:center;margin-top:52px;color:var(--ink2);font-size:.85rem;font-weight:600}
+.foot a{color:var(--orange);font-weight:800}
+
+@media(max-width:640px){.hero h1{font-size:1.9rem}.top-links a:not(.pri){display:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="/"><span class="ic">🛠️</span><span>Công cụ · Huy Le Creative</span></a>
+    <nav class="top-links">
+      <a href="/">Trang chủ</a>
+      <a href="/forum.html" class="pri">Diễn đàn</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <span class="eyebrow">🛠️ Bộ công cụ miễn phí</span>
+    <h1>Công cụ <em>dùng ngay</em>, không cần đăng nhập</h1>
+    <p>Tất cả công cụ dưới đây chạy <b>trực tiếp trên trình duyệt</b> — miễn phí, không cần tài khoản, dữ liệu không rời khỏi máy bạn.</p>
+    <div class="free">
+      <span>✅ Không cần đăng nhập</span>
+      <span>🆓 Miễn phí</span>
+      <span>🔒 Chạy trên máy bạn</span>
+    </div>
+  </section>
+
+  <div class="grid" id="grid">
+    <a class="tool" href="/upscale">
+      <span class="tag off">Offline</span>
+      <div class="emo">🔎</div>
+      <h3>Nâng cấp độ phân giải ảnh</h3>
+      <p>Phóng to ảnh 2×/4× vẫn giữ nét bằng AI ESRGAN — chạy ngay trên trình duyệt, ảnh không rời khỏi máy.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+
+    <a class="tool" href="/qr">
+      <div class="emo">📷</div>
+      <h3>Tạo QR Code có Logo</h3>
+      <p>Tạo mã QR chất lượng cao, chèn logo ở trung tâm. Xuất PNG hoặc SVG cho in ấn.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+
+    <a class="tool" href="/barcode">
+      <div class="emo">📊</div>
+      <h3>Tạo Mã Vạch EAN-13</h3>
+      <p>Nhập 12 số, tự tính checksum. Xuất SVG vector dùng trong Illustrator / CorelDRAW.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+
+    <a class="tool" href="/paper">
+      <div class="emo">📄</div>
+      <h3>Tạo Mẫu Giấy In</h3>
+      <p>Giấy kẻ ngang, ô vuông, chấm bi, Cornell, khuông nhạc, tập viết… Xuất PDF/PNG/SVG để in.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+
+    <a class="tool" href="/wheel">
+      <div class="emo">🎡</div>
+      <h3>Vòng Quay May Mắn</h3>
+      <p>Vòng quay quà tặng/bốc thăm cho sự kiện — tùy chỉnh phần thưởng, tỉ lệ, hiệu ứng & âm thanh.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+
+    <a class="tool" href="/shopee">
+      <div class="emo">🛒</div>
+      <h3>Đổi Link Shopee</h3>
+      <p>Chuyển link sản phẩm Shopee thành link affiliate, tự động áp mã giảm giá tốt nhất.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+
+    <a class="tool" href="/workout">
+      <div class="emo">💪</div>
+      <h3>Chấm Công Tập Thể Dục</h3>
+      <p>Chấm công theo lịch tháng — tích ngày tập/nghỉ + buổi tập thêm, tự tính % đạt mục tiêu.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+
+    <a class="tool" href="/midu_cbct">
+      <div class="emo">🏆</div>
+      <h3>Vinh Danh Chiến Binh Content</h3>
+      <p>Tạo ảnh vinh danh "Chiến binh Content" — điền tên, nội dung, ngày rồi tải ảnh chứng nhận.</p>
+      <span class="go">Mở công cụ →</span>
+    </a>
+  </div>
+
+  <p class="foot">Cần đặt thiết kế hoặc dùng công cụ AI nội bộ? <a href="/forum.html">Đăng nhập diễn đàn →</a></p>
+</main>
+
+</body>
+</html>

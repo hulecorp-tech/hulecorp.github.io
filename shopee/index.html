@@ -150,7 +150,9 @@ const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZ
 const AFFILIATE_ID='an_17368470477';
 const CAMPAIGN_ID='id_VETAndUZpl';
 
-const sb=window.supabase.createClient(SB_URL,SB_KEY);
+// Supabase is optional here — only powers the voucher list. If it fails to load
+// (CDN blocked / project paused) the core link-conversion still works.
+let sb=null;try{sb=window.supabase.createClient(SB_URL,SB_KEY);}catch(_){}
 let vouchers=[],selectedVoucher=null;
 let _t;
 
@@ -164,8 +166,11 @@ function toast(msg,ok=false){
 
 /* ---------- vouchers ---------- */
 async function loadVouchers(){
-  const{data}=await sb.from('shopee_vouchers').select('*').eq('active',true).order('sort_order').order('id');
-  vouchers=data||[];
+  if(!sb){renderVouchers();return;}
+  try{
+    const{data}=await sb.from('shopee_vouchers').select('*').eq('active',true).order('sort_order').order('id');
+    vouchers=data||[];
+  }catch(_){vouchers=[];}
   renderVouchers();
 }
 
@@ -323,12 +328,14 @@ function convert(){
     document.getElementById('voucherDesc').textContent=desc;
   }
 
-  // track link gen in background (don't await)
-  if(selectedVoucher){
-    sb.from('shopee_vouchers')
-      .update({used_count:(selectedVoucher.used_count||0)+1})
-      .eq('id',selectedVoucher.id)
-      .then(()=>{selectedVoucher.used_count=(selectedVoucher.used_count||0)+1});
+  // track link gen in background (don't await; ignore failures)
+  if(sb&&selectedVoucher){
+    try{
+      sb.from('shopee_vouchers')
+        .update({used_count:(selectedVoucher.used_count||0)+1})
+        .eq('id',selectedVoucher.id)
+        .then(()=>{selectedVoucher.used_count=(selectedVoucher.used_count||0)+1},()=>{});
+    }catch(_){}
   }
 }
 
