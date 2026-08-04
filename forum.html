@@ -224,12 +224,12 @@ function renderTools(){
         <div style="color:var(--tx2);font-size:.84rem;line-height:1.55">Chuyển link sản phẩm Shopee thành link affiliate, tự động áp mã giảm giá tốt nhất.</div>
         <div style="margin-top:16px;font-size:.78rem;font-weight:700;color:var(--or)">Mở công cụ →</div>
       </a>
-      <a href="/design" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
+      ${prof?.role==='admin'?`<a href="/design" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2.4rem;margin-bottom:12px">🎨</div>
-        <div style="font-weight:800;font-size:1.05rem;margin-bottom:6px">AI Design Studio</div>
+        <div style="font-weight:800;font-size:1.05rem;margin-bottom:6px">AI Design Studio <span style="font-size:.62rem;font-weight:800;color:#D12E3A;background:#FDE8E8;padding:2px 8px;border-radius:999px;vertical-align:middle">ADMIN · API</span></div>
         <div style="color:var(--tx2);font-size:.84rem;line-height:1.55">Nhập mô tả để tạo ảnh bằng AI (Magnific), nâng cấp chi tiết và tạo lại khi cần.</div>
         <div style="margin-top:16px;font-size:.78rem;font-weight:700;color:var(--or)">Mở công cụ →</div>
-      </a>
+      </a>`:''}
       <a href="/wheel" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2.4rem;margin-bottom:12px">🎡</div>
         <div style="font-weight:800;font-size:1.05rem;margin-bottom:6px">Vòng Quay May Mắn</div>
@@ -242,12 +242,12 @@ function renderTools(){
         <div style="color:var(--tx2);font-size:.84rem;line-height:1.55">Tạo giấy kẻ ngang, ô vuông, chấm bi, Cornell, khuông nhạc, tập viết… Xuất PDF/PNG/SVG để in.</div>
         <div style="margin-top:16px;font-size:.78rem;font-weight:700;color:var(--or)">Mở công cụ →</div>
       </a>
-      <a href="/studio" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
+      ${prof?.role==='admin'?`<a href="/studio" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2.4rem;margin-bottom:12px">🖌️</div>
-        <div style="font-weight:800;font-size:1.05rem;margin-bottom:6px">Xưởng Thiết Kế (Order & Thiết kế)</div>
+        <div style="font-weight:800;font-size:1.05rem;margin-bottom:6px">Xưởng Thiết Kế (Order & Thiết kế) <span style="font-size:.62rem;font-weight:800;color:#D12E3A;background:#FDE8E8;padding:2px 8px;border-radius:999px;vertical-align:middle">ADMIN · API</span></div>
         <div style="color:var(--tx2);font-size:.84rem;line-height:1.55">Nhân sự gửi đơn thiết kế; admin nhận đơn, tạo ảnh bằng AI và chỉnh sửa ngay trong xưởng rồi giao lại.</div>
         <div style="margin-top:16px;font-size:.78rem;font-weight:700;color:var(--or)">Mở công cụ →</div>
-      </a>
+      </a>`:''}
       <a href="/workout" style="display:block;background:var(--wh);border:1px solid var(--bd);border-radius:14px;padding:24px;text-decoration:none;color:inherit;transition:.2s" onmouseover="this.style.boxShadow='0 8px 24px rgba(0,0,0,.1)'" onmouseout="this.style.boxShadow=''">
         <div style="font-size:2.4rem;margin-bottom:12px">💪</div>
         <div style="font-weight:800;font-size:1.05rem;margin-bottom:6px">Chấm Công Tập Thể Dục</div>
