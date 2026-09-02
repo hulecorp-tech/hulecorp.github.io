@@ -10,7 +10,6 @@
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#f8f4ea">
   <meta name="robots" content="noindex,nofollow">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&subset=vietnamese,latin&display=swap">
@@ -114,6 +113,37 @@
       font-weight:500;text-indent:.5em;text-shadow:0 1px 8px rgba(255,255,255,.55);
     }
     .discover svg{width:clamp(18px,5.5cqw,26px);height:auto;animation:bob 2.2s ease-in-out infinite;}
+
+
+    /* ---------------- ornaments ---------------- */
+    /* hairlines flanking every section label */
+    .eyebrow{display:flex;align-items:center;justify-content:center;gap:.85em;}
+    .eyebrow::before,.eyebrow::after{
+      content:"";flex:0 0 auto;height:1px;width:clamp(14px,6cqw,34px);opacity:.6;
+      background:linear-gradient(90deg,transparent,var(--gold));
+    }
+    .eyebrow::after{background:linear-gradient(90deg,var(--gold),transparent);}
+
+    /* faint botanical tucked into a section corner, alternating sides */
+    .corner{
+      position:absolute;z-index:0;width:clamp(76px,21cqw,116px);height:auto;
+      opacity:.13;pointer-events:none;
+    }
+    .corner-l{left:-10px;bottom:6px;transform:rotate(-15deg);}
+    .corner-r{right:-10px;top:8px;transform:rotate(163deg);}
+    /* clip the corner motif so it can never cause sideways scroll */
+    .invite section:not(.cover){overflow:hidden;}
+    /* keep content above the corner motif */
+    .invite section:not(.cover) > *:not(.corner):not(dialog){position:relative;}
+
+    /* minimal divider, for sections without the ornate sprig */
+    .leafrule{
+      display:flex;align-items:center;justify-content:center;gap:.8em;
+      width:min(210px,58%);margin:2em auto 0;
+    }
+    .leafrule i{height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--line));}
+    .leafrule i + svg + i{background:linear-gradient(90deg,var(--line),transparent);}
+    .leafrule svg{flex:0 0 auto;width:17px;height:auto;opacity:.75;}
 
     /* ---------------- sections ---------------- */
     section{padding:clamp(56px,15cqw,88px) clamp(26px,8cqw,44px);position:relative;}
@@ -247,26 +277,6 @@
     .bank dd{margin:0;color:var(--ink);text-align:right;font-weight:600;}
     .bank dd.acct{font-variant-numeric:tabular-nums;letter-spacing:.03em;}
     .copy{display:block;margin:1em auto 0;}
-
-    /* ---- admin gate ---- */
-  body.locked .invite,body.locked .toast{visibility:hidden;}
-  .gate{
-    position:fixed;inset:0;z-index:99;display:grid;place-items:safe center;
-    padding:24px;background:var(--paper);text-align:center;overflow-y:auto;
-  }
-  .gate-in{
-    max-width:34rem;background:var(--paper-2);border:1px solid var(--line);
-    border-radius:26px;padding:clamp(30px,7vw,46px) clamp(22px,5vw,34px);
-    box-shadow:0 30px 70px -40px rgba(50,60,40,.5);
-  }
-  .gate .emo{font-size:2.9rem;line-height:1;margin-bottom:.4em;}
-  .gate h2{font-family:"VLGreatVibes","Parisienne",cursive;
-    font-size:clamp(30px,7vw,42px);color:var(--ink);margin:0 0 .25em;font-weight:400;}
-  .gate p{margin:0 auto;max-width:36ch;color:var(--body);
-    font-size:clamp(14px,3.6vw,16px);line-height:1.65;}
-  .gate .btn{margin-top:1.6em;}
-  .gate .tiny{margin-top:1.5em;font-size:12px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--gold);text-indent:.18em;}
 
   /* ---- gift button ---- */
     .giftbtn{
@@ -431,15 +441,7 @@
     }
   </style>
 </head>
-<body class="locked">
-<div class="gate" id="gate" role="status" aria-live="polite">
-  <div class="gate-in">
-    <div class="emo" id="gateEmo">💐</div>
-    <h2 id="gateTitle">Chờ một chút</h2>
-    <p id="gateMsg">Đang kiểm tra quyền truy cập…</p>
-    <div id="gateAct"></div>
-    <div class="tiny">Thiệp cưới · Riêng tư</div>
-  </div>
+<body>
 </div>
 <!-- ============ BOTANICAL VECTOR LIBRARY ============ -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -964,64 +966,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ================= admin-only gate =================
-   Static host: this hides the page from visitors, it is NOT real security.
-   The HTML is still fetchable by anyone who knows the URL.
-   Flip ADMIN_ONLY to false to open the invitation to guests. */
-(function(){
-  var ADMIN_ONLY = true;
-  var SB_URL = 'https://dmvomgmhsivifionnkiu.supabase.co';
-  var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtdm9tZ21oc2l2aWZpb25ua2l1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwODcyMzAsImV4cCI6MjA5NzY2MzIzMH0.9HQDKLrzjaRwf1z44cWc3Wb-LMx6a4Ec-QN0QAOGZ00';
-
-  var gate = document.getElementById('gate');
-  function show(emo, title, msg, act){
-    document.getElementById('gateEmo').textContent = emo;
-    document.getElementById('gateTitle').textContent = title;
-    document.getElementById('gateMsg').textContent = msg;
-    document.getElementById('gateAct').innerHTML = act || '';
-  }
-  function deny(emo, title, msg, act){
-    var inv = document.querySelector('.invite');
-    if(inv) inv.remove();               // keep it out of the rendered DOM
-    show(emo, title, msg, act);
-  }
-  function allow(){
-    document.body.classList.remove('locked');
-    if(gate) gate.remove();
-    window.dispatchEvent(new Event('resize'));
-  }
-
-  if(!ADMIN_ONLY){ allow(); return; }
-
-  var login = '<a class="btn" href="/forum.html#login">Đăng nhập Forum</a>';
-  var sb = null;
-  try{
-    sb = window.supabase.createClient(SB_URL, SB_KEY,
-         {auth:{persistSession:true, autoRefreshToken:true}});
-  }catch(e){}
-
-  if(!sb){
-    deny('⚠️','Không kết nối được','Không tải được thư viện xác thực. Kiểm tra mạng rồi tải lại trang.');
-    return;
-  }
-
-  (async function(){
-    var me = null, prof = null;
-    try{ var r = await sb.auth.getUser(); me = (r && r.data && r.data.user) || null; }catch(e){}
-    if(!me){
-      deny('🔒','Thiệp riêng tư','Thiệp cưới này đang ở chế độ riêng tư. Vui lòng đăng nhập bằng tài khoản quản trị.', login);
-      return;
-    }
-    try{
-      var p = await sb.from('profiles').select('role,username').eq('id', me.id).single();
-      prof = p && p.data ? p.data : null;
-    }catch(e){}
-    if(prof && prof.role === 'admin'){ allow(); return; }
-    deny('⛔','Chưa được phép','Tài khoản của bạn không có quyền xem thiệp này.',
-         '<a class="btn" href="/">Về trang chủ</a>');
-  })();
-})();
-
 /* ---------------- CONFIG: sửa các giá trị này để cá nhân hoá ---------------- */
 const CONFIG = {
   weddingDate: "2026-09-27T11:00:00+07:00",      // ngày giờ cưới (cho đồng hồ đếm ngược)
@@ -1127,6 +1071,38 @@ $$("[data-copy-btn]").forEach(btn=>{
     tile.innerHTML=(i%2? cam:heart);
     grid.appendChild(tile);
   }
+})();
+
+/* ---------------- botanical ornaments ---------------- */
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  var motifs=['#eucSprig','#oliveSprig','#fern'];
+  function svgUse(cls,vb,href){
+    var el=document.createElementNS(NS,'svg');
+    el.setAttribute('viewBox',vb);
+    el.setAttribute('aria-hidden','true');
+    if(cls) el.setAttribute('class',cls);
+    var u=document.createElementNS(NS,'use');
+    u.setAttribute('href',href);
+    el.appendChild(u);
+    return el;
+  }
+  $$('.invite section:not(.cover)').forEach(function(sec,i){
+    // corner botanical, cycling through three plants and two sides
+    sec.insertBefore(
+      svgUse('corner '+(i%2?'corner-r':'corner-l'),'-26 -58 52 62',motifs[i%motifs.length]),
+      sec.firstChild);
+    // sections without the ornate sprig get a quieter closing rule
+    if(!sec.querySelector('.sprig')){
+      var d=document.createElement('div');
+      d.className='leafrule reveal';
+      d.setAttribute('aria-hidden','true');
+      d.appendChild(document.createElement('i'));
+      d.appendChild(svgUse(null,'-15 -46 30 50','#oliveSprig'));
+      d.appendChild(document.createElement('i'));
+      sec.appendChild(d);
+    }
+  });
 })();
 
 /* ---------------- reveal on scroll ---------------- */
