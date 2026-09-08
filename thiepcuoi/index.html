@@ -135,6 +135,8 @@
       color:var(--body);opacity:.85;
     }
 
+    .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+
   /* ---------------- ornaments ---------------- */
     /* hairlines flanking every section label */
     .eyebrow{display:flex;align-items:center;justify-content:center;gap:.85em;}
@@ -247,8 +249,6 @@
     .btn svg{width:16px;height:16px;}
     .btn.solid{background:var(--sage-deep);color:#fff;}
     .btn.solid:hover{background:var(--ink);border-color:var(--ink);}
-    .btn.wa{border-color:#3aa64a;color:#2e8b3d;}
-    .btn.wa:hover{background:#2e8b3d;color:#fff;}
     .btn.za{border-color:#1a73c7;color:#1666b3;}
     .btn.za:hover{background:#1666b3;color:#fff;}
 
@@ -821,6 +821,10 @@
       <div class="field"><label for="rv-count">Số người tham dự</label>
         <select id="rv-count" name="count"><option>1 người</option><option>2 người</option><option>3 người</option><option>4 người</option><option>5+ người</option></select>
       </div>
+      <div class="hp" aria-hidden="true">
+        <label for="rv-web">Đừng điền ô này</label>
+        <input id="rv-web" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
       <div class="field"><label for="rv-msg">Lời nhắn (không bắt buộc)</label><textarea id="rv-msg" name="msg" placeholder="Gửi đôi lời tới cô dâu chú rể..."></textarea></div>
       <button type="submit" class="btn btn-primary" id="rv-send">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12.5 9 17.5 20 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -828,13 +832,13 @@
       </button>
       <p class="send-note">Hoặc nhắn trực tiếp cho chúng mình:</p>
       <div class="send-row">
-        <button type="button" class="btn wa" id="send-wa">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.7-.9c.2-.2.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.6-.1 1.2Z"/></svg>
-          Gửi qua WhatsApp
+        <button type="button" class="btn za" id="za-groom">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 11.5c0 3.9-3.6 7-8 7-1 0-2-.2-2.9-.5L4 19.5l1.4-3.2A6.6 6.6 0 0 1 4 11.5c0-3.9 3.6-7 8-7s8 3.1 8 7Z" stroke-linejoin="round"/></svg>
+          Zalo chú rể
         </button>
-        <button type="button" class="btn za" id="send-za">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="14" rx="4"/><path d="M8 20l3-2"/></svg>
-          Nhắn Zalo
+        <button type="button" class="btn za" id="za-bride">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 11.5c0 3.9-3.6 7-8 7-1 0-2-.2-2.9-.5L4 19.5l1.4-3.2A6.6 6.6 0 0 1 4 11.5c0-3.9 3.6-7 8-7s8 3.1 8 7Z" stroke-linejoin="round"/></svg>
+          Zalo cô dâu
         </button>
       </div>
     </form>
@@ -977,15 +981,18 @@
 /* ---------------- CONFIG: sửa các giá trị này để cá nhân hoá ---------------- */
 const CONFIG = {
   weddingDate: "2026-11-29T09:00:00+07:00",      // ngày giờ cưới (cho đồng hồ đếm ngược)
-  whatsapp:    "84900000000",                     // số WhatsApp nhận RSVP (dạng 84...)
-  zalo:        "84900000000",                     // số Zalo
+  zalo: {                                         // Zalo để khách nhắn trực tiếp
+    groom: "0987467621",                          // chú rể
+    bride: "0862139077"                           // cô dâu
+  },
   maps: {                                         // link bản đồ cho từng lễ
     groom: "https://maps.app.goo.gl/N93YSFWjoCXKSkg68",   // nhà trai — Lễ Thành Hôn
     bride: "https://maps.app.goo.gl/Drkt8N8c53VjXBXJ8"    // nhà gái  — Lễ Vu Quy
   },
   // Dán URL ứng dụng web Apps Script vào đây để lưu RSVP vào Google Sheet.
   // Hướng dẫn cài đặt: tools/rsvp-sheet.gs
-  rsvpEndpoint: "",
+  rsvpToken:    "hg-nh-2026",                     // khớp với TOKEN trong tools/rsvp-sheet.gs
+  rsvpEndpoint: "https://script.google.com/macros/s/AKfycbye3q1q0Iq9gTq4qiCewBF4gjYL9sq7M9Ql00pYytcmipewP_7K1vg0NlWKpToof-iKtA/exec",
   coupleTag:   "Ngọc Huy & Hương Giang"
 };
 
@@ -1040,6 +1047,8 @@ function rsvpPayload(){
     attend: (document.querySelector('input[name="attend"]:checked')||{}).value||"",
     count:  $("#rv-count").value,
     msg:    $("#rv-msg").value.trim(),
+    hp:     $("#rv-web").value,
+    token:  CONFIG.rsvpToken,
     source: "thiepcuoi"
   };
 }
@@ -1048,7 +1057,7 @@ $("#rsvp-form").addEventListener("submit", async e=>{
   const btn=$("#rv-send"), label=btn.querySelector("span");
   if(!$("#rv-name").value.trim()){ toast("Bạn nhớ điền tên nhé 🌿"); $("#rv-name").focus(); return; }
   if(!CONFIG.rsvpEndpoint){
-    toast("Chưa cấu hình nơi nhận — hãy nhắn WhatsApp/Zalo giúp mình nhé 🙏");
+    toast("Chưa gửi được lúc này — bạn nhắn Zalo giúp mình nhé 🙏");
     return;
   }
   const old=label.textContent;
@@ -1067,20 +1076,20 @@ $("#rsvp-form").addEventListener("submit", async e=>{
     $("#rv-msg").value="";
   }catch(err){
     btn.disabled=false; label.textContent=old;
-    toast("Gửi chưa được. Bạn nhắn giúp qua WhatsApp/Zalo nhé 🙏");
+    toast("Gửi chưa được. Bạn nhắn Zalo giúp mình nhé 🙏");
   }
 });
 
-$("#send-wa").addEventListener("click",()=>{
-  if(!$("#rv-name").value.trim()){toast("Bạn nhớ điền tên nhé 🌿");$("#rv-name").focus();return;}
-  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${rsvpText()}`,"_blank","noopener");
+$("#za-groom").addEventListener("click",()=>{
+  window.open(`https://zalo.me/${CONFIG.zalo.groom}`,"_blank","noopener");
 });
-$("#send-za").addEventListener("click",()=>{
-  window.open(`https://zalo.me/${CONFIG.zalo}`,"_blank","noopener");
+$("#za-bride").addEventListener("click",()=>{
+  window.open(`https://zalo.me/${CONFIG.zalo.bride}`,"_blank","noopener");
 });
+/* lời chúc đi vào ô nhắn của form, để được lưu cùng danh sách khách */
 $("#send-wish").addEventListener("click",()=>{
-  const t=encodeURIComponent(`Gửi lời chúc tới ${CONFIG.coupleTag}: `);
-  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${t}`,"_blank","noopener");
+  document.getElementById("rsvp").scrollIntoView({behavior:"smooth",block:"start"});
+  setTimeout(()=>{ const m=$("#rv-msg"); m.focus({preventScroll:true}); },600);
 });
 
 /* ---------------- gift box -> QR dialog ---------------- */
