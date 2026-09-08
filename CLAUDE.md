@@ -25,6 +25,8 @@ hulecorp.github.io/
 ├── cert-template.png        # Canvas template image used by /midu_cbct
 ├── forum.html                # Community forum (Supabase auth, posts, admin panel)
 ├── tools/index.html          # Public tools hub (no login, no Supabase) — links every account-free tool
+├── via/                      # Pre-built Vietnamese fork of VIA keyboard configurator (GPL-3.0; the only tool with a build step)
+├── .nojekyll                 # Disable Jekyll so /via static assets (incl. _source-changes/) serve verbatim
 ├── CNAME                     # Custom domain: huyle.io.vn
 ├── qr/index.html             # QR code generator with logo
 ├── barcode/index.html        # EAN-13 barcode generator
@@ -112,7 +114,8 @@ Each is a clean-URL folder (`/foo` → `foo/index.html`, no `.html` extension in
 Each tool page is independent — don't assume the portfolio's i18n system, class naming, or CSS tokens apply inside these folders. Some use Tailwind, some hand-written CSS, some their own design tokens.
 
 **Public vs admin split (important):**
-- `/tools` (`tools/index.html`) is the **public entry point** — no login, no Supabase call at all — and lists only the account-free tools: `/upscale`, `/qr`, `/barcode`, `/paper`, `/wheel`, `/workout`, `/midu_cbct`. It is linked from the portfolio nav (`index.html`, desktop pill + `#mnav`).
+- `/tools` (`tools/index.html`) is the **public entry point** — no login, no Supabase call at all — and lists only the account-free tools: `/upscale`, `/via`, `/qr`, `/barcode`, `/paper`, `/wheel`, `/workout`, `/midu_cbct`. It is linked from the portfolio nav (`index.html`, desktop pill + `#mnav`).
+- `/via` is a **self-hosted Vietnamese fork of VIA** (the-via/app, GPL-3.0) — the mechanical-keyboard configurator (WebHID). It is the ONE tool with a build step: it lives as pre-built static output under `via/` (Vite `base:'/via/'`), NOT source. To update it, rebuild upstream with the 5 documented changes (see `via/NOTICE-vi.md` + `via/_source-changes/`) and recopy `dist/`. GPL compliance ships in `via/LICENSE` + `via/NOTICE-vi.md`. A root `.nojekyll` keeps GitHub Pages from mangling its `_source-changes/` folder and hashed assets. Vietnamese is the default language; the in-app menu switches and persists via `localStorage`.
 - The **admin-only tools** are **not** on `/tools`; their cards in `forum.html`'s `#tools` grid are gated to `prof?.role==='admin'`: `/design` (Magnific) + `/studio` (OpenAI) labelled `ADMIN · API`, and `/shopee` labelled `ADMIN`.
 - `/shopee` and `/midu_cbct` use Supabase only for **optional** extras (voucher list / role badge). Both wrap `createClient` and every `sb.*` call so a Supabase outage (paused project, blocked CDN) **never breaks the core tool** — keep this defensive pattern (`let sb=null;try{…}catch{}`, guard every `sb.` with `if(sb)`) if you touch them.
 
