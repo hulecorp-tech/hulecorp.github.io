@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <title>Ngọc Huy & Hương Giang</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="description" content="Thiệp cưới online của Ngọc Huy & Hương Giang — 27.09.2026. Trân trọng kính mời bạn đến chung vui.">
+  <meta name="description" content="Thiệp cưới online của Ngọc Huy & Hương Giang — 29.11.2026. Trân trọng kính mời bạn đến chung vui.">
   <meta property="og:title" content="Ngọc Huy & Hương Giang — Thiệp cưới">
-  <meta property="og:description" content="Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình — 27.09.2026.">
+  <meta property="og:description" content="Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình — 29.11.2026.">
   <meta property="og:type" content="website">
   <meta name="theme-color" content="#f8f4ea">
   <meta name="robots" content="noindex,nofollow">
@@ -102,6 +102,12 @@
       text-shadow:0 1px 8px rgba(255,255,255,.5);animation-delay:.6s;
     }
     .cv-date .yr{font-weight:500;}
+    .cv-lunar{
+      margin-top:2.4cqw;font-family:"Cormorant Garamond",serif;
+      font-size:clamp(12px,3.4cqw,15px);font-style:italic;letter-spacing:.06em;
+      color:var(--ink-soft);opacity:.9;
+      text-shadow:0 1px 8px rgba(255,255,255,.55);animation-delay:.75s;
+    }
     .discover{
       position:absolute;left:0;right:0;bottom:5.5%;
       display:flex;flex-direction:column;align-items:center;gap:1.4cqw;
@@ -115,7 +121,21 @@
     .discover svg{width:clamp(18px,5.5cqw,26px);height:auto;animation:bob 2.2s ease-in-out infinite;}
 
 
-    /* ---------------- ornaments ---------------- */
+    .btn-primary{
+      display:flex;align-items:center;justify-content:center;gap:.5em;
+      width:100%;margin-top:.4em;padding:.95em 1.2em;
+      background:var(--sage-deep);color:#fff;border-color:var(--sage-deep);
+      font-size:clamp(14px,3.9cqw,16px);letter-spacing:.14em;
+    }
+    .btn-primary:hover{background:var(--ink);border-color:var(--ink);}
+    .btn-primary[disabled]{opacity:.6;cursor:default;}
+    .btn-primary svg{width:18px;height:18px;flex:0 0 auto;}
+    .send-note{
+      text-align:center;margin:1.5em 0 .7em;font-size:clamp(13px,3.5cqw,15px);
+      color:var(--body);opacity:.85;
+    }
+
+  /* ---------------- ornaments ---------------- */
     /* hairlines flanking every section label */
     .eyebrow{display:flex;align-items:center;justify-content:center;gap:.85em;}
     .eyebrow::before,.eyebrow::after{
@@ -681,7 +701,8 @@
         <span class="amp">&amp;</span>
         <span class="n">Hương Giang</span>
       </div>
-      <div class="cv-date"><span>27</span><span>Sep</span><span class="yr">2026</span></div>
+      <div class="cv-date"><span>29</span><span>Nov</span><span class="yr">2026</span></div>
+      <div class="cv-lunar reveal">Tức ngày 21 tháng 10 âm lịch</div>
     </div>
     <a class="discover" href="#welcome">
       <span>Discover</span>
@@ -725,23 +746,23 @@
       <div class="card reveal d1">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z" stroke-linejoin="round"/></svg>
         <h3>Lễ Thành Hôn</h3>
-        <div class="when">9:00 sáng · Thứ Bảy, 27.09.2026</div>
+        <div class="when">9:00 sáng · Chủ Nhật, 29.11.2026</div>
         <div class="rule"></div>
-        <div class="where">Tư gia nhà gái</div>
-        <div class="addr">123 Đường Hoa Sứ, Phường 5, Quận 3, TP. Hồ Chí Minh</div>
-        <a class="btn" data-map href="#">
+        <div class="where">Tư gia nhà trai</div>
+        <div class="addr">Thái Bình</div>
+        <a class="btn" data-map="groom" href="#">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
           Chỉ đường
         </a>
       </div>
       <div class="card reveal d2">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 11V7a5 5 0 0 1 10 0v4"/><path d="M5 11h14l-1 9H6l-1-9Z" stroke-linejoin="round"/><path d="M9 15h6"/></svg>
-        <h3>Tiệc Mừng Cưới</h3>
-        <div class="when">18:00 · Thứ Bảy, 27.09.2026</div>
+        <h3>Lễ Vu Quy</h3>
+        <div class="when">15:00 · Chủ Nhật, 29.11.2026</div>
         <div class="rule"></div>
-        <div class="where">Trung tâm Hội nghị Tiệc cưới Ngàn Sao</div>
-        <div class="addr">456 Đại lộ Ánh Dương, Phường 2, Quận 1, TP. Hồ Chí Minh</div>
-        <a class="btn" data-map href="#">
+        <div class="where">Tư gia nhà gái</div>
+        <div class="addr">Nguyễn Xiển, Thanh Xuân, Hà Nội</div>
+        <a class="btn" data-map="bride" href="#">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
           Chỉ đường
         </a>
@@ -801,7 +822,7 @@
   <section class="alt" id="rsvp">
     <div class="eyebrow reveal">Xác nhận tham dự</div>
     <h2 class="h-script reveal d1">Bạn sẽ đến chứ?</h2>
-    <p class="lead reveal d1">Sự hiện diện của bạn là niềm vinh hạnh lớn lao của chúng mình. Vui lòng phản hồi trước ngày <em>01.09.2026</em>.</p>
+    <p class="lead reveal d1">Sự hiện diện của bạn là niềm vinh hạnh lớn lao của chúng mình. Vui lòng phản hồi trước ngày <em>01.11.2026</em>.</p>
     <form class="form reveal d1" id="rsvp-form" novalidate>
       <div class="field"><label for="rv-name">Họ và tên</label><input id="rv-name" name="name" type="text" placeholder="Nhập tên của bạn" autocomplete="name"></div>
       <div class="field">
@@ -815,6 +836,11 @@
         <select id="rv-count" name="count"><option>1 người</option><option>2 người</option><option>3 người</option><option>4 người</option><option>5+ người</option></select>
       </div>
       <div class="field"><label for="rv-msg">Lời nhắn (không bắt buộc)</label><textarea id="rv-msg" name="msg" placeholder="Gửi đôi lời tới cô dâu chú rể..."></textarea></div>
+      <button type="submit" class="btn btn-primary" id="rv-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12.5 9 17.5 20 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Gửi xác nhận</span>
+      </button>
+      <p class="send-note">Hoặc nhắn trực tiếp cho chúng mình:</p>
       <div class="send-row">
         <button type="button" class="btn wa" id="send-wa">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-.4-.1-.9-.3-1.6-.6-2.8-1.2-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8 0-1.3.7-2 .9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 1.9c.1.2.1.4 0 .5l-.4.5c-.2.2-.3.4-.1.7.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.2.1.4.1.6-.1l.7-.9c.2-.2.4-.2.6-.1l1.9.9c.3.1.4.2.5.3.1.2.1.6-.1 1.2Z"/></svg>
@@ -954,7 +980,7 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="foot">
-    <div class="mono reveal">NH &amp; HG</div>
+    <div class="mono reveal">H &amp; G</div>
     <p class="thanks reveal d1">Cảm ơn bạn đã cùng chúng mình chia sẻ niềm hạnh phúc lớn lao này. Hẹn gặp bạn trong ngày vui!</p>
     <div class="fnames reveal d1">Ngọc Huy &amp; Hương Giang</div>
     <div class="fnames reveal d1" style="letter-spacing:.3em;margin-top:.3em">27 · 09 · 2026</div>
@@ -968,10 +994,16 @@
 <script>
 /* ---------------- CONFIG: sửa các giá trị này để cá nhân hoá ---------------- */
 const CONFIG = {
-  weddingDate: "2026-09-27T11:00:00+07:00",      // ngày giờ cưới (cho đồng hồ đếm ngược)
+  weddingDate: "2026-11-29T09:00:00+07:00",      // ngày giờ cưới (cho đồng hồ đếm ngược)
   whatsapp:    "84900000000",                     // số WhatsApp nhận RSVP (dạng 84...)
   zalo:        "84900000000",                     // số Zalo
-  mapsUrl:     "https://www.google.com/maps/search/?api=1&query=Trung+tam+Tiec+cuoi+Ngan+Sao+Quan+1+TPHCM",
+  maps: {                                         // link bản đồ cho từng lễ
+    groom: "https://maps.app.goo.gl/N93YSFWjoCXKSkg68",   // nhà trai — Lễ Thành Hôn
+    bride: "https://maps.app.goo.gl/Drkt8N8c53VjXBXJ8"    // nhà gái  — Lễ Vu Quy
+  },
+  // Dán URL ứng dụng web Apps Script vào đây để lưu RSVP vào Google Sheet.
+  // Hướng dẫn cài đặt: tools/rsvp-sheet.gs
+  rsvpEndpoint: "",
   coupleTag:   "Ngọc Huy & Hương Giang"
 };
 
@@ -986,7 +1018,10 @@ function toast(msg){
 }
 
 /* ---------------- map links ---------------- */
-$$("[data-map]").forEach(a=>{ a.href=CONFIG.mapsUrl; a.target="_blank"; a.rel="noopener"; });
+$$("[data-map]").forEach(a=>{
+  a.href = CONFIG.maps[a.dataset.map] || CONFIG.maps.groom;
+  a.target="_blank"; a.rel="noopener";
+});
 
 /* ---------------- countdown ---------------- */
 (function(){
@@ -1016,6 +1051,44 @@ function rsvpText(){
   if(msg) t+=`%0ALời nhắn: ${msg}`;
   return encodeURIComponent(t).replace(/%2520/g,"%20");
 }
+/* gửi xác nhận vào Google Sheet (xem tools/rsvp-sheet.gs) */
+function rsvpPayload(){
+  return {
+    name:   $("#rv-name").value.trim(),
+    attend: (document.querySelector('input[name="attend"]:checked')||{}).value||"",
+    count:  $("#rv-count").value,
+    msg:    $("#rv-msg").value.trim(),
+    source: "thiepcuoi"
+  };
+}
+$("#rsvp-form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const btn=$("#rv-send"), label=btn.querySelector("span");
+  if(!$("#rv-name").value.trim()){ toast("Bạn nhớ điền tên nhé 🌿"); $("#rv-name").focus(); return; }
+  if(!CONFIG.rsvpEndpoint){
+    toast("Chưa cấu hình nơi nhận — hãy nhắn WhatsApp/Zalo giúp mình nhé 🙏");
+    return;
+  }
+  const old=label.textContent;
+  btn.disabled=true; label.textContent="Đang gửi…";
+  try{
+    // text/plain giữ đây là "simple request" nên không bị chặn preflight CORS
+    const r=await fetch(CONFIG.rsvpEndpoint,{
+      method:"POST",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(rsvpPayload())
+    });
+    const d=await r.json().catch(()=>({ok:r.ok}));
+    if(!d.ok) throw new Error(d.error||"failed");
+    label.textContent="Đã nhận, cảm ơn bạn!";
+    toast("Cảm ơn bạn đã xác nhận 💐");
+    $("#rv-msg").value="";
+  }catch(err){
+    btn.disabled=false; label.textContent=old;
+    toast("Gửi chưa được. Bạn nhắn giúp qua WhatsApp/Zalo nhé 🙏");
+  }
+});
+
 $("#send-wa").addEventListener("click",()=>{
   if(!$("#rv-name").value.trim()){toast("Bạn nhớ điền tên nhé 🌿");$("#rv-name").focus();return;}
   window.open(`https://wa.me/${CONFIG.whatsapp}?text=${rsvpText()}`,"_blank","noopener");
