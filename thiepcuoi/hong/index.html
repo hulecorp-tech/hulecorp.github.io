@@ -386,15 +386,6 @@
     @keyframes fade{from{opacity:0}to{opacity:1}}
 
     /* gallery */
-    .gallery{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:2.2em auto 0;max-width:420px;}
-    .gallery .tile{
-      aspect-ratio:3/4;border-radius:14px;overflow:hidden;position:relative;
-      border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
-    }
-    .gallery .tile:nth-child(1){aspect-ratio:3/4;}
-    .gallery .tile.wide{grid-column:span 2;aspect-ratio:2/1;}
-    .gallery .tile svg{width:34%;height:34%;color:rgba(255,255,255,.85);}
-    .gcap{text-align:center;margin-top:1.2em;font-style:italic;color:var(--sage-deep);font-size:clamp(14px,3.9cqw,17px);}
 
     /* wishes */
     .wishes{margin:2.2em auto 0;max-width:36ch;display:flex;flex-direction:column;gap:14px;}
@@ -690,38 +681,13 @@
       <div class="cv-date"><span>29</span><span>Nov</span><span class="yr">2026</span></div>
       <div class="cv-lunar reveal">Tức ngày 21 tháng 10 âm lịch</div>
     </div>
-    <a class="discover" href="#welcome">
+    <a class="discover" href="#events">
       <span>Discover</span>
       <svg viewBox="0 0 24 14" fill="none" aria-hidden="true"><path d="M2 2 L12 11 L22 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
   </section>
 
-  <!-- ============ WELCOME + COUNTDOWN ============ -->
-  <section id="welcome">
-    <div class="eyebrow reveal">Save the date</div>
-    <h2 class="h-script reveal d1">Sắp cưới rồi!</h2>
-    <p class="lead reveal d2">Sau bao ngày thương nhớ, chúng mình sắp về chung một nhà. Hai đứa hạnh phúc được báo tin vui, và mong có bạn bên cạnh trong ngày trọng đại nhất của cuộc đời.</p>
-    <div class="count reveal d2" id="countdown" aria-label="Đếm ngược đến ngày cưới">
-      <div class="unit"><span class="num" data-cd="d">00</span><span class="lab">Ngày</span></div>
-      <div class="unit"><span class="num" data-cd="h">00</span><span class="lab">Giờ</span></div>
-      <div class="unit"><span class="num" data-cd="m">00</span><span class="lab">Phút</span></div>
-      <div class="unit"><span class="num" data-cd="s">00</span><span class="lab">Giây</span></div>
-    </div>
-    <svg class="sprig reveal d3"><use href="#sprig-h"/></svg>
-  </section>
 
-  <!-- ============ OUR STORY ============ -->
-  <section class="alt" id="story">
-    <div class="eyebrow reveal">Chuyện của chúng mình</div>
-    <h2 class="h-script reveal d1">Hành trình yêu thương</h2>
-    <div class="timeline">
-      <div class="tl reveal"><div class="yr">2019 · Gặp gỡ</div><h3>Lần đầu chạm mắt</h3><p>Một buổi chiều tình cờ, ánh mắt vô tình gặp nhau — và câu chuyện của chúng mình bắt đầu từ đó.</p></div>
-      <div class="tl reveal"><div class="yr">2021 · Yêu</div><h3>Chính thức là của nhau</h3><p>Những buổi hẹn hò, những chuyến đi xa, và một tình yêu cứ lớn dần lên theo năm tháng.</p></div>
-      <div class="tl reveal"><div class="yr">2024 · Cầu hôn</div><h3>Lời hẹn ước</h3><p>Dưới bầu trời đầy sao, một câu hỏi run run và một cái gật đầu thật khẽ mà hạnh phúc vô bờ.</p></div>
-      <div class="tl reveal"><div class="yr">2026 · Kết hôn</div><h3>Về chung một nhà</h3><p>Và giờ đây, chúng mình đã sẵn sàng để viết tiếp chương mới đẹp nhất của cuộc đời.</p></div>
-    </div>
-    <svg class="sprig reveal"><use href="#sprig-h"/></svg>
-  </section>
 
   <!-- ============ EVENTS ============ -->
   <section id="events">
@@ -772,78 +738,7 @@
     <svg class="sprig reveal"><use href="#sprig-h"/></svg>
   </section>
 
-  <!-- ============ LOCATION ============ -->
-  <section id="location">
-    <div class="eyebrow reveal">Địa điểm</div>
-    <h2 class="h-serif reveal d1">Nơi Tổ Chức</h2>
-    <div class="mapcard reveal d1">
-      <svg viewBox="0 0 400 240" role="img" aria-label="Bản đồ minh hoạ địa điểm tổ chức">
-        <rect width="400" height="240" fill="#f6d2da"/>
-        <g stroke="#f0dcd9" stroke-width="10" fill="none">
-          <path d="M-10 70 H410"/><path d="M-10 170 H410"/><path d="M120 -10 V250"/><path d="M300 -10 V250"/>
-        </g>
-        <path d="M-10 210 Q120 190 200 210 T410 200 V250 H-10Z" fill="#f9dcdd"/>
-        <g fill="#f7e6e2">
-          <rect x="30" y="90" width="70" height="60" rx="4"/><rect x="150" y="20" width="120" height="30" rx="4"/>
-          <rect x="330" y="90" width="50" height="60" rx="4"/><rect x="150" y="90" width="120" height="60" rx="4"/>
-        </g>
-        <g transform="translate(200 118)">
-          <circle r="30" fill="#b05c76" opacity=".18"/>
-          <path d="M0 -22a15 15 0 0 1 15 15c0 10-15 25-15 25S-15 3-15 -7a15 15 0 0 1 15-15Z" fill="#b05c76"/>
-          <circle cy="-7" r="5.5" fill="#fff"/>
-        </g>
-      </svg>
-    </div>
-    <div class="venue reveal d1">
-      <div class="vn">Trung tâm Hội nghị Tiệc cưới Ngàn Sao</div>
-      <div class="va">456 Đại lộ Ánh Dương, Quận 1, TP. Hồ Chí Minh</div>
-      <a class="btn solid" data-map href="#">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
-        Mở Google Maps
-      </a>
-    </div>
-  </section>
 
-  <!-- ============ RSVP ============ -->
-  <section class="alt" id="rsvp">
-    <div class="eyebrow reveal">Xác nhận tham dự</div>
-    <h2 class="h-script reveal d1">Bạn sẽ đến chứ?</h2>
-    <p class="lead reveal d1">Sự hiện diện của bạn là niềm vinh hạnh lớn lao của chúng mình. Bạn xác nhận giúp chúng mình một tiếng nhé!</p>
-    <form class="form reveal d1" id="rsvp-form" novalidate>
-      <div class="field"><label for="rv-name">Họ và tên</label><input id="rv-name" name="name" type="text" placeholder="Nhập tên của bạn" autocomplete="name"></div>
-      <div class="field">
-        <label>Bạn sẽ tham dự?</label>
-        <div class="attend">
-          <label><input type="radio" name="attend" value="Sẽ tham dự" checked> 🤍 Có, chắc chắn rồi</label>
-          <label><input type="radio" name="attend" value="Rất tiếc không thể đến"> 🙏 Rất tiếc</label>
-        </div>
-      </div>
-      <div class="field"><label for="rv-count">Số người tham dự</label>
-        <select id="rv-count" name="count"><option>1 người</option><option>2 người</option><option>3 người</option><option>4 người</option><option>5+ người</option></select>
-      </div>
-      <div class="hp" aria-hidden="true">
-        <label for="rv-web">Đừng điền ô này</label>
-        <input id="rv-web" name="website" type="text" tabindex="-1" autocomplete="off">
-      </div>
-      <div class="field"><label for="rv-msg">Lời nhắn (không bắt buộc)</label><textarea id="rv-msg" name="msg" placeholder="Gửi đôi lời tới cô dâu chú rể..."></textarea></div>
-      <button type="submit" class="btn btn-primary" id="rv-send">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12.5 9 17.5 20 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Gửi xác nhận</span>
-      </button>
-      <p class="send-note">Hoặc nhắn trực tiếp cho chúng mình:</p>
-      <div class="send-row">
-        <button type="button" class="btn za" id="za-groom">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 11.5c0 3.9-3.6 7-8 7-1 0-2-.2-2.9-.5L4 19.5l1.4-3.2A6.6 6.6 0 0 1 4 11.5c0-3.9 3.6-7 8-7s8 3.1 8 7Z" stroke-linejoin="round"/></svg>
-          Zalo chú rể
-        </button>
-        <button type="button" class="btn za" id="za-bride">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 11.5c0 3.9-3.6 7-8 7-1 0-2-.2-2.9-.5L4 19.5l1.4-3.2A6.6 6.6 0 0 1 4 11.5c0-3.9 3.6-7 8-7s8 3.1 8 7Z" stroke-linejoin="round"/></svg>
-          Zalo cô dâu
-        </button>
-      </div>
-    </form>
-    <svg class="sprig reveal"><use href="#sprig-h"/></svg>
-  </section>
 
   <!-- ============ GIFT ============ -->
   <section id="gift">
@@ -939,29 +834,47 @@
     </dialog>
   </section>
 
-  <!-- ============ GALLERY ============ -->
-  <section class="alt" id="gallery">
-    <div class="eyebrow reveal">Khoảnh khắc</div>
-    <h2 class="h-script reveal d1">Thư viện ảnh</h2>
-    <div class="gallery reveal d1" id="gallery-grid"></div>
-    <p class="gcap reveal d1">Thay các ô này bằng ảnh cưới của bạn nhé — xem hướng dẫn trong README.</p>
-  </section>
 
-  <!-- ============ WISHES / GUESTBOOK ============ -->
-  <section id="wishes">
-    <div class="eyebrow reveal">Sổ lưu bút</div>
-    <h2 class="h-serif reveal d1">Lời Chúc Phúc</h2>
-    <div class="wishes">
-      <div class="wish reveal d1"><p>“Chúc hai bạn trăm năm hạnh phúc, mãi mãi yêu thương và bên nhau đến đầu bạc răng long!”</p><div class="from">— Gia đình bên nội</div></div>
-      <div class="wish reveal d1"><p>“Cuối cùng thì ngày này cũng đến rồi! Chúc tổ ấm nhỏ luôn đầy ắp tiếng cười.”</p><div class="from">— Nhóm bạn thân</div></div>
-      <div class="wish reveal d2"><p>“Mong hai đứa luôn nắm chặt tay nhau đi qua mọi mùa của cuộc đời.”</p><div class="from">— Cô Ba</div></div>
-    </div>
-    <div style="text-align:center">
-      <button type="button" class="btn solid reveal d2" id="send-wish">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v12H7l-3 3V5Z" stroke-linejoin="round"/></svg>
-        Gửi lời chúc của bạn
+
+  <!-- ============ RSVP ============ -->
+  <section class="alt" id="rsvp">
+    <div class="eyebrow reveal">Xác nhận tham dự</div>
+    <h2 class="h-script reveal d1">Bạn sẽ đến chứ?</h2>
+    <p class="lead reveal d1">Sự hiện diện của bạn là niềm vinh hạnh lớn lao của chúng mình. Bạn xác nhận giúp chúng mình một tiếng nhé!</p>
+    <form class="form reveal d1" id="rsvp-form" novalidate>
+      <div class="field"><label for="rv-name">Họ và tên</label><input id="rv-name" name="name" type="text" placeholder="Nhập tên của bạn" autocomplete="name"></div>
+      <div class="field">
+        <label>Bạn sẽ tham dự?</label>
+        <div class="attend">
+          <label><input type="radio" name="attend" value="Sẽ tham dự" checked> 🤍 Có, chắc chắn rồi</label>
+          <label><input type="radio" name="attend" value="Rất tiếc không thể đến"> 🙏 Rất tiếc</label>
+        </div>
+      </div>
+      <div class="field"><label for="rv-count">Số người tham dự</label>
+        <select id="rv-count" name="count"><option>1 người</option><option>2 người</option><option>3 người</option><option>4 người</option><option>5+ người</option></select>
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="rv-web">Đừng điền ô này</label>
+        <input id="rv-web" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <div class="field"><label for="rv-msg">Lời nhắn (không bắt buộc)</label><textarea id="rv-msg" name="msg" placeholder="Gửi đôi lời tới cô dâu chú rể..."></textarea></div>
+      <button type="submit" class="btn btn-primary" id="rv-send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12.5 9 17.5 20 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Gửi xác nhận</span>
       </button>
-    </div>
+      <p class="send-note">Hoặc nhắn trực tiếp cho chúng mình:</p>
+      <div class="send-row">
+        <button type="button" class="btn za" id="za-groom">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 11.5c0 3.9-3.6 7-8 7-1 0-2-.2-2.9-.5L4 19.5l1.4-3.2A6.6 6.6 0 0 1 4 11.5c0-3.9 3.6-7 8-7s8 3.1 8 7Z" stroke-linejoin="round"/></svg>
+          Zalo chú rể
+        </button>
+        <button type="button" class="btn za" id="za-bride">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 11.5c0 3.9-3.6 7-8 7-1 0-2-.2-2.9-.5L4 19.5l1.4-3.2A6.6 6.6 0 0 1 4 11.5c0-3.9 3.6-7 8-7s8 3.1 8 7Z" stroke-linejoin="round"/></svg>
+          Zalo cô dâu
+        </button>
+      </div>
+    </form>
+    <svg class="sprig reveal"><use href="#sprig-h"/></svg>
   </section>
 
   <!-- ============ FOOTER ============ -->
@@ -980,7 +893,6 @@
 <script>
 /* ---------------- CONFIG: sửa các giá trị này để cá nhân hoá ---------------- */
 const CONFIG = {
-  weddingDate: "2026-11-29T09:00:00+07:00",      // ngày giờ cưới (cho đồng hồ đếm ngược)
   zalo: {                                         // Zalo để khách nhắn trực tiếp
     groom: "0987467621",                          // chú rể
     bride: "0862139077"                           // cô dâu
@@ -1011,21 +923,6 @@ $$("[data-map]").forEach(a=>{
   a.href = CONFIG.maps[a.dataset.map] || CONFIG.maps.groom;
   a.target="_blank"; a.rel="noopener";
 });
-
-/* ---------------- countdown ---------------- */
-(function(){
-  const target=new Date(CONFIG.weddingDate).getTime();
-  const set=(k,v)=>{const el=$(`[data-cd="${k}"]`); if(el) el.textContent=String(v).padStart(2,"0");};
-  function tick(){
-    let d=Math.max(0,target-Date.now());
-    const day=Math.floor(d/864e5); d-=day*864e5;
-    const h=Math.floor(d/36e5);   d-=h*36e5;
-    const m=Math.floor(d/6e4);    d-=m*6e4;
-    const s=Math.floor(d/1e3);
-    set("d",day); set("h",h); set("m",m); set("s",s);
-  }
-  tick(); setInterval(tick,1000);
-})();
 
 /* ---------------- RSVP ---------------- */
 function rsvpText(){
@@ -1086,12 +983,6 @@ $("#za-groom").addEventListener("click",()=>{
 $("#za-bride").addEventListener("click",()=>{
   window.open(`https://zalo.me/${CONFIG.zalo.bride}`,"_blank","noopener");
 });
-/* lời chúc đi vào ô nhắn của form, để được lưu cùng danh sách khách */
-$("#send-wish").addEventListener("click",()=>{
-  document.getElementById("rsvp").scrollIntoView({behavior:"smooth",block:"start"});
-  setTimeout(()=>{ const m=$("#rv-msg"); m.focus({preventScroll:true}); },600);
-});
-
 /* ---------------- gift box -> QR dialog ---------------- */
 (function(){
   const btn=$("#giftOpen"), dlg=$("#giftDialog"), close=$("#giftClose");
@@ -1119,23 +1010,6 @@ $$("[data-copy-btn]").forEach(btn=>{
     catch{ toast("Số TK: "+val); }
   });
 });
-
-/* ---------------- gallery placeholder tiles ---------------- */
-(function(){
-  const grid=$("#gallery-grid"); if(!grid) return;
-  const pal=[["#f6dde1","#d38fa2"],["#f7e3da","#c9906f"],["#efdde6","#b689a3"],
-             ["#f2d6d8","#c08792"],["#e4e2d4","#93a173"],["#f4e2dc","#c2a08f"]];
-  const heart='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/></svg>';
-  const cam='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h3l2-2h6l2 2h3v11H4V8Z" stroke-linejoin="round"/><circle cx="12" cy="13" r="3.2"/></svg>';
-  for(let i=0;i<6;i++){
-    const [a,b]=pal[i];
-    const tile=document.createElement("div");
-    tile.className="tile"+(i===0?" wide":"");
-    tile.style.background=`linear-gradient(140deg, ${a}, ${b})`;
-    tile.innerHTML=(i%2? cam:heart);
-    grid.appendChild(tile);
-  }
-})();
 
 /* ---------------- botanical ornaments ---------------- */
 (function(){
