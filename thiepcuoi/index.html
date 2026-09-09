@@ -68,6 +68,18 @@
       background:linear-gradient(180deg,var(--sky-top),var(--sky-mid) 40%,var(--sky-low));
     }
     #scene{position:absolute;inset:0;width:100%;height:100%;display:block;}
+    /* logo nổi trên nền trời, phía trên vòm hoa */
+    .brand{
+      position:absolute;top:max(3vh,16px);left:50%;translate:-50% 0;
+      z-index:2;width:min(92px,21cqw);pointer-events:none;
+      opacity:0;animation:rise 1.1s cubic-bezier(.2,.7,.2,1) .2s forwards;
+    }
+    .brand img{
+      display:block;width:100%;height:auto;
+      /* nền trời cũng hồng nhạt như logo, thêm quầng trắng cho tách khỏi nền */
+      filter:drop-shadow(0 0 10px rgba(255,255,255,.75))
+             drop-shadow(0 2px 8px rgba(90,60,70,.12));
+    }
     .sprig{display:block;width:min(230px,66%);height:auto;margin:1.8em auto 0;}
     .cover-content{
       position:absolute;inset:0;
@@ -618,6 +630,7 @@
 
   <!-- ============ COVER ============ -->
   <section class="cover" id="cover">
+    <div class="brand"><img alt="Ngọc Huy &amp; Hương Giang" decoding="async"></div>
     <svg id="scene" viewBox="0 0 400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
       <defs>
         <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
@@ -905,7 +918,12 @@ const CONFIG = {
   // Hướng dẫn cài đặt: tools/rsvp-sheet.gs
   rsvpToken:    "hg-nh-2026",                     // khớp với TOKEN trong tools/rsvp-sheet.gs
   rsvpEndpoint: "https://script.google.com/macros/s/AKfycbxbbRGstq2okI7BIeNHPQiAe0QhMHffVDaMgeElHhejvIbLt2fqvKPUMSEY2-0qv5aJ9w/exec",
-  coupleTag:   "Ngọc Huy & Hương Giang"
+  coupleTag:   "Ngọc Huy & Hương Giang",
+
+  /* Logo ở đầu trang. Đặt file cùng thư mục với trang này rồi ghi tên vào.
+     Không có file thì khối logo tự ẩn, trang không hiện ô ảnh vỡ.
+     Nên dùng PNG nền trong suốt, bề ngang khoảng 400px là đủ nét.       */
+  logo: "logo.png"
 };
 
 /* ---------------- helpers ---------------- */
@@ -917,6 +935,15 @@ function toast(msg){
   const t=$("#toast"); t.textContent=msg; t.classList.add("show");
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2200);
 }
+
+/* ---------------- logo đầu trang ---------------- */
+(function(){
+  const box=$(".brand"), img=box&&box.querySelector("img");
+  if(!box||!img) return;
+  if(!CONFIG.logo){ box.remove(); return; }
+  img.addEventListener("error",()=>box.remove());   // chưa có file thì ẩn luôn
+  img.src=CONFIG.logo;
+})();
 
 /* ---------------- map links ---------------- */
 $$("[data-map]").forEach(a=>{
