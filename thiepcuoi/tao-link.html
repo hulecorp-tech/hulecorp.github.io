@@ -162,10 +162,20 @@ function toast(msg){
   toast._t = setTimeout(() => toastEl.classList.remove("on"), 1800);
 }
 
+/* Mã hoá gọn: dấu cách thành "+", chữ tiếng Việt để nguyên cho link ngắn và
+   đọc được. Chỉ giải mã lại các chuỗi UTF-8 nhiều byte (byte dẫn C0-FF kèm
+   byte nối 80-BF) — nhờ vậy %26 (&), %23 (#), %25 (%), %2B (+) vẫn được
+   giữ mã hoá, không thì tên có mấy ký tự đó sẽ làm gãy link. */
+function enc(s){
+  return encodeURIComponent(s)
+    .replace(/%20/g, "+")
+    .replace(/%[C-F][0-9A-F](?:%[89AB][0-9A-F])+/gi, m => decodeURIComponent(m));
+}
+
 function linkFor(name, xh){
   const base = baseEl.value.trim().replace(/[?&#].*$/, "").replace(/\/+$/, "");
-  let u = base + "?guest=" + encodeURIComponent(name);
-  if(xh && xh !== "ban") u += "&xh=" + xh;    // "ban" là mặc định, khỏi ghi cho link gọn
+  let u = base + "?g=" + enc(name);
+  if(xh && xh !== "ban") u += "&x=" + xh;     // "ban" là mặc định, khỏi ghi cho link gọn
   return u;
 }
 

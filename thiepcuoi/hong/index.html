@@ -976,7 +976,8 @@ const XUNGHO = {
   giadinh: { goi:"gia đình", tu:"chúng cháu", moi:"Trân trọng kính mời" },
   quyvi:   { goi:"quý vị",   tu:"chúng tôi",  moi:"Trân trọng kính mời" }
 };
-const XH = XUNGHO[(new URLSearchParams(location.search).get("xh")||"").toLowerCase()] || XUNGHO.ban;
+const _q = new URLSearchParams(location.search);
+const XH = XUNGHO[(_q.get("x") || _q.get("xh") || "").toLowerCase()] || XUNGHO.ban;
 
 /* Hoa đầu câu: "cô chú" -> "Cô chú" */
 const hoa = t => t.charAt(0).toUpperCase() + t.slice(1);
@@ -1018,8 +1019,8 @@ function dichXH(t){
 /* Địa chỉ dạng  .../thiepcuoi?guest=Anh%20Nguy%E1%BB%85n%20V%C4%83n%20A
    Không có tham số thì trang chạy y như thiệp chung.                     */
 const GUEST = (function(){
-  const q = new URLSearchParams(location.search);
-  let v = q.get("guest") || q.get("khach") || q.get("ten") || "";
+  // g / x là dạng ngắn; guest / xh giữ lại cho link đã gửi trước đó
+  let v = _q.get("g") || _q.get("guest") || _q.get("khach") || _q.get("ten") || "";
   return v.replace(/[\u0000-\u001f\u007f]/g, "")   // bỏ ký tự điều khiển
           .replace(/\s+/g, " ").trim().slice(0, 70);
 })();
