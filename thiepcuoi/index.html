@@ -114,6 +114,30 @@
       text-shadow:0 1px 8px rgba(255,255,255,.5);animation-delay:.6s;
     }
     .cv-date .yr{font-weight:500;}
+    .cv-guest{
+      position:relative;width:min(76%,330px);
+      margin-top:4.2cqw;padding-top:3.6cqw;
+      display:flex;flex-direction:column;align-items:center;gap:.4cqw;
+      animation-delay:.85s;
+    }
+    /* thuộc tính hidden bị display:flex đè, phải nói rõ */
+    .cv-guest[hidden]{display:none;}
+    .cv-guest::before{
+      content:"";position:absolute;top:0;left:50%;translate:-50% 0;
+      width:52%;height:1px;background:var(--ink-soft);opacity:.32;
+    }
+    .cv-guest .gl{
+      font-size:clamp(9px,2.8cqw,12px);letter-spacing:.44em;text-transform:uppercase;
+      font-weight:500;color:var(--ink-soft);text-indent:.44em;
+      text-shadow:0 1px 8px rgba(255,255,255,.55);
+    }
+    .cv-guest .gn{
+      font-family:"VLGreatVibes","Parisienne",cursive;
+      font-size:clamp(23px,7.6cqw,33px);line-height:1.12;color:var(--ink);
+      text-shadow:0 1px 10px rgba(255,255,255,.5);
+      /* tên dài thì xuống dòng chứ đừng tràn ra ngoài bìa */
+      max-width:100%;overflow-wrap:break-word;
+    }
     .cv-lunar{
       margin-top:2.4cqw;font-family:"Cormorant Garamond",serif;
       font-size:clamp(12px,3.4cqw,15px);font-style:italic;letter-spacing:.06em;
@@ -693,6 +717,10 @@
       </div>
       <div class="cv-date"><span>29</span><span>Nov</span><span class="yr">2026</span></div>
       <div class="cv-lunar reveal">Tức ngày 21 tháng 10 âm lịch</div>
+      <div class="cv-guest" hidden>
+        <span class="gl">Thân mời</span>
+        <span class="gn"></span>
+      </div>
     </div>
     <a class="discover" href="#events">
       <span>Discover</span>
@@ -936,6 +964,30 @@ function toast(msg){
   clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),2200);
 }
 
+/* ---------------- thiệp riêng cho từng khách ---------------- */
+/* Địa chỉ dạng  .../thiepcuoi?guest=Anh%20Nguy%E1%BB%85n%20V%C4%83n%20A
+   Không có tham số thì trang chạy y như thiệp chung.                     */
+const GUEST = (function(){
+  const q = new URLSearchParams(location.search);
+  let v = q.get("guest") || q.get("khach") || q.get("ten") || "";
+  return v.replace(/[\u0000-\u001f\u007f]/g, "")   // bỏ ký tự điều khiển
+          .replace(/\s+/g, " ").trim().slice(0, 70);
+})();
+
+(function(){
+  if(!GUEST) return;
+  const box = $(".cv-guest");
+  if(box){
+    // textContent, không phải innerHTML: tên đến từ địa chỉ trang nên
+    // phải coi là dữ liệu, chèn thẳng vào HTML là mở đường cho chèn mã.
+    box.querySelector(".gn").textContent = GUEST;
+    box.hidden = false;
+  }
+  const inp = $("#rv-name");
+  if(inp && !inp.value) inp.value = GUEST;
+  document.title = GUEST + " · " + CONFIG.coupleTag;
+})();
+
 /* ---------------- logo đầu trang ---------------- */
 (function(){
   const box=$(".brand"), img=box&&box.querySelector("img");
@@ -973,6 +1025,7 @@ function rsvpPayload(){
     msg:    $("#rv-msg").value.trim(),
     hp:     $("#rv-web").value,
     token:  CONFIG.rsvpToken,
+    guest:  GUEST,                    // tên trên thiệp, để đối chiếu danh sách mời
     source: "thiepcuoi"
   };
 }

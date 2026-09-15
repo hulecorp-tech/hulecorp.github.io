@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Tạo link thiệp mời riêng</title>
+<style>
+  :root{
+    --paper:#fdf7f4; --card:#fff; --ink:#4a3548; --body:#5b4a56;
+    --line:#ecdcd6; --rose:#9a4f6b; --rose-soft:#f7e6e6; --gold:#8f6a28;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:clamp(16px,4vw,36px);
+    background:var(--paper);color:var(--body);
+    font:16px/1.55 "Cormorant Garamond",Georgia,serif;
+  }
+  .wrap{max-width:900px;margin:0 auto}
+  h1{
+    margin:0 0 .15em;font-size:clamp(24px,5.5vw,34px);font-weight:600;
+    color:var(--ink);letter-spacing:.01em;
+  }
+  .sub{margin:0 0 1.6em;font-size:clamp(14px,3.4vw,17px)}
+  .eyebrow{
+    font-size:12px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--gold);text-indent:.34em;margin-bottom:.5em;
+  }
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:clamp(14px,3.4vw,22px);margin-bottom:18px;
+  }
+  label{display:block;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+        color:var(--rose);margin-bottom:.5em}
+  input,textarea{
+    width:100%;padding:.7em .85em;border:1px solid var(--line);border-radius:9px;
+    background:#fffdfc;color:var(--ink);font-family:inherit;font-size:16px;
+  }
+  input:focus,textarea:focus{outline:2px solid var(--rose-soft);border-color:var(--rose)}
+  textarea{min-height:190px;resize:vertical;line-height:1.7}
+  .hint{font-size:13.5px;color:#8a7680;margin-top:.55em}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+  button{
+    font:inherit;font-size:15px;cursor:pointer;border-radius:999px;
+    padding:.6em 1.25em;border:1px solid var(--rose);
+    background:#fff;color:var(--rose);transition:.16s;
+  }
+  button:hover{background:var(--rose);color:#fff}
+  button.solid{background:var(--rose);color:#fff}
+  button.solid:hover{filter:brightness(1.12)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .count{margin-left:auto;font-size:14px;color:#8a7680}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th,td{text-align:left;padding:.62em .6em;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);font-weight:600}
+  td.nm{white-space:nowrap;color:var(--ink)}
+  td.lk{word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  td.ac{white-space:nowrap;text-align:right}
+  td.ac button{padding:.34em .8em;font-size:13px}
+  .scroll{max-height:46vh;overflow:auto;margin-top:6px}
+  .empty{padding:2em 0;text-align:center;color:#a2909a;font-style:italic}
+  .toast{
+    position:fixed;left:50%;bottom:26px;translate:-50% 0;
+    background:var(--ink);color:#fff;padding:.7em 1.3em;border-radius:999px;
+    font-size:14.5px;opacity:0;pointer-events:none;transition:opacity .22s;
+  }
+  .toast.on{opacity:.96}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Ngọc Huy &amp; Hương Giang</div>
+  <h1>Tạo link thiệp mời riêng</h1>
+  <p class="sub">
+    Dán danh sách khách vào ô bên dưới, mỗi người một dòng. Mỗi người sẽ có một
+    link riêng — mở ra thiệp có tên họ trên bìa và tên được điền sẵn vào ô xác nhận.
+  </p>
+
+  <div class="card">
+    <label for="base">Địa chỉ thiệp</label>
+    <input id="base" type="text" value="https://huyle.io.vn/thiepcuoi" spellcheck="false">
+    <p class="hint">Đổi thành <code>.../thiepcuoi/hong</code> nếu muốn dùng bản hồng.</p>
+  </div>
+
+  <div class="card">
+    <label for="names">Danh sách khách — mỗi người một dòng</label>
+    <textarea id="names" spellcheck="false" placeholder="Anh Nguyễn Văn An
+Chị Trần Thu Hà
+Gia đình bác Bảy
+Vợ chồng anh Minh"></textarea>
+    <p class="hint">
+      Nên ghi cả cách xưng hô (Anh / Chị / Cô / Bác / Gia đình…) vì phần này
+      hiện nguyên văn trên thiệp. Dòng trống và tên trùng sẽ được bỏ qua.
+    </p>
+    <div class="row">
+      <button class="solid" id="copyAll">Chép tất cả (tên + link)</button>
+      <button id="csv">Tải file CSV</button>
+      <span class="count" id="count"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Khách mời</th><th>Link riêng</th><th></th></tr></thead>
+        <tbody id="out"></tbody>
+      </table>
+      <div class="empty" id="empty">Chưa có tên nào — dán danh sách vào ô phía trên.</div>
+    </div>
+  </div>
+
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const baseEl = $("#base"), namesEl = $("#names"), outEl = $("#out"),
+      emptyEl = $("#empty"), countEl = $("#count"), toastEl = $("#toast");
+
+let rows = [];
+
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add("on");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => toastEl.classList.remove("on"), 1800);
+}
+
+function linkFor(name){
+  const base = baseEl.value.trim().replace(/[?&#].*$/, "").replace(/\/+$/, "");
+  return base + "?guest=" + encodeURIComponent(name);
+}
+
+function build(){
+  const seen = new Set();
+  rows = namesEl.value.split("\n")
+    .map(s => s.replace(/\s+/g, " ").trim())
+    .filter(s => {
+      if(!s) return false;
+      const k = s.toLowerCase();
+      if(seen.has(k)) return false;      // bỏ tên trùng
+      seen.add(k);
+      return true;
+    })
+    .map(name => ({ name, url: linkFor(name) }));
+
+  outEl.textContent = "";
+  for(const r of rows){
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td"); td1.className = "nm"; td1.textContent = r.name;
+    const td2 = document.createElement("td"); td2.className = "lk"; td2.textContent = r.url;
+    const td3 = document.createElement("td"); td3.className = "ac";
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = "Chép";
+    b.addEventListener("click", () => copy(r.url, "Đã chép link của " + r.name));
+    td3.appendChild(b);
+    tr.append(td1, td2, td3);
+    outEl.appendChild(tr);
+  }
+  emptyEl.hidden = rows.length > 0;
+  countEl.textContent = rows.length ? rows.length + " khách" : "";
+  $("#copyAll").disabled = $("#csv").disabled = rows.length === 0;
+}
+
+async function copy(text, msg){
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch(e){
+    // clipboard API cần HTTPS; mở bằng file:// thì rơi vào nhánh này
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); }catch(_){ toast("Trình duyệt không cho chép tự động"); ta.remove(); return; }
+    ta.remove();
+  }
+  toast(msg);
+}
+
+$("#copyAll").addEventListener("click", () => {
+  // ngăn cách bằng Tab -> dán thẳng vào Google Sheet ra đúng 2 cột
+  copy(rows.map(r => r.name + "\t" + r.url).join("\n"),
+       "Đã chép " + rows.length + " dòng — dán thẳng vào Google Sheet được");
+});
+
+$("#csv").addEventListener("click", () => {
+  const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const csv = "﻿" + ["Khách mời,Link riêng"]      // BOM để Excel đọc đúng tiếng Việt
+    .concat(rows.map(r => esc(r.name) + "," + esc(r.url))).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
+  a.download = "link-thiep-moi.csv";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  toast("Đã tải " + rows.length + " link");
+});
+
+namesEl.addEventListener("input", build);
+baseEl.addEventListener("input", build);
+build();
+</script>
+</body>
+</html>
