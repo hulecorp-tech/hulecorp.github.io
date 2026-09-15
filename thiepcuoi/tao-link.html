@@ -32,6 +32,12 @@
   }
   label{display:block;font-size:13px;letter-spacing:.14em;text-transform:uppercase;
         color:var(--rose);margin-bottom:.5em}
+  select{
+    font:inherit;font-size:15px;padding:.42em .6em;border-radius:8px;
+    border:1px solid var(--line);background:#fffdfc;color:var(--ink);cursor:pointer;
+  }
+  select:focus{outline:2px solid var(--rose-soft);border-color:var(--rose)}
+  .row label{margin:0;font-size:12px}
   input,textarea{
     width:100%;padding:.7em .85em;border:1px solid var(--line);border-radius:9px;
     background:#fffdfc;color:var(--ink);font-family:inherit;font-size:16px;
@@ -54,6 +60,7 @@
   th,td{text-align:left;padding:.62em .6em;border-bottom:1px solid var(--line);vertical-align:top}
   th{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);font-weight:600}
   td.nm{white-space:nowrap;color:var(--ink)}
+  td select{max-width:190px}
   td.lk{word-break:break-all;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
   td.ac{white-space:nowrap;text-align:right}
   td.ac button{padding:.34em .8em;font-size:13px}
@@ -85,16 +92,22 @@
 
   <div class="card">
     <label for="names">Danh sách khách — mỗi người một dòng</label>
-    <textarea id="names" spellcheck="false" placeholder="Anh Nguyễn Văn An
-Chị Trần Thu Hà
-Gia đình bác Bảy
-Vợ chồng anh Minh"></textarea>
+    <textarea id="names" spellcheck="false" placeholder="Ông bà Nguyễn Văn Bảy
+Bác Trần Thu Hà
+Anh Nguyễn Văn An
+Gia đình chú Minh
+Linh"></textarea>
     <p class="hint">
-      Nên ghi cả cách xưng hô (Anh / Chị / Cô / Bác / Gia đình…) vì phần này
-      hiện nguyên văn trên thiệp. Dòng trống và tên trùng sẽ được bỏ qua.
+      Nên ghi cả cách xưng hô (Anh / Chị / Cô / Bác / Ông bà / Gia đình…) vì phần này
+      hiện nguyên văn trên thiệp — và công cụ cũng dựa vào đó để đoán mức xưng hô.
+      Dòng trống và tên trùng sẽ được bỏ qua.
     </p>
+    <div class="row" style="margin-bottom:2px">
+      <label for="dfXh" style="margin:0 .4em 0 0">Mặc định khi không đoán được</label>
+      <select id="dfXh"></select>
+    </div>
     <div class="row">
-      <button class="solid" id="copyAll">Chép tất cả (tên + link)</button>
+      <button class="solid" id="copyAll">Chép tất cả (tên + xưng hô + link)</button>
       <button id="csv">Tải file CSV</button>
       <span class="count" id="count"></span>
     </div>
@@ -103,7 +116,7 @@ Vợ chồng anh Minh"></textarea>
   <div class="card">
     <div class="scroll">
       <table>
-        <thead><tr><th>Khách mời</th><th>Link riêng</th><th></th></tr></thead>
+        <thead><tr><th>Khách mời</th><th>Xưng hô</th><th>Link riêng</th><th></th></tr></thead>
         <tbody id="out"></tbody>
       </table>
       <div class="empty" id="empty">Chưa có tên nào — dán danh sách vào ô phía trên.</div>
@@ -116,9 +129,31 @@ Vợ chồng anh Minh"></textarea>
 <script>
 const $ = s => document.querySelector(s);
 const baseEl = $("#base"), namesEl = $("#names"), outEl = $("#out"),
-      emptyEl = $("#empty"), countEl = $("#count"), toastEl = $("#toast");
+      emptyEl = $("#empty"), countEl = $("#count"), toastEl = $("#toast"),
+      dfEl = $("#dfXh");
 
 let rows = [];
+
+/* Phải khớp bảng XUNGHO trong thiệp. Nhãn ở đây là để người dùng chọn. */
+const XH = [
+  ["ban",     "Bạn bè ngang tuổi",      "gọi “bạn” · xưng “chúng mình”"],
+  ["anhchi",  "Anh chị lớn hơn ít",     "gọi “anh chị” · xưng “chúng em”"],
+  ["cochu",   "Cô chú, bác",            "gọi “cô chú” · xưng “chúng cháu”"],
+  ["ongba",   "Ông bà, bậc cao niên",   "gọi “ông bà” · xưng “chúng cháu”"],
+  ["giadinh", "Cả gia đình",            "gọi “gia đình” · xưng “chúng cháu”"],
+  ["quyvi",   "Trang trọng chung",      "gọi “quý vị” · xưng “chúng tôi”"],
+];
+const nhan = Object.fromEntries(XH.map(([k, l]) => [k, l]));
+
+/* Đoán mức xưng hô từ chữ mở đầu của tên. Đoán sai thì sửa ở ô bên cạnh. */
+function doan(name){
+  const t = " " + name.toLowerCase().trim() + " ";
+  if(/^\s*(gia đình|vợ chồng|hai bác|nhà |cả nhà)/.test(t)) return "giadinh";
+  if(/^\s*(ông|bà|cụ)\b/.test(t))                          return "ongba";
+  if(/^\s*(cô|chú|bác|dì|cậu|mợ|thím|dượng|thầy)\b/.test(t))return "cochu";
+  if(/^\s*(anh|chị)\b/.test(t))                            return "anhchi";
+  return "";                                               // để rơi về mặc định
+}
 
 function toast(msg){
   toastEl.textContent = msg;
@@ -127,13 +162,28 @@ function toast(msg){
   toast._t = setTimeout(() => toastEl.classList.remove("on"), 1800);
 }
 
-function linkFor(name){
+function linkFor(name, xh){
   const base = baseEl.value.trim().replace(/[?&#].*$/, "").replace(/\/+$/, "");
-  return base + "?guest=" + encodeURIComponent(name);
+  let u = base + "?guest=" + encodeURIComponent(name);
+  if(xh && xh !== "ban") u += "&xh=" + xh;    // "ban" là mặc định, khỏi ghi cho link gọn
+  return u;
+}
+
+function selectXH(value, onChange){
+  const s = document.createElement("select");
+  for(const [k, l, mo] of XH){
+    const o = document.createElement("option");
+    o.value = k; o.textContent = l; o.title = mo;
+    s.appendChild(o);
+  }
+  s.value = value;
+  if(onChange) s.addEventListener("change", () => onChange(s.value));
+  return s;
 }
 
 function build(){
   const seen = new Set();
+  const df = dfEl.value;
   rows = namesEl.value.split("\n")
     .map(s => s.replace(/\s+/g, " ").trim())
     .filter(s => {
@@ -143,19 +193,30 @@ function build(){
       seen.add(k);
       return true;
     })
-    .map(name => ({ name, url: linkFor(name) }));
+    .map(name => {
+      const xh = doan(name) || df;
+      return { name, xh, url: linkFor(name, xh) };
+    });
 
   outEl.textContent = "";
   for(const r of rows){
     const tr = document.createElement("tr");
+
     const td1 = document.createElement("td"); td1.className = "nm"; td1.textContent = r.name;
-    const td2 = document.createElement("td"); td2.className = "lk"; td2.textContent = r.url;
-    const td3 = document.createElement("td"); td3.className = "ac";
+
+    const td2 = document.createElement("td");
+    const tdUrl = document.createElement("td"); tdUrl.className = "lk"; tdUrl.textContent = r.url;
+    td2.appendChild(selectXH(r.xh, v => {           // đổi tay thì link cập nhật ngay
+      r.xh = v; r.url = linkFor(r.name, v); tdUrl.textContent = r.url;
+    }));
+
+    const td4 = document.createElement("td"); td4.className = "ac";
     const b = document.createElement("button");
     b.type = "button"; b.textContent = "Chép";
     b.addEventListener("click", () => copy(r.url, "Đã chép link của " + r.name));
-    td3.appendChild(b);
-    tr.append(td1, td2, td3);
+    td4.appendChild(b);
+
+    tr.append(td1, td2, tdUrl, td4);
     outEl.appendChild(tr);
   }
   emptyEl.hidden = rows.length > 0;
@@ -178,15 +239,15 @@ async function copy(text, msg){
 }
 
 $("#copyAll").addEventListener("click", () => {
-  // ngăn cách bằng Tab -> dán thẳng vào Google Sheet ra đúng 2 cột
-  copy(rows.map(r => r.name + "\t" + r.url).join("\n"),
+  // ngăn cách bằng Tab -> dán thẳng vào Google Sheet ra đúng 3 cột
+  copy(rows.map(r => r.name + "\t" + nhan[r.xh] + "\t" + r.url).join("\n"),
        "Đã chép " + rows.length + " dòng — dán thẳng vào Google Sheet được");
 });
 
 $("#csv").addEventListener("click", () => {
   const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
-  const csv = "﻿" + ["Khách mời,Link riêng"]      // BOM để Excel đọc đúng tiếng Việt
-    .concat(rows.map(r => esc(r.name) + "," + esc(r.url))).join("\r\n");
+  const csv = "﻿" + ["Khách mời,Xưng hô,Link riêng"]   // BOM để Excel đọc đúng tiếng Việt
+    .concat(rows.map(r => [r.name, nhan[r.xh], r.url].map(esc).join(","))).join("\r\n");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([csv], {type:"text/csv;charset=utf-8"}));
   a.download = "link-thiep-moi.csv";
@@ -195,8 +256,16 @@ $("#csv").addEventListener("click", () => {
   toast("Đã tải " + rows.length + " link");
 });
 
+dfEl.appendChild(document.createDocumentFragment());
+for(const [k, l] of XH){
+  const o = document.createElement("option");
+  o.value = k; o.textContent = l; dfEl.appendChild(o);
+}
+dfEl.value = "ban";
+
 namesEl.addEventListener("input", build);
 baseEl.addEventListener("input", build);
+dfEl.addEventListener("change", build);
 build();
 </script>
 </body>
