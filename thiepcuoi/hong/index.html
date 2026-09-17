@@ -898,6 +898,13 @@
         <label for="rv-web">Đừng điền ô này</label>
         <input id="rv-web" name="website" type="text" tabindex="-1" autocomplete="off">
       </div>
+      <div class="field"><label for="rv-days">Bạn dự mấy ngày?</label>
+        <select id="rv-days" name="days">
+          <option>Chỉ hôm chính (29.11)</option>
+          <option>2 ngày</option>
+          <option>3 ngày</option>
+        </select>
+      </div>
       <div class="field"><label for="rv-msg">Lời nhắn (không bắt buộc)</label><textarea id="rv-msg" name="msg" placeholder="Gửi đôi lời tới cô dâu chú rể..."></textarea></div>
       <button type="submit" class="btn btn-primary" id="rv-send">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12.5 9 17.5 20 6.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -970,6 +977,19 @@ function toast(msg){
    bộ từ riêng: gọi khách bằng gì, cô dâu chú rể tự xưng bằng gì, mời ra sao. */
 const XUNGHO = {
   ban:     { goi:"bạn",      tu:"chúng mình", moi:"Thân mời" },
+  than:    { goi:"cậu",      tu:"bọn tớ",     moi:"Nhất định phải có mặt nhé",
+    cau:{
+      "Trân trọng kính mời": "Thân gửi",
+      "Chúng mình hân hạnh được đón tiếp bạn trong hai buổi lễ dưới đây.":
+        "Bọn tớ mong được đón cậu ở cả hai buổi lễ dưới đây.",
+      "Bạn sẽ đến chứ?": "Cậu đến nhé?",
+      "Sự hiện diện của bạn là niềm vinh hạnh lớn lao của chúng mình. Bạn xác nhận giúp chúng mình một tiếng nhé!":
+        "Có cậu ở đó thì bọn tớ vui lắm. Cậu nhắn cho bọn tớ một tiếng nhé!",
+      "Sự hiện diện của bạn đã là món quà quý giá nhất. Nếu muốn gửi thêm một chút tấm lòng, chúng mình xin trân trọng đón nhận.":
+        "Cậu đến là bọn tớ mừng rồi. Còn muốn gửi thêm chút tấm lòng thì bọn tớ cảm ơn nhiều lắm.",
+      "Cảm ơn bạn đã cùng chúng mình chia sẻ niềm hạnh phúc lớn lao này. Hẹn gặp bạn trong ngày vui!":
+        "Cảm ơn cậu đã cùng bọn tớ chia sẻ niềm vui này. Hẹn gặp cậu hôm đó nhé!"
+    } },
   anhchi:  { goi:"anh chị",  tu:"chúng em",   moi:"Trân trọng kính mời" },
   cochu:   { goi:"cô chú",   tu:"chúng cháu", moi:"Trân trọng kính mời" },
   ongba:   { goi:"ông bà",   tu:"chúng cháu", moi:"Kính mời" },
@@ -986,6 +1006,11 @@ const hoa = t => t.charAt(0).toUpperCase() + t.slice(1);
    ("bạn" khớp cả trong "bạn bè"). Dùng \p{L} để chặn hai đầu cho đúng. */
 function dichXH(t){
   if(XH === XUNGHO.ban || !t) return t;
+  if(XH.cau){
+    const goc = t.trim();
+    // đã có câu viết sẵn cho mức này thì dùng luôn, khỏi chạy tiếp phần đại từ
+    if(XH.cau[goc]) return t.replace(goc, XH.cau[goc]);
+  }
   const ranh = (tu, thay) =>
     [new RegExp("(^|\\P{L})" + tu + "(?!\\p{L})", "gu"), (m, d) => d + thay];
   const luat = [
@@ -1056,24 +1081,13 @@ $$("[data-map]").forEach(a=>{
 });
 
 /* ---------------- RSVP ---------------- */
-function rsvpText(){
-  const name=$("#rv-name").value.trim()||"(chưa điền tên)";
-  const attend=(document.querySelector('input[name="attend"]:checked')||{}).value||"";
-  const count=$("#rv-count").value;
-  const msg=$("#rv-msg").value.trim();
-  let t=`Xin chào ${CONFIG.coupleTag}! 💐%0A`;
-  t+=`Tôi là: ${name}%0A`;
-  t+=`Xác nhận: ${attend}%0A`;
-  t+=`Số người: ${count}`;
-  if(msg) t+=`%0ALời nhắn: ${msg}`;
-  return encodeURIComponent(t).replace(/%2520/g,"%20");
-}
 /* gửi xác nhận vào Google Sheet (xem tools/rsvp-sheet.gs) */
 function rsvpPayload(){
   return {
     name:   $("#rv-name").value.trim(),
     attend: (document.querySelector('input[name="attend"]:checked')||{}).value||"",
     count:  $("#rv-count").value,
+    days:   $("#rv-days").value,
     msg:    $("#rv-msg").value.trim(),
     hp:     $("#rv-web").value,
     token:  CONFIG.rsvpToken,
