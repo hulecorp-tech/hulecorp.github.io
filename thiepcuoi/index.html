@@ -955,6 +955,15 @@ const CONFIG = {
   rsvpEndpoint: "https://script.google.com/macros/s/AKfycbxbbRGstq2okI7BIeNHPQiAe0QhMHffVDaMgeElHhejvIbLt2fqvKPUMSEY2-0qv5aJ9w/exec",
   coupleTag:   "Ngọc Huy & Hương Giang",
 
+  /* Thiệp dành riêng cho một nhóm: điền sẵn tên và xưng hô, nhờ vậy link
+     chỉ còn .../thiepcuoi/<nhóm> chứ không phải kéo theo ?g=...
+       ten : hiện trên bìa dưới dòng lời mời
+       xh  : khoá trong bảng XUNGHO ở phần JS
+       goi : ghi đè cách gọi, dùng khi mời cả nhóm ("cậu" -> "các cậu")
+     Địa chỉ trang vẫn ghi đè được, nên vẫn gửi riêng cho một người trong
+     nhóm được bằng ?g=Tên. Để null nếu đây là thiệp chung.                */
+  moiSan: null,
+
   /* Logo ở đầu trang. Đặt file cùng thư mục với trang này rồi ghi tên vào.
      Không có file thì khối logo tự ẩn, trang không hiện ô ảnh vỡ.
      Nên dùng PNG nền trong suốt, bề ngang khoảng 400px là đủ nét.       */
@@ -981,14 +990,14 @@ const XUNGHO = {
     cau:{
       "Trân trọng kính mời": "Thân gửi",
       "Chúng mình hân hạnh được đón tiếp bạn trong hai buổi lễ dưới đây.":
-        "Bọn tớ mong được đón cậu ở cả hai buổi lễ dưới đây.",
-      "Bạn sẽ đến chứ?": "Cậu đến nhé?",
+        "Chúng mình mong được đón bạn ở cả hai buổi lễ dưới đây.",
+      "Bạn sẽ đến chứ?": "Bạn đến nhé?",
       "Sự hiện diện của bạn là niềm vinh hạnh lớn lao của chúng mình. Bạn xác nhận giúp chúng mình một tiếng nhé!":
-        "Có cậu ở đó thì bọn tớ vui lắm. Cậu nhắn cho bọn tớ một tiếng nhé!",
+        "Có bạn ở đó thì chúng mình vui lắm. Bạn nhắn cho chúng mình một tiếng nhé!",
       "Sự hiện diện của bạn đã là món quà quý giá nhất. Nếu muốn gửi thêm một chút tấm lòng, chúng mình xin trân trọng đón nhận.":
-        "Cậu đến là bọn tớ mừng rồi. Còn muốn gửi thêm chút tấm lòng thì bọn tớ cảm ơn nhiều lắm.",
+        "Bạn đến là chúng mình mừng rồi. Còn muốn gửi thêm chút tấm lòng thì chúng mình cảm ơn nhiều lắm.",
       "Cảm ơn bạn đã cùng chúng mình chia sẻ niềm hạnh phúc lớn lao này. Hẹn gặp bạn trong ngày vui!":
-        "Cảm ơn cậu đã cùng bọn tớ chia sẻ niềm vui này. Hẹn gặp cậu hôm đó nhé!"
+        "Cảm ơn bạn đã cùng chúng mình chia sẻ niềm vui này. Hẹn gặp bạn hôm đó nhé!"
     } },
   anhchi:  { goi:"anh chị",  tu:"chúng em",   moi:"Trân trọng kính mời" },
   cochu:   { goi:"cô chú",   tu:"chúng cháu", moi:"Trân trọng kính mời" },
@@ -996,8 +1005,18 @@ const XUNGHO = {
   giadinh: { goi:"gia đình", tu:"chúng cháu", moi:"Trân trọng kính mời" },
   quyvi:   { goi:"quý vị",   tu:"chúng tôi",  moi:"Trân trọng kính mời" }
 };
-const _q = new URLSearchParams(location.search);
-const XH = XUNGHO[(_q.get("x") || _q.get("xh") || "").toLowerCase()] || XUNGHO.ban;
+const _q  = new URLSearchParams(location.search);
+const MOI = CONFIG.moiSan || {};
+const _xh = (_q.get("x") || _q.get("xh") || MOI.xh || "").toLowerCase();
+let   XH  = XUNGHO[_xh] || XUNGHO.ban;
+/* Mời cả nhóm thì "cậu" phải thành "các cậu" — nhưng chỉ khi đúng là mời
+   cả nhóm: địa chỉ trang không đặt tên riêng và cũng không tự chọn mức
+   xưng hô. Kèm ?g=Tên tức là gửi riêng một người, lúc đó về số ít.
+   Bản sao này khác đối tượng XUNGHO.ban, nên các chỗ so sánh phía dưới
+   vẫn hiểu đúng là "có đổi lời văn". */
+const _coTen = !!(_q.get("g") || _q.get("guest") || _q.get("khach") || _q.get("ten"));
+if(MOI.goi && !_q.get("x") && !_q.get("xh") && !_coTen)
+  XH = Object.assign({}, XH, { goi: MOI.goi });
 
 /* Hoa đầu câu: "cô chú" -> "Cô chú" */
 const hoa = t => t.charAt(0).toUpperCase() + t.slice(1);
@@ -1008,8 +1027,10 @@ function dichXH(t){
   if(XH === XUNGHO.ban || !t) return t;
   if(XH.cau){
     const goc = t.trim();
-    // đã có câu viết sẵn cho mức này thì dùng luôn, khỏi chạy tiếp phần đại từ
-    if(XH.cau[goc]) return t.replace(goc, XH.cau[goc]);
+    // Câu viết sẵn dùng đại từ mặc định ("bạn" / "chúng mình") rồi mới cho
+    // phần đổi đại từ bên dưới chạy lên nó — nên một câu phục vụ được cả
+    // "cậu" (mời một người) lẫn "các cậu" (mời cả nhóm).
+    if(XH.cau[goc]) t = t.replace(goc, XH.cau[goc]);
   }
   const ranh = (tu, thay) =>
     [new RegExp("(^|\\P{L})" + tu + "(?!\\p{L})", "gu"), (m, d) => d + thay];
@@ -1045,7 +1066,8 @@ function dichXH(t){
    Không có tham số thì trang chạy y như thiệp chung.                     */
 const GUEST = (function(){
   // g / x là dạng ngắn; guest / xh giữ lại cho link đã gửi trước đó
-  let v = _q.get("g") || _q.get("guest") || _q.get("khach") || _q.get("ten") || "";
+  let v = _q.get("g") || _q.get("guest") || _q.get("khach") || _q.get("ten")
+          || MOI.ten || "";
   return v.replace(/[\u0000-\u001f\u007f]/g, "")   // bỏ ký tự điều khiển
           .replace(/\s+/g, " ").trim().slice(0, 70);
 })();
